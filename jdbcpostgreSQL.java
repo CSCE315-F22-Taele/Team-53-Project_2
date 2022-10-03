@@ -4,6 +4,7 @@ import java.util.Scanner;
 import java.sql.Time;
 
 
+
 public class jdbcpostgreSQL {
 
   //Commands to run this script
@@ -41,11 +42,12 @@ public class jdbcpostgreSQL {
 
 
        //Running a query
-       //TODO: update the sql command here
-       int orderId = 220904001;
+      
+      //the starting variables for the data to insert it into the array
+       int orderId = 220904003;
        Time time = new Time(2211696000000L);
        float amount = 0;
-       int checkoutid = 1;
+       int checkoutid = 3;
        int orderedgyro = 0;
        int orderedbowl =0;
        int orderedpitahummus= 0;
@@ -54,13 +56,22 @@ public class jdbcpostgreSQL {
        int ordereddressing = 0;
        int ordereddrink =0;
        Integer [] inventory = new Integer[25]; 
+       
 
-       System.out.println(time);
 
        //String sqlStatement = "INSERT INTO teammembers (name, phonenumber, email) VALUES(" + str(name) + ")";
+
+       PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout( checkoutid, amount) VALUES (?, ?)");
+       checkoutStatement.setInt(1, checkoutid);
+       //checkoutStatement.setInt(2, 1);
+       checkoutStatement.setFloat(2, amount);
+
+       checkoutStatement.executeUpdate();
+
        PreparedStatement statement = conn.prepareStatement("INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
        //send statement to DBMS
        //This executeQuery command is useful for data retrieval
+
        Array inventoryused = conn.createArrayOf("INT", inventory);
        statement.setInt(1, orderId); 
        statement.setTime(2,time );
@@ -75,7 +86,7 @@ public class jdbcpostgreSQL {
        statement.setInt(11 , ordereddrink);
        statement.setArray(12 , inventoryused);
 
-       ResultSet result = statement.executeQuery();
+       statement.executeUpdate();
        //OR
        //This executeUpdate command is useful for updating data
        //int result = stmt.executeUpdate(sqlStatement);
@@ -87,7 +98,7 @@ public class jdbcpostgreSQL {
        //System.out.println(result.getString("column_name"));
        //}
        //OR
-       System.out.println(result);
+       //System.out.println(result);
    } catch (Exception e){
        e.printStackTrace();
        System.err.println(e.getClass().getName()+": "+e.getMessage());
