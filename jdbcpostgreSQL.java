@@ -1,8 +1,7 @@
 import java.sql.*;
-import java.io.*;
-import java.util.Scanner;
+// import java.io.*;
+// import java.util.Scanner;
 import java.sql.Time;
-
 
 
 public class jdbcpostgreSQL {
@@ -12,7 +11,7 @@ public class jdbcpostgreSQL {
   //javac *.java
   //This command tells the file where to find the postgres jar which it needs to execute postgres commands, then executes the code
   //Windows: java -cp ".;postgresql-42.2.8.jar" jdbcpostgreSQL
-  //Mac/Linux: java -cp ".:postgresql-42.2.8.jar" jdbcpostgreSQL
+  //Mac/Linux: java -cp ".:postgredsql-42.2.8.jar" jdbcpostgreSQL
 
   //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
   public static void main(String args[]) {
@@ -44,10 +43,10 @@ public class jdbcpostgreSQL {
        //Running a query
       
       //the starting variables for the data to insert it into the array
-       int orderId = 220904003;
+       int orderId = 220904004;
        Time time = new Time(2211696000000L);
        float amount = 0;
-       int checkoutid = 3;
+       int checkoutid = 4; //we want to change this so that itll autoincrement. 
        int orderedgyro = 0;
        int orderedbowl =0;
        int orderedpitahummus= 0;
@@ -56,10 +55,10 @@ public class jdbcpostgreSQL {
        int ordereddressing = 0;
        int ordereddrink =0;
        Integer [] inventory = new Integer[25]; 
-       
 
+       //TODO: loop through for different quantities, inventory items, times. order ids and amounts throughout the day. RANDOMIZE
 
-       //String sqlStatement = "INSERT INTO teammembers (name, phonenumber, email) VALUES(" + str(name) + ")";
+      //need to insert into checkout to make it work
 
        PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout( checkoutid, amount) VALUES (?, ?)");
        checkoutStatement.setInt(1, checkoutid);
@@ -68,6 +67,7 @@ public class jdbcpostgreSQL {
 
        checkoutStatement.executeUpdate();
 
+        // now we are able to insert into ordering 
        PreparedStatement statement = conn.prepareStatement("INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
        //send statement to DBMS
        //This executeQuery command is useful for data retrieval
