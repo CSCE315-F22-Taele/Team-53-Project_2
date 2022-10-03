@@ -1,6 +1,4 @@
 import java.sql.*;
-// import java.io.*;
-// import java.util.Scanner;
 import java.sql.Time;
 
 
@@ -11,7 +9,7 @@ public class jdbcpostgreSQL {
   //javac *.java
   //This command tells the file where to find the postgres jar which it needs to execute postgres commands, then executes the code
   //Windows: java -cp ".;postgresql-42.2.8.jar" jdbcpostgreSQL
-  //Mac/Linux: java -cp ".:postgredsql-42.2.8.jar" jdbcpostgreSQL
+  //Mac/Linux: java -cp ".:postgresql-42.2.8.jar" jdbcpostgreSQL
 
   //MAKE SURE YOU ARE ON VPN or TAMU WIFI TO ACCESS DATABASE
   public static void main(String args[]) {
@@ -39,8 +37,6 @@ public class jdbcpostgreSQL {
        //create a statement object
        Statement stmt = conn.createStatement();
 
-
-       //Running a query
       
       //the starting variables for the data to insert it into the array
        int orderId = 220904004;
@@ -56,22 +52,19 @@ public class jdbcpostgreSQL {
        int ordereddrink =0;
        Integer [] inventory = new Integer[25]; 
 
-       //TODO: loop through for different quantities, inventory items, times. order ids and amounts throughout the day. RANDOMIZE
+      //TODO: loop through for different quantities, inventory items, times. order ids and amounts throughout the day. RANDOMIZE
 
-      //need to insert into checkout to make it work
-
+      //need to insert into checkout to generate checkoutid foreign key before ordering insert
        PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout( checkoutid, amount) VALUES (?, ?)");
        checkoutStatement.setInt(1, checkoutid);
-       //checkoutStatement.setInt(2, 1);
        checkoutStatement.setFloat(2, amount);
 
        checkoutStatement.executeUpdate();
 
-        // now we are able to insert into ordering 
+      // now we are able to insert into ordering without errors
        PreparedStatement statement = conn.prepareStatement("INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
-       //send statement to DBMS
-       //This executeQuery command is useful for data retrieval
-
+       
+       //transform java data into proper SQL variables
        Array inventoryused = conn.createArrayOf("INT", inventory);
        statement.setInt(1, orderId); 
        statement.setTime(2,time );
@@ -87,18 +80,12 @@ public class jdbcpostgreSQL {
        statement.setArray(12 , inventoryused);
 
        statement.executeUpdate();
-       //OR
-       //This executeUpdate command is useful for updating data
-       //int result = stmt.executeUpdate(sqlStatement);
+  
 
        //OUTPUT
-       //You will need to output the results differently depeninding on which function you use
+      
        System.out.println("--------------------Query Results--------------------");
-       //while (result.next()) {
-       //System.out.println(result.getString("column_name"));
-       //}
-       //OR
-       //System.out.println(result);
+    
    } catch (Exception e){
        e.printStackTrace();
        System.err.println(e.getClass().getName()+": "+e.getMessage());
