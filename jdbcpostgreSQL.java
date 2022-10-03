@@ -229,7 +229,7 @@ public class jdbcpostgreSQL {
 
       // TODO: loop through for different quantities, inventory items, times. order
       // ids and amounts throughout the day. RANDOMIZE
-      // For better understanding:
+      // For better understanding of how randomizing works:
       orderedgyro = getRandomValue(0, 1);
       orderedbowl = getRandomValue(0, 1);
       orderedpitahummus = getRandomValue(0, 2);
@@ -241,6 +241,19 @@ public class jdbcpostgreSQL {
           orderedprotein, ordereddressing, ordereddrink);
       inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
           orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
+
+      System.out.println("Ordered Gyro:" + orderedgyro);
+      System.out.println("Ordered Bowl:" + orderedbowl);
+      System.out.println("Ordered pita & hummus:" + orderedpitahummus);
+      System.out.println("Ordered 2 Falafel:" + orderedfalafel);
+      System.out.println("Ordered Protein:" + orderedprotein);
+      System.out.println("Ordered Dressing:" + ordereddressing);
+      System.out.println("Ordered Drink:" + ordereddrink);
+      System.out.println(amount);
+      for (int i = 0; i < inventory.length; i++) {
+        System.out.print(inventory[i] + ",");
+      }
+      System.out.println();
 
       // need to insert into checkout to generate checkoutid foreign key before
       // ordering insert
