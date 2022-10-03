@@ -1,4 +1,7 @@
 import java.sql.*;
+import java.io.*;
+import java.util.Scanner;
+
 
 public class jdbcpostgreSQL {
 
@@ -35,16 +38,27 @@ public class jdbcpostgreSQL {
        //create a statement object
        Statement stmt = conn.createStatement();
 
+
        //Running a query
        //TODO: update the sql command here
-       //String name = 'jay';
+       
+
        //String sqlStatement = "INSERT INTO teammembers (name, phonenumber, email) VALUES(" + str(name) + ")";
-       PreparedStatement statement = conn.prepareStatement("INSERT INTO teammembers (name, phonenumber, email) VALUES (?,?,?)");
+       PreparedStatement statement = conn.prepareStatement("INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
        //send statement to DBMS
        //This executeQuery command is useful for data retrieval
-       statement.setString(1, "vaghela");
-       statement.setInt(2, 1234);
-       statement.setString(3, "@gmail.com");
+       statement.setInt(1, orderId); 
+       statement.setTime(2,time );
+       statement.setFloat(3, amount);
+       statement.setInt( 4, checkoutid);
+       statement.setInt(5, orderedgyro);
+       statement.setInt(6, orderedbowl); 
+       statement.setInt(7, orderedpitahummus);
+       statement.setInt(8, orderedfalafel); 
+       statement.setInt(9, orderedprotein);
+       statement.setInt(10, ordereddressing);
+       statement.setInt(11 , ordereddrink);
+       statement.setArray(12 , inventoryused);
 
        ResultSet result = statement.executeQuery();
        //OR
@@ -74,3 +88,4 @@ public class jdbcpostgreSQL {
     }//end try catch
   }//end main
 }//end Class
+
