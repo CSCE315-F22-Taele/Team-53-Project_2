@@ -1,6 +1,7 @@
 import java.sql.*;
 import java.io.*;
 import java.util.Scanner;
+import java.sql.Time;
 
 
 public class jdbcpostgreSQL {
@@ -41,12 +42,26 @@ public class jdbcpostgreSQL {
 
        //Running a query
        //TODO: update the sql command here
-       
+       int orderId = 220904001;
+       Time time = new Time(2211696000000L);
+       float amount = 0;
+       int checkoutid = 1;
+       int orderedgyro = 0;
+       int orderedbowl =0;
+       int orderedpitahummus= 0;
+       int orderedfalafel=0;
+       int orderedprotein = 0;
+       int ordereddressing = 0;
+       int ordereddrink =0;
+       Integer [] inventory = new Integer[25]; 
+
+       System.out.println(time);
 
        //String sqlStatement = "INSERT INTO teammembers (name, phonenumber, email) VALUES(" + str(name) + ")";
        PreparedStatement statement = conn.prepareStatement("INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
        //send statement to DBMS
        //This executeQuery command is useful for data retrieval
+       Array inventoryused = conn.createArrayOf("INT", inventory);
        statement.setInt(1, orderId); 
        statement.setTime(2,time );
        statement.setFloat(3, amount);
@@ -88,4 +103,3 @@ public class jdbcpostgreSQL {
     }//end try catch
   }//end main
 }//end Class
-
