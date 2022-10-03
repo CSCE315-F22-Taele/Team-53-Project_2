@@ -1,4 +1,4 @@
 SELECT
     COUNT(orderid)
 FROM
-    ordering
+    ordering;
