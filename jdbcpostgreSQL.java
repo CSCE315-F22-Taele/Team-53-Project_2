@@ -9,6 +9,18 @@ public class jdbcpostgreSQL {
         .nextInt(Min, Max + 1);
   }
 
+  public static float getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
+      int orderedprotein, int ordereddressing, int ordereddrink) {
+    double ordertotal = (8.09 * orderedgyro) +
+        (8.09 * orderedbowl) +
+        (3.49 * orderedpitahummus) +
+        (3.49 * orderedfalafel) +
+        (1.99 * orderedprotein) +
+        (0.39 * ordereddressing) +
+        (2.45 * ordereddrink);
+    return (float) ordertotal;
+  }
+
   // Commands to run this script
   // This will compile all java files in this directory
   // javac *.java
