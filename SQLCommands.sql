@@ -1,7 +1,7 @@
 /* total sales */
 
 SELECT 
-    SUM(amount) total sales
+    SUM(amount) total sales,
 FROM
     checkout;
 
@@ -9,6 +9,14 @@ FROM
 /* number of orders */
 
 SELECT
-    COUNT(orderid)
+    COUNT(orderid),
 FROM
     ordering;
+
+
+/* cost of inventory */
+SELECT 
+    itemname,
+    amount * cost AS total cost
+FROM 
+    inventory;
