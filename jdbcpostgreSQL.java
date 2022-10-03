@@ -21,6 +21,164 @@ public class jdbcpostgreSQL {
     return (float) ordertotal;
   }
 
+  public static Integer[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
+      int orderedprotein, int ordereddressing, int ordereddrink) {
+    Integer[] inventory = new Integer[24];
+
+    if (orderedgyro > 0) {
+      inventory[16] = orderedgyro;
+    }
+
+    if (orderedbowl > 0) {
+      inventory[19] = orderedbowl;
+    }
+
+    int bowlOrGyro = orderedgyro + orderedbowl;
+    inventory[4] = 0;
+    inventory[5] = 0;
+    inventory[6] = 0;
+    inventory[7] = 0;
+    inventory[8] = 0;
+    inventory[9] = 0;
+    inventory[10] = 0;
+    inventory[11] = 0;
+    inventory[12] = 0;
+    while (bowlOrGyro > 0) {
+      // Rice
+      if (inventory[0] == null) {
+        inventory[0] = 0;
+      }
+      inventory[0] += getRandomValue(1, 3);
+
+      // Protein (chicken or sp meatball)
+      int curProtein = getRandomValue(1, 2);
+      switch (curProtein) {
+        case 1:
+          if (inventory[1] == null) {
+            inventory[1] = 0;
+          }
+          inventory[1] += 1;
+          break;
+        case 2:
+          if (inventory[2] == null) {
+            inventory[2] = 0;
+          }
+          inventory[2] += 1;
+          break;
+      }
+
+      // Toppings - there's prob a better way to write this??
+      inventory[4] += getRandomValue(0, 2);
+      inventory[5] += getRandomValue(0, 2);
+      inventory[6] += getRandomValue(0, 2);
+      inventory[7] += getRandomValue(0, 2);
+      inventory[8] += getRandomValue(0, 2);
+      inventory[9] += getRandomValue(0, 2);
+      inventory[10] += getRandomValue(0, 2);
+      inventory[11] += getRandomValue(0, 2);
+      inventory[12] += getRandomValue(0, 2);
+
+      // Dressing
+      int curDressing = getRandomValue(1, 3);
+      switch (curDressing) {
+        case 1: // Harissa
+          if (inventory[13] == null) {
+            inventory[13] = 0;
+          }
+          inventory[13] += 1;
+          break;
+        case 2: // Tzatziki sauce
+          if (inventory[14] == null) {
+            inventory[14] = 0;
+          }
+          inventory[14] += 1;
+          break;
+        case 3: // balsamic vinegar
+          if (inventory[15] == null) {
+            inventory[15] = 0;
+          }
+          inventory[15] += 1;
+          break;
+      }
+
+      bowlOrGyro--;
+    }
+
+    // return topping values to null, if not included in order
+    for (int i = 4; i < 12; i++) {
+      if (inventory[i] == 0) {
+        inventory[i] = null;
+      }
+    }
+
+    if (orderedpitahummus > 0) {
+      if (inventory[16] == null) { // pita
+        inventory[16] = orderedpitahummus;
+      } else {
+        inventory[16] = orderedpitahummus;
+      }
+      inventory[17] = orderedpitahummus; // hummus
+    }
+
+    if (orderedfalafel > 0) {
+      inventory[3] = orderedfalafel * 2;
+    }
+
+    while (orderedprotein > 0) {
+      int curProtein = getRandomValue(1, 2);
+      switch (curProtein) {
+        case 1: // chicken
+          if (inventory[1] == null) {
+            inventory[1] = 0;
+          }
+          inventory[1] += 1;
+          break;
+        case 2: // spicy meatball
+          if (inventory[2] == null) {
+            inventory[2] = 0;
+          }
+          inventory[2] += 1;
+          break;
+      }
+      orderedprotein--;
+    }
+
+    while (ordereddressing > 0) {
+      int curDressing = getRandomValue(1, 3);
+      switch (curDressing) {
+        case 1: // harissa
+          if (inventory[13] == null) {
+            inventory[13] = 0;
+          }
+          inventory[13] += 1;
+          break;
+        case 2: // tzatziki sauce
+          if (inventory[14] == null) {
+            inventory[14] = 0;
+          }
+          inventory[14] += 1;
+          break;
+        case 3: // balsamic vinegar
+          if (inventory[15] == null) {
+            inventory[15] = 0;
+          }
+          inventory[15] += 1;
+          break;
+      }
+      ordereddressing--;
+    }
+
+    if (ordereddrink > 0) {
+      inventory[20] = ordereddrink; // cup
+      inventory[21] = ordereddrink; // lid
+      inventory[22] = ordereddrink; // straw
+    }
+
+    inventory[23] = getRandomValue(1, 10); // Napkins
+
+    return inventory;
+  }
+
   // Commands to run this script
   // This will compile all java files in this directory
   // javac *.java
@@ -71,6 +229,18 @@ public class jdbcpostgreSQL {
 
       // TODO: loop through for different quantities, inventory items, times. order
       // ids and amounts throughout the day. RANDOMIZE
+      // For better understanding:
+      orderedgyro = getRandomValue(0, 1);
+      orderedbowl = getRandomValue(0, 1);
+      orderedpitahummus = getRandomValue(0, 2);
+      orderedfalafel = getRandomValue(0, 2);
+      orderedprotein = getRandomValue(0, 2);
+      ordereddressing = getRandomValue(0, 3);
+      ordereddrink = getRandomValue(1, 2);
+      amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
+          orderedprotein, ordereddressing, ordereddrink);
+      inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
+          orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
 
       // need to insert into checkout to generate checkoutid foreign key before
       // ordering insert
