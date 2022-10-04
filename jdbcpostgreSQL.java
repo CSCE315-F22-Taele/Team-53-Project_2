@@ -5,43 +5,44 @@ import java.util.concurrent.ThreadLocalRandom;
 public class jdbcpostgreSQL {
 
   // Return a randomized order in string format
-  public static String getOrderEntity(int orderId, Time time, float amount, int orderedgyro, int orderedbowl,
-      int orderedpitahummus, int orderedfalafel, int orderedprotein, int ordereddressing, int ordereddrink,
-      Integer[] inventory) {
+  // public static String getOrderEntity(int orderId, Time time){
+  // float amount, int orderedgyro, int orderedbowl,
+  //     int orderedpitahummus, int orderedfalafel, int orderedprotein, int ordereddressing, int ordereddrink,
+  //     Integer[] inventory) {
+    
+  //   String values = "VALUES ('";
+  //   //orderId = 220904001; // TODO: Determime how to update orderId
+  //   //time = new Time(2211696000000L); // TODO: Determine how to update time
+  //   orderedgyro = getRandomValue(0, 1);
+  //   orderedbowl = getRandomValue(0, 1);
+  //   orderedpitahummus = getRandomValue(0, 2);
+  //   orderedfalafel = getRandomValue(0, 2);
+  //   orderedprotein = getRandomValue(0, 2);
+  //   ordereddressing = getRandomValue(0, 3);
+  //   ordereddrink = getRandomValue(1, 2);
+  //   amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing,
+  //       ordereddrink);
+  //   inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
+  //       orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
 
-    String values = "VALUES ('";
-    orderId = 220904002; // TODO: Determime how to update orderId
-    time = new Time(2211696000000L); // TODO: Determine how to update time
-    orderedgyro = getRandomValue(0, 1);
-    orderedbowl = getRandomValue(0, 1);
-    orderedpitahummus = getRandomValue(0, 2);
-    orderedfalafel = getRandomValue(0, 2);
-    orderedprotein = getRandomValue(0, 2);
-    ordereddressing = getRandomValue(0, 3);
-    ordereddrink = getRandomValue(1, 2);
-    amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing,
-        ordereddrink);
-    inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
-        orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
+  //   values = values + orderId + "', '" + time + "', '" + amount + "', '" + orderedgyro + "', '" + orderedbowl + "', '"
+  //       + orderedpitahummus + "', '" + orderedfalafel + "', '" + orderedprotein + "', '" + ordereddressing + "', '"
+  //       + ordereddrink + "', '";
 
-    values = values + orderId + "', '" + time + "', '" + amount + "', '" + orderedgyro + "', '" + orderedbowl + "', '"
-        + orderedpitahummus + "', '" + orderedfalafel + "', '" + orderedprotein + "', '" + ordereddressing + "', '"
-        + ordereddrink + "', '";
+  //   String inventoryArray = "(";
+  //   for (int i = 0; i < inventory.length; i++) {
+  //     inventoryArray += inventory[i];
+  //     if (i < inventory.length - 1) {
+  //       inventoryArray += ',';
+  //     }
+  //   }
+  //   inventoryArray += ')';
 
-    String inventoryArray = "(";
-    for (int i = 0; i < inventory.length; i++) {
-      inventoryArray += inventory[i];
-      if (i < inventory.length - 1) {
-        inventoryArray += ',';
-      }
-    }
-    inventoryArray += ')';
-
-    values += inventoryArray + "');";
-    return values;
-  }
+  //   values += inventoryArray + "');";
+  // }
 
   public static int getRandomValue(int Min, int Max) {
+    //FIX ME: SEE IF WE CAN RANDOMIZE THIS SO THAT THE AMOUNT IS 0 50% OF THE TIME, 1 30% AND MORE THAN 1 OTHER: 20%
     return ThreadLocalRandom
         .current()
         .nextInt(Min, Max + 1);
@@ -61,8 +62,12 @@ public class jdbcpostgreSQL {
 
   public static Integer[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
       int orderedprotein, int ordereddressing, int ordereddrink) {
+    
+    //FIX ME: MAKE THIS INTO 0 AS THE CONDITION. NOT NULL
+    //
     Integer[] inventory = new Integer[24];
-
+   
+      
     if (orderedgyro > 0) {
       inventory[16] = orderedgyro;
     }
@@ -217,6 +222,8 @@ public class jdbcpostgreSQL {
     return inventory;
   }
 
+  
+
   // Commands to run this script
   // This will compile all java files in this directory
   // javac *.java
@@ -248,26 +255,46 @@ public class jdbcpostgreSQL {
     System.out.println("Opened database successfully");
 
     try {
+
       // create a statement object
       Statement stmt = conn.createStatement();
 
       // the starting variables for the data to insert it into the array
-      int orderId = 220904004;
-      Time time = new Time(2211696000000L);
+      int orderId = 220904000;  //CHANGE ME PER DATE. 
+      int numOrdersWant = 120;
+      int amountCount=0;
+     // Time time = new Time(1662303600000L);
       float amount = 0;
-      int checkoutid = 4; // we want to change this so that itll autoincrement.
+      int checkoutid = 0; 
       int orderedgyro = 0;
       int orderedbowl = 0;
       int orderedpitahummus = 0;
       int orderedfalafel = 0;
       int orderedprotein = 0;
       int ordereddressing = 0;
-      int ordereddrink = 0;
+      int ordereddrink = 0; 
       Integer[] inventory = new Integer[25];
 
-      // TODO: loop through for different quantities, inventory items, times. order
-      // ids and amounts throughout the day. RANDOMIZE
-      // LINE 270-295: For better understanding of how randomizing works. DELETE!
+
+      // for (int i =0; i< inventory.length; i++){
+      //   inventory[i] =0;
+      // }
+
+      int orderCount = 0;
+
+      // Time times[] = new Time[numOrdersWant];
+      long timeMS =  1662303600000L; 
+      // for(int i=0; i< times.length; i++){
+      //   long time = timeMS + getRandomValue(5000,480000 );
+      //   times[i] = new Time(time);
+      // }
+      while( orderCount <  numOrdersWant || timeMS < 1662292800000 ) { 
+
+
+      orderId += 1;
+      timeMS = timeMS + getRandomValue(5000,480000 );
+      Time time = new Time(timeMS);
+      orderCount +=1;
       orderedgyro = getRandomValue(0, 1);
       orderedbowl = getRandomValue(0, 1);
       orderedpitahummus = getRandomValue(0, 2);
@@ -275,39 +302,33 @@ public class jdbcpostgreSQL {
       orderedprotein = getRandomValue(0, 2);
       ordereddressing = getRandomValue(0, 3);
       ordereddrink = getRandomValue(1, 2);
-      amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
-          orderedprotein, ordereddressing, ordereddrink);
+      amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing,
+          ordereddrink);
+      
+      
+      amountCount += amount; 
+      
       inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
           orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
 
-      System.out.println("Ordered Gyro:" + orderedgyro);
-      System.out.println("Ordered Bowl:" + orderedbowl);
-      System.out.println("Ordered pita & hummus:" + orderedpitahummus);
-      System.out.println("Ordered 2 Falafel:" + orderedfalafel);
-      System.out.println("Ordered Protein:" + orderedprotein);
-      System.out.println("Ordered Dressing:" + ordereddressing);
-      System.out.println("Ordered Drink:" + ordereddrink);
-      System.out.println(amount);
-      for (int i = 0; i < inventory.length; i++) {
-        System.out.print(inventory[i] + ",");
-      }
-      System.out.println();
-      System.out.println();
-
-      // LINE 270-295 placed into getOrderEntity function
-      String oneOrder = getOrderEntity(orderId, time, amount, orderedgyro, orderedbowl,
-          orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing, ordereddrink, inventory);
-
-      System.out.println(oneOrder);
+      //String oneOrder = getOrderEntity(orderId, time, amount, orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing, ordereddrink, inventory);
+      //System.out.println(oneOrder);
 
       // need to insert into checkout to generate checkoutid foreign key before
       // ordering insert
-      PreparedStatement checkoutStatement = conn
-          .prepareStatement("INSERT INTO checkout( checkoutid, amount) VALUES (?, ?)");
-      checkoutStatement.setInt(1, checkoutid);
-      checkoutStatement.setFloat(2, amount);
 
+      PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(amount) VALUES (?)");
+      //checkoutStatement.setInt(1, checkoutid)
+      checkoutStatement.setFloat(1, amount);
       checkoutStatement.executeUpdate();
+
+      String checkoutidStatement = "SELECT checkoutid FROM checkout WHERE checkoutid = (SELECT MAX(checkoutid) FROM checkout)";
+      ResultSet checkoutResult = stmt.executeQuery(checkoutidStatement);
+      while (checkoutResult.next()) {
+        checkoutid = checkoutResult.getInt("checkoutid");
+      }
+      System.out.println(checkoutResult);
+
 
       // now we are able to insert into ordering without errors
       PreparedStatement statement = conn.prepareStatement(
@@ -331,8 +352,9 @@ public class jdbcpostgreSQL {
       statement.executeUpdate();
 
       // OUTPUT
-
-      System.out.println("--------------------Query Results--------------------");
+      System.out.println(amountCount);
+    }
+      //System.out.println("--------------------Query Results--------------------");
 
     } catch (Exception e) {
       e.printStackTrace();
