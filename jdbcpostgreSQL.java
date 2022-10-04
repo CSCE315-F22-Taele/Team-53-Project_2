@@ -196,95 +196,107 @@ public class jdbcpostgreSQL {
       Statement stmt = conn.createStatement();
 
       // CHANGE ME PER DATE.
-      int orderId = 220911000; //4, 5, 06, 7, 8
-      int numOrdersWant = 242;
-      int employeeid = 1;
+      int [] orderIdArray = new int [] {220904000,220905000, 220906000, 220907000, 220908000,  220909000, 220910000,
+        220911000, 220912000, 220913000, 220914000, 220915000, 220916000, 220917000, 
+        220918000, 220919000, 220920000, 220922000, 220923000, 220924000, 220925000}; 
+      int [] numOrdersWantArray = new int [] {81, 98, 113, 85, 124, 72, 242, 
+        102, 73, 96, 85, 94, 107, 256,
+        89, 98, 111, 78, 112, 98, 123 };
+      int [] employeeidArray = new int[]{0, 1, 2, 3, 4, 5, 1,
+                        2, 3, 4, 5, 0, 1, 2,
+                        3, 4, 5, 0, 1, 2, 3};
 
-      int orderCount = 0;
+      for( int i=0; i< orderIdArray.length; i++){
 
-      // will change each iteration
-      double amount = 0;
-      int checkoutid = 0;
-      int orderedgyro = 0;
-      int orderedbowl = 0;
-      int orderedpitahummus = 0;
-      int orderedfalafel = 0;
-      int orderedprotein = 0;
-      int ordereddressing = 0;
-      int ordereddrink = 0;
-      Integer[] inventory = new Integer[24];
+        int orderId = orderIdArray[i];
+        int numOrdersWant = numOrdersWantArray[i];
+        int employeeid = employeeidArray[i];
 
-      long timeMS = 1662303600000L;
-    
-      while (orderCount < numOrdersWant || timeMS < 1662292800000L) {
+        int orderCount = 0;
+        // will change each iteration
+        double amount = 0;
+        int checkoutid = 0;
+        int orderedgyro = 0;
+        int orderedbowl = 0;
+        int orderedpitahummus = 0;
+        int orderedfalafel = 0;
+        int orderedprotein = 0;
+        int ordereddressing = 0;
+        int ordereddrink = 0;
+        Integer[] inventory = new Integer[24];
 
-        orderId += 1;
-        timeMS = timeMS + getRandomValue(5000, 480000);
-        Time time = new Time(timeMS);
-        orderCount += 1;
-        orderedgyro = getRandomValue(0, 1);
-        orderedbowl = getRandomValue(0, 1);
-
-        orderedpitahummus = getRandomValue(0, 1);
-        orderedfalafel = getRandomValue(0, 1);
-        orderedprotein = getRandomValue(0, 1);
-        ordereddressing = getRandomValue(0, 1);
-        ordereddrink = getRandomValue(0, 2);
-        amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
-            orderedprotein, ordereddressing, ordereddrink);
-
-        inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
-            orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
-
-        // need to insert into checkout to generate checkoutid foreign key before
-        // Populate checkout attributes
-        int paymentmethod = getRandomValue(0, 2);
-        String cardnumber = getCardNumber(paymentmethod);
-        while( cardnumber.charAt(0) == '-'){
-          cardnumber = getCardNumber(paymentmethod);
-        }
+        long timeMS = 1662303600000L;
         
+        while (orderCount < numOrdersWant || timeMS < 1662292800000L) {
 
-        PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(paymentmethod, amount, cardnumber, employeeid) VALUES (?, ?,?, ?)");
-        // checkoutStatement.setInt(1, checkoutid)
-        checkoutStatement.setDouble(2, amount);
-        checkoutStatement.setInt(1, paymentmethod);
-        checkoutStatement.setString(3, cardnumber);
-        checkoutStatement.setInt(4, employeeid);
+          orderId += 1;
+          timeMS = timeMS + getRandomValue(5000, 480000);
+          Time time = new Time(timeMS);
+          orderCount += 1;
+          orderedgyro = getRandomValue(0, 1);
+          orderedbowl = getRandomValue(0, 1);
 
-        checkoutStatement.executeUpdate();
+          orderedpitahummus = getRandomValue(0, 1);
+          orderedfalafel = getRandomValue(0, 1);
+          orderedprotein = getRandomValue(0, 1);
+          ordereddressing = getRandomValue(0, 1);
+          ordereddrink = getRandomValue(0, 2);
+          amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
+              orderedprotein, ordereddressing, ordereddrink);
 
-        // get the checkoutid to use as foreign key
-        String checkoutidStatement = "SELECT checkoutid FROM checkout WHERE checkoutid = (SELECT MAX(checkoutid) FROM checkout)";
-        ResultSet checkoutResult = stmt.executeQuery(checkoutidStatement);
-        while (checkoutResult.next()) {
-          checkoutid = checkoutResult.getInt("checkoutid");
-        }
+          inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
+              orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
 
-        // now we are able to insert into ordering without errors
-        PreparedStatement statement = conn.prepareStatement(
-            "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
-
-        // transform java data into proper SQL variables
-        
-        Array inventoryused = conn.createArrayOf("INT", inventory);
-        statement.setInt(1, orderId);
-        statement.setTime(2, time);
-        statement.setDouble(3, amount);
-        statement.setInt(4, checkoutid);
-        statement.setInt(5, orderedgyro);
-        statement.setInt(6, orderedbowl);
-        statement.setInt(7, orderedpitahummus);
-        statement.setInt(8, orderedfalafel);
-        statement.setInt(9, orderedprotein);
-        statement.setInt(10, ordereddressing);
-        statement.setInt(11, ordereddrink);
-        statement.setArray(12, inventoryused);
+          // need to insert into checkout to generate checkoutid foreign key before
+          // Populate checkout attributes
+          int paymentmethod = getRandomValue(0, 2);
+          String cardnumber = getCardNumber(paymentmethod);
+          while( cardnumber.charAt(0) == '-'){
+            cardnumber = getCardNumber(paymentmethod);
+          }
           
-        statement.executeUpdate();
-        
-        // OUTPUT
-        System.out.println(orderCount);
+
+          PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(paymentmethod, amount, cardnumber, employeeid) VALUES (?, ?,?, ?)");
+          // checkoutStatement.setInt(1, checkoutid)
+          checkoutStatement.setDouble(2, amount);
+          checkoutStatement.setInt(1, paymentmethod);
+          checkoutStatement.setString(3, cardnumber);
+          checkoutStatement.setInt(4, employeeid);
+
+          checkoutStatement.executeUpdate();
+
+          // get the checkoutid to use as foreign key
+          String checkoutidStatement = "SELECT checkoutid FROM checkout WHERE checkoutid = (SELECT MAX(checkoutid) FROM checkout)";
+          ResultSet checkoutResult = stmt.executeQuery(checkoutidStatement);
+          while (checkoutResult.next()) {
+            checkoutid = checkoutResult.getInt("checkoutid");
+          }
+
+          // now we are able to insert into ordering without errors
+          PreparedStatement statement = conn.prepareStatement(
+              "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
+
+          // transform java data into proper SQL variables
+          
+          Array inventoryused = conn.createArrayOf("INT", inventory);
+          statement.setInt(1, orderId);
+          statement.setTime(2, time);
+          statement.setDouble(3, amount);
+          statement.setInt(4, checkoutid);
+          statement.setInt(5, orderedgyro);
+          statement.setInt(6, orderedbowl);
+          statement.setInt(7, orderedpitahummus);
+          statement.setInt(8, orderedfalafel);
+          statement.setInt(9, orderedprotein);
+          statement.setInt(10, ordereddressing);
+          statement.setInt(11, ordereddrink);
+          statement.setArray(12, inventoryused);
+            
+          statement.executeUpdate();
+          
+          // OUTPUT
+          System.out.println(orderCount);
+        }
       }
       // System.out.println("--------------------Query Results--------------------");
 
