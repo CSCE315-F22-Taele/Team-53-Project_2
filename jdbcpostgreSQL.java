@@ -6,7 +6,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class jdbcpostgreSQL {
 
   public static int getRandomValue(int Min, int Max) {
-    //FIX ME: SEE IF WE CAN RANDOMIZE THIS SO THAT THE AMOUNT IS 0 50% OF THE TIME, 1 30% AND MORE THAN 1 OTHER: 20%
+    // FIX ME: SEE IF WE CAN RANDOMIZE THIS SO THAT THE AMOUNT IS 0 50% OF THE TIME,
+    // 1 30% AND MORE THAN 1 OTHER: 20%
     return ThreadLocalRandom
         .current()
         .nextInt(Min, Max + 1);
@@ -26,12 +27,11 @@ public class jdbcpostgreSQL {
 
   public static Integer[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
       int orderedprotein, int ordereddressing, int ordereddrink) {
-    
-    //FIX ME: MAKE THIS INTO 0 AS THE CONDITION. NOT NULL
+
+    // FIX ME: MAKE THIS INTO 0 AS THE CONDITION. NOT NULL
     //
     Integer[] inventory = new Integer[24];
-   
-      
+
     if (orderedgyro > 0) {
       inventory[16] = orderedgyro;
     }
@@ -186,7 +186,27 @@ public class jdbcpostgreSQL {
     return inventory;
   }
 
-  
+  public static String getCardNumber(int paymentmethod) {
+    int uin = 0;
+    String cardnumber = "";
+    // Determine a card
+    switch (paymentmethod) {
+      case 0: // meal swipes --> uin
+        uin = getRandomValue(100000000, 900000000);
+        cardnumber = String.format("%d", uin);
+        break;
+      case 1: // dining dollars
+        uin = getRandomValue(100000000, 900000000);
+        cardnumber = String.format("%d", uin);
+        break;
+      case 2:
+        Random rd = new Random();
+        cardnumber = Long.toString(rd.nextLong() / 1000);
+        break;
+    }
+
+    return cardnumber;
+  }
 
   // Commands to run this script
   // This will compile all java files in this directory
@@ -223,105 +243,104 @@ public class jdbcpostgreSQL {
       // create a statement object
       Statement stmt = conn.createStatement();
 
-
-      //CHANGE ME PER DATE. 
-      int orderId = 220904000;  
+      // CHANGE ME PER DATE.
+      int orderId = 220904000;
       int numOrdersWant = 120;
 
-      int amountCount=0;
+      int amountCount = 0;
 
-     // will change each iteration
+      // will change each iteration
       float amount = 0;
-      int checkoutid = 0; 
+      int checkoutid = 0;
       int orderedgyro = 0;
       int orderedbowl = 0;
       int orderedpitahummus = 0;
       int orderedfalafel = 0;
       int orderedprotein = 0;
       int ordereddressing = 0;
-      int ordereddrink = 0; 
+      int ordereddrink = 0;
       Integer[] inventory = new Integer[25];
 
-
       // for (int i =0; i< inventory.length; i++){
-      //   inventory[i] =0;
+      // inventory[i] =0;
       // }
 
       int orderCount = 0;
 
       // Time times[] = new Time[numOrdersWant];
-      long timeMS =  1662303600000L; 
+      long timeMS = 1662303600000L;
       // for(int i=0; i< times.length; i++){
-      //   long time = timeMS + getRandomValue(5000,480000 );
-      //   times[i] = new Time(time);
+      // long time = timeMS + getRandomValue(5000,480000 );
+      // times[i] = new Time(time);
       // }
-      while( orderCount <  numOrdersWant || timeMS < 1662292800000L ) { 
+      while (orderCount < numOrdersWant || timeMS < 1662292800000L) {
 
+        orderId += 1;
+        timeMS = timeMS + getRandomValue(5000, 480000);
+        Time time = new Time(timeMS);
+        orderCount += 1;
+        orderedgyro = getRandomValue(0, 1);
+        orderedbowl = getRandomValue(0, 1);
 
-      orderId += 1;
-      timeMS = timeMS + getRandomValue(5000,480000 );
-      Time time = new Time(timeMS);
-      orderCount +=1;
-      orderedgyro = getRandomValue(0, 1);
-      orderedbowl = getRandomValue(0, 1);
+        orderedpitahummus = getRandomValue(0, 1);
+        orderedfalafel = getRandomValue(0, 1);
+        orderedprotein = getRandomValue(0, 1);
+        ordereddressing = getRandomValue(0, 1);
+        ordereddrink = getRandomValue(0, 2);
+        amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
+            orderedprotein, ordereddressing, ordereddrink);
 
-      orderedpitahummus = getRandomValue(0, 1);
-      orderedfalafel = getRandomValue(0, 1);
-      orderedprotein = getRandomValue(0, 1);
-      ordereddressing = getRandomValue(0, 1);
-      ordereddrink = getRandomValue(0, 2);
-      amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
-          orderedprotein, ordereddressing, ordereddrink);
+        // FIX ME AMOUNT IS NOT DECIMAL CORRECT.
+        amount = (float) Math.round(amount * 100) / 100;
 
-      //FIX ME AMOUNT IS NOT DECIMAL CORRECT.
-      amount = (float) Math.round(amount*100)/100;
+        inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
+            orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
 
-      inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
-          orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
+        System.out.println(amount);
 
-      System.out.println(amount);
+        // need to insert into checkout to generate checkoutid foreign key before
+        // Populate checkout attributes
+        int paymentmethod = getRandomValue(0, 2);
+        String cardnumber = getCardNumber(paymentmethod);
+        int employeeid = 0;
 
-      // need to insert into checkout to generate checkoutid foreign key before
+        PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(amount) VALUES (?)");
+        // checkoutStatement.setInt(1, checkoutid)
+        checkoutStatement.setFloat(1, amount);
+        checkoutStatement.executeUpdate();
 
-      PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(amount) VALUES (?)");
-      //checkoutStatement.setInt(1, checkoutid)
-      checkoutStatement.setFloat(1, amount);
-      checkoutStatement.executeUpdate();
+        // get the checkoutid to use as foreign key
+        String checkoutidStatement = "SELECT checkoutid FROM checkout WHERE checkoutid = (SELECT MAX(checkoutid) FROM checkout)";
+        ResultSet checkoutResult = stmt.executeQuery(checkoutidStatement);
+        while (checkoutResult.next()) {
+          checkoutid = checkoutResult.getInt("checkoutid");
+        }
 
-      //get the checkoutid to use as foreign key
-      String checkoutidStatement = "SELECT checkoutid FROM checkout WHERE checkoutid = (SELECT MAX(checkoutid) FROM checkout)";
-      ResultSet checkoutResult = stmt.executeQuery(checkoutidStatement);
-      while (checkoutResult.next()) {
-        checkoutid = checkoutResult.getInt("checkoutid");
+        // now we are able to insert into ordering without errors
+        PreparedStatement statement = conn.prepareStatement(
+            "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
+
+        // transform java data into proper SQL variables
+        Array inventoryused = conn.createArrayOf("INT", inventory);
+        statement.setInt(1, orderId);
+        statement.setTime(2, time);
+        statement.setFloat(3, amount);
+        statement.setInt(4, checkoutid);
+        statement.setInt(5, orderedgyro);
+        statement.setInt(6, orderedbowl);
+        statement.setInt(7, orderedpitahummus);
+        statement.setInt(8, orderedfalafel);
+        statement.setInt(9, orderedprotein);
+        statement.setInt(10, ordereddressing);
+        statement.setInt(11, ordereddrink);
+        statement.setArray(12, inventoryused);
+
+        statement.executeUpdate();
+
+        // OUTPUT
+
       }
-    
-
-
-      // now we are able to insert into ordering without errors
-      PreparedStatement statement = conn.prepareStatement(
-          "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
-
-      // transform java data into proper SQL variables
-      Array inventoryused = conn.createArrayOf("INT", inventory);
-      statement.setInt(1, orderId);
-      statement.setTime(2, time);
-      statement.setFloat(3, amount);
-      statement.setInt(4, checkoutid);
-      statement.setInt(5, orderedgyro);
-      statement.setInt(6, orderedbowl);
-      statement.setInt(7, orderedpitahummus);
-      statement.setInt(8, orderedfalafel);
-      statement.setInt(9, orderedprotein);
-      statement.setInt(10, ordereddressing);
-      statement.setInt(11, ordereddrink);
-      statement.setArray(12, inventoryused);
-
-      statement.executeUpdate();
-
-      // OUTPUT
-
-    }
-      //System.out.println("--------------------Query Results--------------------");
+      // System.out.println("--------------------Query Results--------------------");
 
     } catch (Exception e) {
       e.printStackTrace();
