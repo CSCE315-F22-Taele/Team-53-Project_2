@@ -290,13 +290,8 @@ public class jdbcpostgreSQL {
         amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
             orderedprotein, ordereddressing, ordereddrink);
 
-        // FIX ME AMOUNT IS NOT DECIMAL CORRECT.
-        amount = (float) Math.round(amount * 100) / 100;
-
         inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
             orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
-
-        System.out.println(amount);
 
         // need to insert into checkout to generate checkoutid foreign key before
         // Populate checkout attributes
