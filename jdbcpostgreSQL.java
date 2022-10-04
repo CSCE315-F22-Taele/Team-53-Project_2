@@ -275,7 +275,7 @@ public class jdbcpostgreSQL {
       orderedfalafel = getRandomValue(0, 1);
       orderedprotein = getRandomValue(0, 1);
       ordereddressing = getRandomValue(0, 1);
-      ordereddrink = getRandomValue(1, 2);
+      ordereddrink = getRandomValue(0, 2);
       amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
           orderedprotein, ordereddressing, ordereddrink);
       inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
@@ -303,29 +303,6 @@ public class jdbcpostgreSQL {
 
       // need to insert into checkout to generate checkoutid foreign key before
       // ordering insert
-      int paymentmethod = 0;
-      String cardnumber = "";
-      int employeeid = 0;
-
-      paymentmethod = getRandomValue(0, 2);
-      int uin = 0;
-      // Determine a card
-      switch (paymentmethod) {
-        case 0: // meal swipes --> uin
-          uin = getRandomValue(100000000, 900000000);
-          cardnumber = String.format("%d", uin);
-          break;
-        case 1: // dining dollars
-          uin = getRandomValue(100000000, 900000000);
-          cardnumber = String.format("%d", uin);
-          break;
-        case 2:
-          Random rd = new Random();
-          cardnumber = Long.toString(rd.nextLong() / 1000);
-          break;
-      }
-      System.out.println("");
-      // checkoutid, paymentmethod, amount, cardnumber, employeeid
 
       PreparedStatement checkoutStatement = conn
           .prepareStatement("INSERT INTO checkout( checkoutid, amount) VALUES (?, ?)");
