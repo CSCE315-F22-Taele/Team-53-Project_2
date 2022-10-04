@@ -25,12 +25,12 @@ public class jdbcpostgreSQL {
     return (float) ordertotal;
   }
 
-  public static Integer[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
+  public static int[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
       int orderedprotein, int ordereddressing, int ordereddrink) {
 
     // FIX ME: MAKE THIS INTO 0 AS THE CONDITION. NOT NULL
     //
-    Integer[] inventory = new Integer[24];
+    int[] inventory = new int[24];
 
     if (orderedgyro > 0) {
       inventory[16] = orderedgyro;
@@ -41,35 +41,18 @@ public class jdbcpostgreSQL {
     }
 
     int bowlOrGyro = orderedgyro + orderedbowl;
-    inventory[4] = 0;
-    inventory[5] = 0;
-    inventory[6] = 0;
-    inventory[7] = 0;
-    inventory[8] = 0;
-    inventory[9] = 0;
-    inventory[10] = 0;
-    inventory[11] = 0;
-    inventory[12] = 0;
+
     while (bowlOrGyro > 0) {
       // Rice
-      if (inventory[0] == null) {
-        inventory[0] = 0;
-      }
       inventory[0] += getRandomValue(1, 3);
 
       // Protein (chicken or sp meatball)
       int curProtein = getRandomValue(1, 2);
       switch (curProtein) {
         case 1:
-          if (inventory[1] == null) {
-            inventory[1] = 0;
-          }
           inventory[1] += 1;
           break;
         case 2:
-          if (inventory[2] == null) {
-            inventory[2] = 0;
-          }
           inventory[2] += 1;
           break;
       }
@@ -89,21 +72,12 @@ public class jdbcpostgreSQL {
       int curDressing = getRandomValue(1, 3);
       switch (curDressing) {
         case 1: // Harissa
-          if (inventory[13] == null) {
-            inventory[13] = 0;
-          }
           inventory[13] += 1;
           break;
         case 2: // Tzatziki sauce
-          if (inventory[14] == null) {
-            inventory[14] = 0;
-          }
           inventory[14] += 1;
           break;
         case 3: // balsamic vinegar
-          if (inventory[15] == null) {
-            inventory[15] = 0;
-          }
           inventory[15] += 1;
           break;
       }
@@ -111,19 +85,8 @@ public class jdbcpostgreSQL {
       bowlOrGyro--;
     }
 
-    // return topping values to null, if not included in order
-    for (int i = 4; i < 12; i++) {
-      if (inventory[i] == 0) {
-        inventory[i] = null;
-      }
-    }
-
     if (orderedpitahummus > 0) {
-      if (inventory[16] == null) { // pita
-        inventory[16] = orderedpitahummus;
-      } else {
-        inventory[16] = orderedpitahummus;
-      }
+      inventory[16] += orderedpitahummus; // pita
       inventory[17] = orderedpitahummus; // hummus
     }
 
@@ -135,15 +98,9 @@ public class jdbcpostgreSQL {
       int curProtein = getRandomValue(1, 2);
       switch (curProtein) {
         case 1: // chicken
-          if (inventory[1] == null) {
-            inventory[1] = 0;
-          }
           inventory[1] += 1;
           break;
         case 2: // spicy meatball
-          if (inventory[2] == null) {
-            inventory[2] = 0;
-          }
           inventory[2] += 1;
           break;
       }
@@ -154,21 +111,12 @@ public class jdbcpostgreSQL {
       int curDressing = getRandomValue(1, 3);
       switch (curDressing) {
         case 1: // harissa
-          if (inventory[13] == null) {
-            inventory[13] = 0;
-          }
           inventory[13] += 1;
           break;
         case 2: // tzatziki sauce
-          if (inventory[14] == null) {
-            inventory[14] = 0;
-          }
           inventory[14] += 1;
           break;
         case 3: // balsamic vinegar
-          if (inventory[15] == null) {
-            inventory[15] = 0;
-          }
           inventory[15] += 1;
           break;
       }
@@ -259,11 +207,8 @@ public class jdbcpostgreSQL {
       int orderedprotein = 0;
       int ordereddressing = 0;
       int ordereddrink = 0;
-      Integer[] inventory = new Integer[25];
-
-      // for (int i =0; i< inventory.length; i++){
-      // inventory[i] =0;
-      // }
+      // Integer[] inventory = new Integer[25];
+      int[] inventory = new int[24];
 
       int orderCount = 0;
 
@@ -316,22 +261,23 @@ public class jdbcpostgreSQL {
             "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
 
         // transform java data into proper SQL variables
-        Array inventoryused = conn.createArrayOf("INT", inventory);
-        statement.setInt(1, orderId);
-        statement.setTime(2, time);
-        statement.setFloat(3, amount);
-        statement.setInt(4, checkoutid);
-        statement.setInt(5, orderedgyro);
-        statement.setInt(6, orderedbowl);
-        statement.setInt(7, orderedpitahummus);
-        statement.setInt(8, orderedfalafel);
-        statement.setInt(9, orderedprotein);
-        statement.setInt(10, ordereddressing);
-        statement.setInt(11, ordereddrink);
-        statement.setArray(12, inventoryused);
-
-        statement.executeUpdate();
-
+        /*
+         * Array inventoryused = conn.createArrayOf("INT", inventory);
+         * statement.setInt(1, orderId);
+         * statement.setTime(2, time);
+         * statement.setFloat(3, amount);
+         * statement.setInt(4, checkoutid);
+         * statement.setInt(5, orderedgyro);
+         * statement.setInt(6, orderedbowl);
+         * statement.setInt(7, orderedpitahummus);
+         * statement.setInt(8, orderedfalafel);
+         * statement.setInt(9, orderedprotein);
+         * statement.setInt(10, ordereddressing);
+         * statement.setInt(11, ordereddrink);
+         * statement.setArray(12, inventoryused);
+         * 
+         * statement.executeUpdate();
+         */
         // OUTPUT
 
       }
