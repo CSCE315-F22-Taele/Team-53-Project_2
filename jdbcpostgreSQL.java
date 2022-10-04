@@ -228,7 +228,7 @@ public class jdbcpostgreSQL {
       int orderId = 220904000;  
       int numOrdersWant = 120;
 
-      int amountCount=0;
+      int orderCount = 0;
 
      // will change each iteration
       float amount = 0;
@@ -242,29 +242,17 @@ public class jdbcpostgreSQL {
       int ordereddrink = 0; 
       Integer[] inventory = new Integer[25];
 
-
-      // for (int i =0; i< inventory.length; i++){
-      //   inventory[i] =0;
-      // }
-
-      int orderCount = 0;
-
-      // Time times[] = new Time[numOrdersWant];
       long timeMS =  1662303600000L; 
-      // for(int i=0; i< times.length; i++){
-      //   long time = timeMS + getRandomValue(5000,480000 );
-      //   times[i] = new Time(time);
-      // }
+
       while( orderCount <  numOrdersWant || timeMS < 1662292800000L ) { 
 
-
+      //changing the ordering data. 
       orderId += 1;
       timeMS = timeMS + getRandomValue(5000,480000 );
       Time time = new Time(timeMS);
       orderCount +=1;
       orderedgyro = getRandomValue(0, 1);
       orderedbowl = getRandomValue(0, 1);
-
       orderedpitahummus = getRandomValue(0, 1);
       orderedfalafel = getRandomValue(0, 1);
       orderedprotein = getRandomValue(0, 1);
@@ -273,13 +261,12 @@ public class jdbcpostgreSQL {
       amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
           orderedprotein, ordereddressing, ordereddrink);
 
-      //FIX ME AMOUNT IS NOT DECIMAL CORRECT.
       amount = (float) Math.round(amount*100)/100;
 
       inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
           orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
 
-      System.out.println(amount);
+      //System.out.println(amount);
 
       // need to insert into checkout to generate checkoutid foreign key before
 
@@ -305,7 +292,7 @@ public class jdbcpostgreSQL {
       Array inventoryused = conn.createArrayOf("INT", inventory);
       statement.setInt(1, orderId);
       statement.setTime(2, time);
-      statement.setFloat(3, amount);
+      statement.setFloat(3, amount); //FIX ME AMOUNT IS NOT DECIMAL CORRECT. maybe we convert everything to Decimal type? 
       statement.setInt(4, checkoutid);
       statement.setInt(5, orderedgyro);
       statement.setInt(6, orderedbowl);
@@ -317,11 +304,10 @@ public class jdbcpostgreSQL {
       statement.setArray(12, inventoryused);
 
       statement.executeUpdate();
-
-      // OUTPUT
-
+      System.out.print("order # completed: ");
+      System.out.println(orderCount);
     }
-      //System.out.println("--------------------Query Results--------------------");
+  
 
     } catch (Exception e) {
       e.printStackTrace();
