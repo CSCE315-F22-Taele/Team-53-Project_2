@@ -195,7 +195,7 @@ public class jdbcpostgreSQL {
       int orderId = 220904000;
       int numOrdersWant = 120;
 
-      int amountCount = 0;
+      int orderCount = 0;
 
       // will change each iteration
       float amount = 0;
