@@ -210,8 +210,6 @@ public class jdbcpostgreSQL {
       // Integer[] inventory = new Integer[25];
       int[] inventory = new int[24];
 
-      int orderCount = 0;
-
       // Time times[] = new Time[numOrdersWant];
       long timeMS = 1662303600000L;
       // for(int i=0; i< times.length; i++){
