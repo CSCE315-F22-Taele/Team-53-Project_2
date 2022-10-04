@@ -5,43 +5,6 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class jdbcpostgreSQL {
 
-  // Return a randomized order in string format
-  // public static String getOrderEntity(int orderId, Time time){
-  // float amount, int orderedgyro, int orderedbowl,
-  //     int orderedpitahummus, int orderedfalafel, int orderedprotein, int ordereddressing, int ordereddrink,
-  //     Integer[] inventory) {
-    
-  //   String values = "VALUES ('";
-  //   //orderId = 220904001; // TODO: Determime how to update orderId
-  //   //time = new Time(2211696000000L); // TODO: Determine how to update time
-  //   orderedgyro = getRandomValue(0, 1);
-  //   orderedbowl = getRandomValue(0, 1);
-  //   orderedpitahummus = getRandomValue(0, 2);
-  //   orderedfalafel = getRandomValue(0, 2);
-  //   orderedprotein = getRandomValue(0, 2);
-  //   ordereddressing = getRandomValue(0, 3);
-  //   ordereddrink = getRandomValue(1, 2);
-  //   amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing,
-  //       ordereddrink);
-  //   inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
-  //       orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
-
-  //   values = values + orderId + "', '" + time + "', '" + amount + "', '" + orderedgyro + "', '" + orderedbowl + "', '"
-  //       + orderedpitahummus + "', '" + orderedfalafel + "', '" + orderedprotein + "', '" + ordereddressing + "', '"
-  //       + ordereddrink + "', '";
-
-  //   String inventoryArray = "(";
-  //   for (int i = 0; i < inventory.length; i++) {
-  //     inventoryArray += inventory[i];
-  //     if (i < inventory.length - 1) {
-  //       inventoryArray += ',';
-  //     }
-  //   }
-  //   inventoryArray += ')';
-
-  //   values += inventoryArray + "');";
-  // }
-
   public static int getRandomValue(int Min, int Max) {
     //FIX ME: SEE IF WE CAN RANDOMIZE THIS SO THAT THE AMOUNT IS 0 50% OF THE TIME, 1 30% AND MORE THAN 1 OTHER: 20%
     return ThreadLocalRandom
@@ -260,11 +223,14 @@ public class jdbcpostgreSQL {
       // create a statement object
       Statement stmt = conn.createStatement();
 
-      // the starting variables for the data to insert it into the array
-      int orderId = 220904000;  //CHANGE ME PER DATE. 
+
+      //CHANGE ME PER DATE. 
+      int orderId = 220904000;  
       int numOrdersWant = 120;
+
       int amountCount=0;
-     // Time time = new Time(1662303600000L);
+
+     // will change each iteration
       float amount = 0;
       int checkoutid = 0; 
       int orderedgyro = 0;
@@ -289,7 +255,7 @@ public class jdbcpostgreSQL {
       //   long time = timeMS + getRandomValue(5000,480000 );
       //   times[i] = new Time(time);
       // }
-      while( orderCount <  numOrdersWant || timeMS < 1662292800000 ) { 
+      while( orderCount <  numOrdersWant || timeMS < 1662292800000L ) { 
 
 
       orderId += 1;
@@ -306,27 +272,29 @@ public class jdbcpostgreSQL {
       ordereddrink = getRandomValue(0, 2);
       amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
           orderedprotein, ordereddressing, ordereddrink);
+
+      //FIX ME AMOUNT IS NOT DECIMAL CORRECT.
+      amount = (float) Math.round(amount*100)/100;
+
       inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
           orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
-       amountCount += amount; 
 
-      //String oneOrder = getOrderEntity(orderId, time, amount, orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing, ordereddrink, inventory);
-      //System.out.println(oneOrder);
+      System.out.println(amount);
 
       // need to insert into checkout to generate checkoutid foreign key before
-      // ordering insert
 
       PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(amount) VALUES (?)");
       //checkoutStatement.setInt(1, checkoutid)
       checkoutStatement.setFloat(1, amount);
       checkoutStatement.executeUpdate();
 
+      //get the checkoutid to use as foreign key
       String checkoutidStatement = "SELECT checkoutid FROM checkout WHERE checkoutid = (SELECT MAX(checkoutid) FROM checkout)";
       ResultSet checkoutResult = stmt.executeQuery(checkoutidStatement);
       while (checkoutResult.next()) {
         checkoutid = checkoutResult.getInt("checkoutid");
       }
-      System.out.println(checkoutResult);
+    
 
 
       // now we are able to insert into ordering without errors
@@ -351,7 +319,7 @@ public class jdbcpostgreSQL {
       statement.executeUpdate();
 
       // OUTPUT
-      System.out.println(amountCount);
+
     }
       //System.out.println("--------------------Query Results--------------------");
 
