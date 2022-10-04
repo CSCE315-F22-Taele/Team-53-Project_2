@@ -1,7 +1,7 @@
 /* total sales */
 
 SELECT 
-    SUM(amount) total sales,
+    SUM(amount) 
 FROM
     checkout;
 
@@ -9,7 +9,7 @@ FROM
 /* number of orders */
 
 SELECT
-    COUNT(orderid),
+    COUNT(orderid)
 FROM
     ordering;
 
@@ -17,7 +17,7 @@ FROM
 /* cost of inventory */
 SELECT 
     itemname,
-    amount * cost AS total cost
+    amount * cost AS totalCost
 FROM 
     inventory;
 
@@ -35,8 +35,9 @@ SELECT itemname FROM inventory ORDER BY expirationdate;
 
 
 /* group inventory by vendor */
-
-SELECT itemname FROM inventory, GROUP BY vendor
+/* FIX ME: 
+    ERROR:  column "inventory.itemname" must appear in the GROUP BY clause or be used in an aggregate function */
+SELECT itemname FROM inventory GROUP BY vendor;
 
 
 /* see managerID and employeeID */
@@ -52,8 +53,9 @@ WHERE hoursworked > 15;
 
 
 /* group employees by manager */
-
-SELECT employeename FROM employee, GROUP BY managerid
+/*FIX ME: 
+    ERROR:  column "employee.employeename" must appear in the GROUP BY clause or be used in an aggregate function*/
+SELECT employeename FROM employee GROUP BY managerid;
 
 
 /* see sales made by each employee */
