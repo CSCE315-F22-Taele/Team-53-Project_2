@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.sql.Time;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class jdbcpostgreSQL {
@@ -14,11 +15,11 @@ public class jdbcpostgreSQL {
     time = new Time(2211696000000L); // TODO: Determine how to update time
     orderedgyro = getRandomValue(0, 1);
     orderedbowl = getRandomValue(0, 1);
-    orderedpitahummus = getRandomValue(0, 2);
-    orderedfalafel = getRandomValue(0, 2);
-    orderedprotein = getRandomValue(0, 2);
-    ordereddressing = getRandomValue(0, 3);
-    ordereddrink = getRandomValue(1, 2);
+    orderedpitahummus = getRandomValue(0, 1);
+    orderedfalafel = getRandomValue(0, 1);
+    orderedprotein = getRandomValue(0, 1);
+    ordereddressing = getRandomValue(0, 2);
+    ordereddrink = getRandomValue(0, 2);
     amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing,
         ordereddrink);
     inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
@@ -270,10 +271,10 @@ public class jdbcpostgreSQL {
       // LINE 270-295: For better understanding of how randomizing works. DELETE!
       orderedgyro = getRandomValue(0, 1);
       orderedbowl = getRandomValue(0, 1);
-      orderedpitahummus = getRandomValue(0, 2);
-      orderedfalafel = getRandomValue(0, 2);
-      orderedprotein = getRandomValue(0, 2);
-      ordereddressing = getRandomValue(0, 3);
+      orderedpitahummus = getRandomValue(0, 1);
+      orderedfalafel = getRandomValue(0, 1);
+      orderedprotein = getRandomValue(0, 1);
+      ordereddressing = getRandomValue(0, 1);
       ordereddrink = getRandomValue(1, 2);
       amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
           orderedprotein, ordereddressing, ordereddrink);
@@ -302,6 +303,30 @@ public class jdbcpostgreSQL {
 
       // need to insert into checkout to generate checkoutid foreign key before
       // ordering insert
+      int paymentmethod = 0;
+      String cardnumber = "";
+      int employeeid = 0;
+
+      paymentmethod = getRandomValue(0, 2);
+      int uin = 0;
+      // Determine a card
+      switch (paymentmethod) {
+        case 0: // meal swipes --> uin
+          uin = getRandomValue(100000000, 900000000);
+          cardnumber = String.format("%d", uin);
+          break;
+        case 1: // dining dollars
+          uin = getRandomValue(100000000, 900000000);
+          cardnumber = String.format("%d", uin);
+          break;
+        case 2:
+          Random rd = new Random();
+          cardnumber = Long.toString(rd.nextLong() / 1000);
+          break;
+      }
+      System.out.println("");
+      // checkoutid, paymentmethod, amount, cardnumber, employeeid
+
       PreparedStatement checkoutStatement = conn
           .prepareStatement("INSERT INTO checkout( checkoutid, amount) VALUES (?, ?)");
       checkoutStatement.setInt(1, checkoutid);
