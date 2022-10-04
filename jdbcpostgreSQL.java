@@ -1,5 +1,6 @@
 import java.sql.*;
 import java.sql.Time;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class jdbcpostgreSQL {
@@ -297,19 +298,17 @@ public class jdbcpostgreSQL {
       orderCount +=1;
       orderedgyro = getRandomValue(0, 1);
       orderedbowl = getRandomValue(0, 1);
-      orderedpitahummus = getRandomValue(0, 2);
-      orderedfalafel = getRandomValue(0, 2);
-      orderedprotein = getRandomValue(0, 2);
-      ordereddressing = getRandomValue(0, 3);
-      ordereddrink = getRandomValue(1, 2);
-      amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing,
-          ordereddrink);
-      
-      
-      amountCount += amount; 
-      
+
+      orderedpitahummus = getRandomValue(0, 1);
+      orderedfalafel = getRandomValue(0, 1);
+      orderedprotein = getRandomValue(0, 1);
+      ordereddressing = getRandomValue(0, 1);
+      ordereddrink = getRandomValue(0, 2);
+      amount = getAmount(orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel,
+          orderedprotein, ordereddressing, ordereddrink);
       inventory = getInventory(orderedgyro, orderedbowl, orderedpitahummus,
           orderedfalafel, orderedprotein, ordereddressing, ordereddrink);
+       amountCount += amount; 
 
       //String oneOrder = getOrderEntity(orderId, time, amount, orderedgyro, orderedbowl, orderedpitahummus, orderedfalafel, orderedprotein, ordereddressing, ordereddrink, inventory);
       //System.out.println(oneOrder);
