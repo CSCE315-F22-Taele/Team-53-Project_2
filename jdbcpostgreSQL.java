@@ -13,7 +13,7 @@ public class jdbcpostgreSQL {
         .nextInt(Min, Max + 1);
   }
 
-  public static float getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
+  public static double getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
       int orderedprotein, int ordereddressing, int ordereddrink) {
     double ordertotal = (8.09 * orderedgyro) +
         (8.09 * orderedbowl) +
@@ -22,15 +22,19 @@ public class jdbcpostgreSQL {
         (1.99 * orderedprotein) +
         (0.39 * ordereddressing) +
         (2.45 * ordereddrink);
-    return (float) ordertotal;
+    return (double) ordertotal;
   }
 
-  public static int[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
+  public static Integer[] getInventory(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
       int orderedprotein, int ordereddressing, int ordereddrink) {
 
     // FIX ME: MAKE THIS INTO 0 AS THE CONDITION. NOT NULL
     //
-    int[] inventory = new int[24];
+    Integer[] inventory = new Integer[24];
+
+    for( int i=0; i < inventory.length; i++){
+      inventory[i] =0;
+    }
 
     if (orderedgyro > 0) {
       inventory[16] = orderedgyro;
@@ -152,7 +156,7 @@ public class jdbcpostgreSQL {
         cardnumber = Long.toString(rd.nextLong() / 1000);
         break;
     }
-
+    
     return cardnumber;
   }
 
@@ -192,13 +196,14 @@ public class jdbcpostgreSQL {
       Statement stmt = conn.createStatement();
 
       // CHANGE ME PER DATE.
-      int orderId = 220904000;
-      int numOrdersWant = 120;
+      int orderId = 220911000; //4, 5, 06, 7, 8
+      int numOrdersWant = 242;
+      int employeeid = 1;
 
       int orderCount = 0;
 
       // will change each iteration
-      float amount = 0;
+      double amount = 0;
       int checkoutid = 0;
       int orderedgyro = 0;
       int orderedbowl = 0;
@@ -207,15 +212,10 @@ public class jdbcpostgreSQL {
       int orderedprotein = 0;
       int ordereddressing = 0;
       int ordereddrink = 0;
-      // Integer[] inventory = new Integer[25];
-      int[] inventory = new int[24];
+      Integer[] inventory = new Integer[24];
 
-      // Time times[] = new Time[numOrdersWant];
       long timeMS = 1662303600000L;
-      // for(int i=0; i< times.length; i++){
-      // long time = timeMS + getRandomValue(5000,480000 );
-      // times[i] = new Time(time);
-      // }
+    
       while (orderCount < numOrdersWant || timeMS < 1662292800000L) {
 
         orderId += 1;
@@ -240,11 +240,18 @@ public class jdbcpostgreSQL {
         // Populate checkout attributes
         int paymentmethod = getRandomValue(0, 2);
         String cardnumber = getCardNumber(paymentmethod);
-        int employeeid = 0;
+        while( cardnumber.charAt(0) == '-'){
+          cardnumber = getCardNumber(paymentmethod);
+        }
+        
 
-        PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(amount) VALUES (?)");
+        PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(paymentmethod, amount, cardnumber, employeeid) VALUES (?, ?,?, ?)");
         // checkoutStatement.setInt(1, checkoutid)
-        checkoutStatement.setFloat(1, amount);
+        checkoutStatement.setDouble(2, amount);
+        checkoutStatement.setInt(1, paymentmethod);
+        checkoutStatement.setString(3, cardnumber);
+        checkoutStatement.setInt(4, employeeid);
+
         checkoutStatement.executeUpdate();
 
         // get the checkoutid to use as foreign key
@@ -259,25 +266,25 @@ public class jdbcpostgreSQL {
             "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
 
         // transform java data into proper SQL variables
-        /*
-         * Array inventoryused = conn.createArrayOf("INT", inventory);
-         * statement.setInt(1, orderId);
-         * statement.setTime(2, time);
-         * statement.setFloat(3, amount);
-         * statement.setInt(4, checkoutid);
-         * statement.setInt(5, orderedgyro);
-         * statement.setInt(6, orderedbowl);
-         * statement.setInt(7, orderedpitahummus);
-         * statement.setInt(8, orderedfalafel);
-         * statement.setInt(9, orderedprotein);
-         * statement.setInt(10, ordereddressing);
-         * statement.setInt(11, ordereddrink);
-         * statement.setArray(12, inventoryused);
-         * 
-         * statement.executeUpdate();
-         */
+        
+        Array inventoryused = conn.createArrayOf("INT", inventory);
+        statement.setInt(1, orderId);
+        statement.setTime(2, time);
+        statement.setDouble(3, amount);
+        statement.setInt(4, checkoutid);
+        statement.setInt(5, orderedgyro);
+        statement.setInt(6, orderedbowl);
+        statement.setInt(7, orderedpitahummus);
+        statement.setInt(8, orderedfalafel);
+        statement.setInt(9, orderedprotein);
+        statement.setInt(10, ordereddressing);
+        statement.setInt(11, ordereddrink);
+        statement.setArray(12, inventoryused);
+          
+        statement.executeUpdate();
+        
         // OUTPUT
-
+        System.out.println(orderCount);
       }
       // System.out.println("--------------------Query Results--------------------");
 
