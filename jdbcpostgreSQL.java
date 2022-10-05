@@ -213,7 +213,7 @@ public class jdbcpostgreSQL {
       }
       
       //loops through all the 21 days/ 3 weeks 
-      for( int i=13; i< orderIdArray.length; i++){ 
+      for( int i=0; i< orderIdArray.length; i++){ 
         
         System.out.println(orderIdArray[i]);
         int orderId = orderIdArray[i];
