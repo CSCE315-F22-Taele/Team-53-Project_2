@@ -202,21 +202,32 @@ public class jdbcpostgreSQL {
       int [] numOrdersWantArray = new int [] {81, 98, 113, 85, 124, 72, 242, 
         102, 73, 96, 85, 94, 107, 256,
         89, 98, 111, 81, 78, 112, 98, 123 };
+
+
+      for( int i=0; i< numOrdersWantArray.length; i++){
+        if ( i< 14){
+         numOrdersWantArray[i] += 30; //30;
+        }
+        else{
+          numOrdersWantArray[i] += 50; //20+20+10 
+        }
+      }
+
       int [] employeeidArray = new int[]{0, 1, 2, 3, 4, 5, 1,
                         2, 3, 4, 5, 0, 1, 2,
                         3, 4, 5, 0, 0, 1, 2, 3};
 
       int [] reorder = new int[24];
 
-      for( int i=0; i< reorder.length; i++){
+      for( int i=0; i< reorder.length-7; i++){
         reorder[i] = 0;
       }
       
       //loops through all the 21 days/ 3 weeks 
-      for( int i=0; i< orderIdArray.length; i++){ 
+      for( int i=0; i< orderIdArray.length-7; i++){ 
         
-        System.out.println(orderIdArray[i]);
-        int orderId = orderIdArray[i];
+        
+        int orderId = orderIdArray[i] + numOrdersWantArray[i];
         int numOrdersWant = numOrdersWantArray[i];
         int employeeid = employeeidArray[i];
 
@@ -255,9 +266,12 @@ public class jdbcpostgreSQL {
           System.out.println("reordered");
           }
         }
-        while (orderCount < numOrdersWant || timeMS < 1662292800000L) {
 
-          orderId += 1;
+        while (orderCount <  numOrdersWant[i] ) { 
+
+          
+          orderId ++;
+          System.out.println(orderId);
           timeMS = timeMS + getRandomValue(5000, 480000);
           Time time = new Time(timeMS);
           orderCount += 1;
