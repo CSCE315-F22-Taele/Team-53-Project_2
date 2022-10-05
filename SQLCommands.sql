@@ -15,6 +15,7 @@ FROM
 
 
 /* cost of inventory */
+
 SELECT 
     itemname,
     amount * cost AS totalCost
@@ -23,6 +24,7 @@ FROM
 
 
 /* min, max, avg salaries */
+
 SELECT 
     Max(salary), 
     Min(salary), 
@@ -31,13 +33,13 @@ FROM employee;
 
 
 /* order inventory by expiration */
+
 SELECT itemname FROM inventory ORDER BY expirationdate;
 
 
-/* group inventory by vendor */
-/* FIX ME: 
-    ERROR:  column "inventory.itemname" must appear in the GROUP BY clause or be used in an aggregate function */
-SELECT itemname FROM inventory GROUP BY vendor;
+/* show all inventory items */
+
+SELECT itemname FROM inventory;
 
 
 /* see managerID and employeeID */
@@ -52,10 +54,9 @@ SELECT employeeid FROM employee
 WHERE hoursworked > 15;
 
 
-/* group employees by manager */
-/*FIX ME: 
-    ERROR:  column "employee.employeename" must appear in the GROUP BY clause or be used in an aggregate function*/
-SELECT employeename FROM employee GROUP BY managerid;
+/* show all employees */
+
+SELECT employeename FROM employee;
 
 
 /* see sales made by each employee */
