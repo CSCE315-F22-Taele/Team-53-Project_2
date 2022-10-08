@@ -32,8 +32,8 @@ public class jdbcpostgreSQL {
     //
     Integer[] inventory = new Integer[24];
 
-    for( int i=0; i < inventory.length; i++){
-      inventory[i] =0;
+    for (int i = 0; i < inventory.length; i++) {
+      inventory[i] = 0;
     }
 
     if (orderedgyro > 0) {
@@ -156,7 +156,7 @@ public class jdbcpostgreSQL {
         cardnumber = Long.toString(rd.nextLong() / 1000);
         break;
     }
-    
+
     return cardnumber;
   }
 
@@ -196,37 +196,34 @@ public class jdbcpostgreSQL {
       Statement stmt = conn.createStatement();
 
       // CHANGE ME PER DATE.
-      int [] orderIdArray = new int [] {220904000,220905000, 220906000, 220907000, 220908000,  220909000, 220910000,
-        220911000, 220912000, 220913000, 220914000, 220915000, 220916000, 220917000, 
-        220918000, 220919000, 220920000, 220921000, 220922000,220923000, 220924000, 220925000}; 
-      int [] numOrdersWantArray = new int [] {81, 98, 113, 85, 124, 72, 242, 
-        102, 73, 96, 85, 94, 107, 256,
-        89, 98, 111, 81, 78, 112, 98, 123 };
+      int[] orderIdArray = new int[] { 220904000, 220905000, 220906000, 220907000, 220908000, 220909000, 220910000,
+          220911000, 220912000, 220913000, 220914000, 220915000, 220916000, 220917000,
+          220918000, 220919000, 220920000, 220921000, 220922000, 220923000, 220924000, 220925000 };
+      int[] numOrdersWantArray = new int[] { 81, 98, 113, 85, 124, 72, 242,
+          102, 73, 96, 85, 94, 107, 256,
+          89, 98, 111, 81, 78, 112, 98, 123 };
 
-
-      for( int i=0; i< numOrdersWantArray.length; i++){
-        if ( i< 14){
-         numOrdersWantArray[i] += 30; //30;
-        }
-        else{
-          numOrdersWantArray[i] += 50; //20+20+10 
+      for (int i = 0; i < numOrdersWantArray.length; i++) {
+        if (i < 14) {
+          numOrdersWantArray[i] += 30; // 30;
+        } else {
+          numOrdersWantArray[i] += 50; // 20+20+10
         }
       }
 
-      int [] employeeidArray = new int[]{0, 1, 2, 3, 4, 5, 1,
-                        2, 3, 4, 5, 0, 1, 2,
-                        3, 4, 5, 0, 0, 1, 2, 3};
+      int[] employeeidArray = new int[] { 0, 1, 2, 3, 4, 5, 1,
+          2, 3, 4, 5, 0, 1, 2,
+          3, 4, 5, 0, 0, 1, 2, 3 };
 
-      int [] reorder = new int[24];
+      int[] reorder = new int[24];
 
-      for( int i=0; i< reorder.length-7; i++){
+      for (int i = 0; i < reorder.length - 7; i++) {
         reorder[i] = 0;
       }
-      
-      //loops through all the 21 days/ 3 weeks 
-      for( int i=0; i< orderIdArray.length-7; i++){ 
-        
-        
+
+      // loops through all the 21 days/ 3 weeks
+      for (int i = 0; i < orderIdArray.length - 7; i++) {
+
         int orderId = orderIdArray[i] + numOrdersWantArray[i];
         int numOrdersWant = numOrdersWantArray[i];
         int employeeid = employeeidArray[i];
@@ -245,32 +242,31 @@ public class jdbcpostgreSQL {
         Integer[] inventory = new Integer[24];
 
         long timeMS = 1662303600000L;
-        for( int j=0; j<reorder.length; j++){
+        for (int j = 0; j < reorder.length; j++) {
 
-          if( reorder[j] == orderId){ //if the day where reorder comes
-          
-          PreparedStatement amountReorder = conn.prepareStatement("SELECT amount FROM inventory WHERE itemid=(?)");
-          amountReorder.setInt(1, j);
-          ResultSet ReorderInventory = amountReorder.executeQuery();
-          
+          if (reorder[j] == orderId) { // if the day where reorder comes
 
-          while (ReorderInventory.next()) {
-            int itemQuantity = ReorderInventory.getInt("amount") + 1000;
-            PreparedStatement reorderInventory = conn.prepareStatement("UPDATE inventory SET amount=(?) WHERE itemid=(?)");
-            reorderInventory.setInt(1, itemQuantity );
-            reorderInventory.setInt(2, j);
+            PreparedStatement amountReorder = conn.prepareStatement("SELECT amount FROM inventory WHERE itemid=(?)");
+            amountReorder.setInt(1, j);
+            ResultSet ReorderInventory = amountReorder.executeQuery();
 
-            reorderInventory.executeUpdate();
-          }
-          reorder[j] = 0; 
-          System.out.println("reordered");
+            while (ReorderInventory.next()) {
+              int itemQuantity = ReorderInventory.getInt("amount") + 1000;
+              PreparedStatement reorderInventory = conn
+                  .prepareStatement("UPDATE inventory SET amount=(?) WHERE itemid=(?)");
+              reorderInventory.setInt(1, itemQuantity);
+              reorderInventory.setInt(2, j);
+
+              reorderInventory.executeUpdate();
+            }
+            reorder[j] = 0;
+            System.out.println("reordered");
           }
         }
 
-        while (orderCount <  numOrdersWant[i] ) { 
+        while (orderCount < numOrdersWantArray[i]) {
 
-          
-          orderId ++;
+          orderId++;
           System.out.println(orderId);
           timeMS = timeMS + getRandomValue(5000, 480000);
           Time time = new Time(timeMS);
@@ -293,12 +289,12 @@ public class jdbcpostgreSQL {
           // Populate checkout attributes
           int paymentmethod = getRandomValue(0, 2);
           String cardnumber = getCardNumber(paymentmethod);
-          while( cardnumber.charAt(0) == '-'){
+          while (cardnumber.charAt(0) == '-') {
             cardnumber = getCardNumber(paymentmethod);
           }
-          
 
-          PreparedStatement checkoutStatement = conn.prepareStatement("INSERT INTO checkout(paymentmethod, amount, cardnumber, employeeid) VALUES (?, ?,?, ?)");
+          PreparedStatement checkoutStatement = conn.prepareStatement(
+              "INSERT INTO checkout(paymentmethod, amount, cardnumber, employeeid) VALUES (?, ?,?, ?)");
           // checkoutStatement.setInt(1, checkoutid)
           checkoutStatement.setDouble(2, amount);
           checkoutStatement.setInt(1, paymentmethod);
@@ -319,7 +315,7 @@ public class jdbcpostgreSQL {
               "INSERT INTO ordering(orderid , timeoforder , amount , checkoutid , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?, ?)");
 
           // transform java data into proper SQL variables
-          
+
           Array inventoryused = conn.createArrayOf("INT", inventory);
           statement.setInt(1, orderId);
           statement.setTime(2, time);
@@ -333,14 +329,12 @@ public class jdbcpostgreSQL {
           statement.setInt(10, ordereddressing);
           statement.setInt(11, ordereddrink);
           statement.setArray(12, inventoryused);
-            
+
           statement.executeUpdate();
-          
-          
-          
+
           // Update inventory table for each order
 
-          //look at the item and the amount 
+          // look at the item and the amount
           ResultSet findInventory = stmt.executeQuery("SELECT itemid, amount FROM inventory");
           int tempInventoryArray = 0; // Increments inventory array
 
@@ -351,34 +345,34 @@ public class jdbcpostgreSQL {
             tempInventoryArray++;
 
             // update in inventory
-            PreparedStatement updateInventory = conn.prepareStatement("UPDATE inventory SET amount=(?) WHERE itemid=(?)");
+            PreparedStatement updateInventory = conn
+                .prepareStatement("UPDATE inventory SET amount=(?) WHERE itemid=(?)");
             updateInventory.setDouble(1, itemQuantity);
             updateInventory.setInt(2, curitemId);
 
             updateInventory.executeUpdate();
           }
           // OUTPUT
-            System.out.println(orderCount);
+          System.out.println(orderCount);
         }
 
-        
-        //check if the amount is too little 
+        // check if the amount is too little
         ResultSet checkInventory = stmt.executeQuery("SELECT itemid, amount FROM inventory");
         int curitemId = 0;
         int itemQuantity = 0;
-         
+
         while (checkInventory.next()) {
-            itemQuantity = checkInventory.getInt("amount");
-            curitemId = checkInventory.getInt("itemid");
-            System.out.println(itemQuantity);
-            if( itemQuantity <= 400 && reorder[curitemId] == 0){
-              reorder[curitemId] = orderIdArray[i] + 2000; //get it to increment the quantity after 2 days 
-            }
+          itemQuantity = checkInventory.getInt("amount");
+          curitemId = checkInventory.getInt("itemid");
+          System.out.println(itemQuantity);
+          if (itemQuantity <= 400 && reorder[curitemId] == 0) {
+            reorder[curitemId] = orderIdArray[i] + 2000; // get it to increment the quantity after 2 days
+          }
         }
 
       }
       // System.out.println("--------------------Query Results--------------------");
-    
+
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName() + ": " + e.getMessage());
