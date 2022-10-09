@@ -65,7 +65,7 @@ public class cashierGUI implements ActionListener {
     // Frame Declaraiton
     JFrame f = new JFrame("Cashier GUI");
 
-    // Global Var
+    // Global Var --> Unused, hardcoded can change later
     int height = 0;
 
     /* Store quantity of each menu item */
@@ -176,7 +176,11 @@ public class cashierGUI implements ActionListener {
         f.add(logoutBtn);
         f.add(checkoutBtn);
 
-        // TESTING: Moved to main
+        for (int i = 0; i < 10; ++i) {
+            f.add(labelArr[i]);
+            f.add(inputArr[i]);
+        }
+
         f.setSize(400, 400);
         f.setLayout(null);
         f.setVisible(true);
@@ -184,65 +188,66 @@ public class cashierGUI implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btn1) {
-            l1.setBounds(1000, 60 + height, 100, 50);
-            inputArr[0].setBounds(1200, 60 + height, 100, 50);
+            // l1.setBounds(1000, 60 + height, 100, 50); --> hardcoded
+            l1.setBounds(1000, 60, 100, 50);
+            inputArr[0].setBounds(1200, 60, 100, 50);
             // btn1.setEnabled(false); -- ONLY ALLOW TO BE CLICKED ONCE
             gyroClick++;
             input_1.setText(Integer.toString(gyroClick));
 
         } else if (e.getSource() == btn2) {
-            l2.setBounds(1000, 60 + height, 100, 50);
-            inputArr[1].setBounds(1200, 60 + height, 100, 50);
+            l2.setBounds(1000, 130, 100, 50);
+            inputArr[1].setBounds(1200, 130, 100, 50);
             bowlClick++;
             input_2.setText(Integer.toString(bowlClick));
 
         } else if (e.getSource() == btn3) {
-            l3.setBounds(1000, 60 + height, 100, 50);
-            inputArr[2].setBounds(1200, 60 + height, 100, 50);
+            l3.setBounds(1000, 200, 100, 50);
+            inputArr[2].setBounds(1200, 200, 100, 50);
             falafelClick++;
             input_3.setText(Integer.toString(falafelClick));
 
         } else if (e.getSource() == btn4) {
-            l4.setBounds(1000, 60 + height, 100, 50);
-            inputArr[3].setBounds(1200, 60 + height, 100, 50);
+            l4.setBounds(1000, 270, 100, 50);
+            inputArr[3].setBounds(1200, 270, 100, 50);
             pitaAndHumusClick++;
             input_4.setText(Integer.toString(pitaAndHumusClick));
 
         } else if (e.getSource() == btn5) {
-            l5.setBounds(1000, 60 + height, 100, 50);
-            inputArr[4].setBounds(1200, 60 + height, 100, 50);
+            l5.setBounds(1000, 340, 100, 50);
+            inputArr[4].setBounds(1200, 340, 100, 50);
             extraChickenClick++;
             input_5.setText(Integer.toString(extraChickenClick));
 
         } else if (e.getSource() == btn6) {
-            l6.setBounds(1000, 60 + height, 100, 50);
-            inputArr[5].setBounds(1200, 60 + height, 100, 50);
+            l6.setBounds(1000, 410, 100, 50);
+            inputArr[5].setBounds(1200, 410, 100, 50);
             extraHarissaClick++;
             input_6.setText(Integer.toString(extraHarissaClick));
 
         } else if (e.getSource() == btn7) {
-            l7.setBounds(1000, 60 + height, 100, 50);
-            inputArr[6].setBounds(1200, 60 + height, 100, 50);
+            l7.setBounds(1000, 480, 100, 50);
+            inputArr[6].setBounds(1200, 480, 100, 50);
             extraMeatballClick++;
             input_7.setText(Integer.toString(extraMeatballClick));
 
         } else if (e.getSource() == btn8) {
-            l8.setBounds(1000, 60 + height, 100, 50);
-            inputArr[7].setBounds(1200, 60 + height, 100, 50);
+            l8.setBounds(1000, 550, 100, 50);
+            inputArr[7].setBounds(1200, 550, 100, 50);
             extraTzatzikiSauceClick++;
             input_8.setText(Integer.toString(extraTzatzikiSauceClick));
 
         } else if (e.getSource() == btn9) {
-            l9.setBounds(1000, 60 + height, 100, 50);
-            inputArr[8].setBounds(1200, 60 + height, 100, 50);
+            l9.setBounds(1000, 620, 100, 50);
+            inputArr[8].setBounds(1200, 620, 100, 50);
             extraVinegarClick++;
             input_9.setText(Integer.toString(extraVinegarClick));
 
         } else if (e.getSource() == btn10) {
-            l10.setBounds(1000, 60 + height, 100, 50);
-            inputArr[9].setBounds(1200, 60 + height, 100, 50);
+            l10.setBounds(1000, 690, 100, 50);
+            inputArr[9].setBounds(1200, 690, 100, 50);
             drinkClick++;
-            input_10.setText(Integer.toString(extraVinegarClick));
+            input_10.setText(Integer.toString(drinkClick));
 
         } else if (e.getSource() == checkoutBtn) {
             for (int i = 0; i < 10; ++i) {
@@ -251,12 +256,9 @@ public class cashierGUI implements ActionListener {
                 }
             }
         }
-        height += 70;
 
-        for (int i = 0; i < 10; ++i) {
-            f.add(labelArr[i]);
-            f.add(inputArr[i]);
-        }
+        // height += 70; --> Hardcoded height, can fix later
+
     }
 
     public static void main(String args[]) {
