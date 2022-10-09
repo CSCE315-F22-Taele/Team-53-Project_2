@@ -92,21 +92,21 @@ public class inventoryPerOrder implements ActionListener {
     int vinegarClick = 0;
 
     // Input Declaration
-    JTextField riceInput = new JTextField("1");
-    JTextField chickenInput = new JTextField("1");
-    JTextField meatballsInput = new JTextField("1");
-    JTextField cucumbersInput = new JTextField("1");
-    JTextField cauliflowerInput = new JTextField("1");
-    JTextField tomatoInput = new JTextField("1");
-    JTextField spinachInput = new JTextField("1");
-    JTextField kaleInput = new JTextField("1");
-    JTextField cabbageInput = new JTextField("1");
-    JTextField romaineInput = new JTextField("1");
-    JTextField peppersInput = new JTextField("1");
-    JTextField cheesesInput = new JTextField("1");
-    JTextField harissaInput = new JTextField("1");
-    JTextField sauceInput = new JTextField("1");
-    JTextField vinegarInput = new JTextField("1");
+    JTextField riceInput = new JTextField("0");
+    JTextField chickenInput = new JTextField("0");
+    JTextField meatballsInput = new JTextField("0");
+    JTextField cucumbersInput = new JTextField("0");
+    JTextField cauliflowerInput = new JTextField("0");
+    JTextField tomatoInput = new JTextField("0");
+    JTextField spinachInput = new JTextField("0");
+    JTextField kaleInput = new JTextField("0");
+    JTextField cabbageInput = new JTextField("0");
+    JTextField romaineInput = new JTextField("0");
+    JTextField peppersInput = new JTextField("0");
+    JTextField cheesesInput = new JTextField("0");
+    JTextField harissaInput = new JTextField("0");
+    JTextField sauceInput = new JTextField("0");
+    JTextField vinegarInput = new JTextField("0");
 
     JTextField inputArr[] = { riceInput, chickenInput, meatballsInput, cucumbersInput, cauliflowerInput,
             tomatoInput, spinachInput, kaleInput, cabbageInput, romaineInput, peppersInput,
