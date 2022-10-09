@@ -28,7 +28,7 @@ public class inventoryPerOrder implements ActionListener {
     }
 
     // Frame Declaraiton
-    JFrame f = new JFrame("Inventory GUI");
+    JFrame f = new JFrame("Inventory Per Order GUI");
 
     // Button Declaration
     JButton riceBtn = new JButton("Rice");
@@ -74,6 +74,23 @@ public class inventoryPerOrder implements ActionListener {
             tomatoLabel, spinachLabel, kaleLabel, cabbageLabel, romaineLabel, peppersLabel,
             cheesesLabel, harissaLabel, sauceLabel, vinegarLabel };
 
+    // Increments
+    int riceClick = 0;
+    int chickenClick = 0;
+    int meatballsClick = 0;
+    int cucumbersClick = 0;
+    int cauliflowerClick = 0;
+    int tomatoClick = 0;
+    int spinachClick = 0;
+    int kaleClick = 0;
+    int cabbageClick = 0;
+    int romaineClick = 0;
+    int peppersClick = 0;
+    int cheesesClick = 0;
+    int harissaClick = 0;
+    int sauceClick = 0; // What is sauce?
+    int vinegarClick = 0;
+
     // Input Declaration
     JTextField riceInput = new JTextField("1");
     JTextField chickenInput = new JTextField("1");
@@ -96,6 +113,7 @@ public class inventoryPerOrder implements ActionListener {
             cheesesInput, harissaInput, sauceInput, vinegarInput };
 
     // Global Vars
+    // TODO: Query employee name (let's not use id if that's a password)
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
     int height = 0;
@@ -155,63 +173,48 @@ public class inventoryPerOrder implements ActionListener {
         if (e.getSource() == riceBtn) {
             riceLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[0].setBounds(1200, 40 + height, 100, 30);
-            riceBtn.setEnabled(false);
         } else if (e.getSource() == chickenBtn) {
             chickenLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[1].setBounds(1200, 40 + height, 100, 30);
-            chickenBtn.setEnabled(false);
         } else if (e.getSource() == meatballsBtn) {
             meatballsLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[2].setBounds(1200, 40 + height, 100, 30);
-            meatballsBtn.setEnabled(false);
         } else if (e.getSource() == cucumbersBtn) {
             cucumbersLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[3].setBounds(1200, 40 + height, 100, 30);
-            cucumbersBtn.setEnabled(false);
         } else if (e.getSource() == cauliflowerBtn) {
             cauliflowerLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[4].setBounds(1200, 40 + height, 100, 30);
-            cauliflowerBtn.setEnabled(false);
         } else if (e.getSource() == tomatoBtn) {
             tomatoLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[5].setBounds(1200, 40 + height, 100, 30);
-            tomatoBtn.setEnabled(false);
         } else if (e.getSource() == spinachBtn) {
             spinachLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[6].setBounds(1200, 40 + height, 100, 30);
-            spinachBtn.setEnabled(false);
         } else if (e.getSource() == kaleBtn) {
             kaleLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[7].setBounds(1200, 40 + height, 100, 30);
-            kaleBtn.setEnabled(false);
         } else if (e.getSource() == cabbageBtn) {
             cabbageLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[8].setBounds(1200, 40 + height, 100, 30);
-            cabbageBtn.setEnabled(false);
         } else if (e.getSource() == romaineBtn) {
             romaineLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[9].setBounds(1200, 40 + height, 100, 30);
-            romaineBtn.setEnabled(false);
         } else if (e.getSource() == peppersBtn) {
             peppersLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[10].setBounds(1200, 40 + height, 100, 30);
-            peppersBtn.setEnabled(false);
         } else if (e.getSource() == cheeseBtn) {
             cheesesLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[11].setBounds(1200, 40 + height, 100, 30);
-            cheeseBtn.setEnabled(false);
         } else if (e.getSource() == harissaBtn) {
             harissaLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[12].setBounds(1200, 40 + height, 100, 30);
-            harissaBtn.setEnabled(false);
         } else if (e.getSource() == sauceBtn) {
             sauceLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[13].setBounds(1200, 40 + height, 100, 30);
-            sauceBtn.setEnabled(false);
         } else if (e.getSource() == vinegarBtn) {
             vinegarLabel.setBounds(1000, 40 + height, 100, 30);
             inputArr[14].setBounds(1200, 40 + height, 100, 30);
-            vinegarBtn.setEnabled(false);
         } else if (e.getSource() == submitBtn) {
             for (int i = 0; i < 15; ++i) {
                 if (inputArr[i].getText() != "") {
