@@ -50,16 +50,16 @@ public class cashierGUI implements ActionListener{
         JLabel labelArr[] = {l1, l2, l3, l4, l5, l6, l7, l8, l9, l10};
 
         // Quantity input Declaration
-        JTextField input_1 = new JTextField("0");
-        JTextField input_2 = new JTextField("0");
-        JTextField input_3 = new JTextField("0");
-        JTextField input_4 = new JTextField("0");
-        JTextField input_5 = new JTextField("0");
-        JTextField input_6 = new JTextField("0");
-        JTextField input_7 = new JTextField("0");
-        JTextField input_8 = new JTextField("0");
-        JTextField input_9 = new JTextField("0");
-        JTextField input_10 = new JTextField("0");
+        JTextField input_1 = new JTextField("1");
+        JTextField input_2 = new JTextField("1");
+        JTextField input_3 = new JTextField("1");
+        JTextField input_4 = new JTextField("1");
+        JTextField input_5 = new JTextField("1");
+        JTextField input_6 = new JTextField("1");
+        JTextField input_7 = new JTextField("1");
+        JTextField input_8 = new JTextField("1");
+        JTextField input_9 = new JTextField("1");
+        JTextField input_10 = new JTextField("1");
         JTextField inputArr[] = {input_1, input_2, input_3, input_4, input_5, input_6, input_7, 
                                 input_8, input_9, input_10};
 
