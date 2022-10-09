@@ -116,7 +116,7 @@ public class inventoryPerOrder implements ActionListener {
     // TODO: Query employee name (let's not use id if that's a password)
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
-    int height = 0;
+    int height = 0; // Hardcoded --> can fix later
     /* Store quantity of each inventory item */
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -171,92 +171,92 @@ public class inventoryPerOrder implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == riceBtn) {
-            riceLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[0].setBounds(1200, 40 + height, 100, 30);
+            riceLabel.setBounds(1000, 40, 100, 30);
+            inputArr[0].setBounds(1200, 40, 100, 30);
             riceClick++;
             riceInput.setText(Integer.toString(riceClick));
 
         } else if (e.getSource() == chickenBtn) {
-            chickenLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[1].setBounds(1200, 40 + height, 100, 30);
+            chickenLabel.setBounds(1000, 90, 100, 30);
+            inputArr[1].setBounds(1200, 90, 100, 30);
             chickenClick++;
             chickenInput.setText(Integer.toString(chickenClick));
 
         } else if (e.getSource() == meatballsBtn) {
-            meatballsLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[2].setBounds(1200, 40 + height, 100, 30);
+            meatballsLabel.setBounds(1000, 130, 100, 30);
+            inputArr[2].setBounds(1200, 130, 100, 30);
             meatballsClick++;
             meatballsInput.setText(Integer.toString(meatballsClick));
 
         } else if (e.getSource() == cucumbersBtn) {
-            cucumbersLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[3].setBounds(1200, 40 + height, 100, 30);
+            cucumbersLabel.setBounds(1000, 180, 100, 30);
+            inputArr[3].setBounds(1200, 180, 100, 30);
             cucumbersClick++;
             cucumbersInput.setText(Integer.toString(cucumbersClick));
 
         } else if (e.getSource() == cauliflowerBtn) {
-            cauliflowerLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[4].setBounds(1200, 40 + height, 100, 30);
+            cauliflowerLabel.setBounds(1000, 230, 100, 30);
+            inputArr[4].setBounds(1200, 230, 100, 30);
             cauliflowerClick++;
             cauliflowerInput.setText(Integer.toString(cauliflowerClick));
 
         } else if (e.getSource() == tomatoBtn) {
-            tomatoLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[5].setBounds(1200, 40 + height, 100, 30);
+            tomatoLabel.setBounds(1000, 280, 100, 30);
+            inputArr[5].setBounds(1200, 280, 100, 30);
             tomatoClick++;
             tomatoInput.setText(Integer.toString(tomatoClick));
 
         } else if (e.getSource() == spinachBtn) {
-            spinachLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[6].setBounds(1200, 40 + height, 100, 30);
+            spinachLabel.setBounds(1000, 330, 100, 30);
+            inputArr[6].setBounds(1200, 330, 100, 30);
             spinachClick++;
             spinachInput.setText(Integer.toString(spinachClick));
 
         } else if (e.getSource() == kaleBtn) {
-            kaleLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[7].setBounds(1200, 40 + height, 100, 30);
+            kaleLabel.setBounds(1000, 380, 100, 30);
+            inputArr[7].setBounds(1200, 380, 100, 30);
             kaleClick++;
             kaleInput.setText(Integer.toString(kaleClick));
 
         } else if (e.getSource() == cabbageBtn) {
-            cabbageLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[8].setBounds(1200, 40 + height, 100, 30);
+            cabbageLabel.setBounds(1000, 430, 100, 30);
+            inputArr[8].setBounds(1200, 430, 100, 30);
             cabbageClick++;
             cabbageInput.setText(Integer.toString(cabbageClick));
 
         } else if (e.getSource() == romaineBtn) {
-            romaineLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[9].setBounds(1200, 40 + height, 100, 30);
+            romaineLabel.setBounds(1000, 480, 100, 30);
+            inputArr[9].setBounds(1200, 480, 100, 30);
             romaineClick++;
             romaineInput.setText(Integer.toString(romaineClick));
 
         } else if (e.getSource() == peppersBtn) {
-            peppersLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[10].setBounds(1200, 40 + height, 100, 30);
+            peppersLabel.setBounds(1000, 530, 100, 30);
+            inputArr[10].setBounds(1200, 530, 100, 30);
             peppersClick++;
             peppersInput.setText(Integer.toString(peppersClick));
 
         } else if (e.getSource() == cheeseBtn) {
-            cheesesLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[11].setBounds(1200, 40 + height, 100, 30);
+            cheesesLabel.setBounds(1000, 580, 100, 30);
+            inputArr[11].setBounds(1200, 580, 100, 30);
             cheesesClick++;
             cheesesInput.setText(Integer.toString(cheesesClick));
 
         } else if (e.getSource() == harissaBtn) {
-            harissaLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[12].setBounds(1200, 40 + height, 100, 30);
+            harissaLabel.setBounds(1000, 630, 100, 30);
+            inputArr[12].setBounds(1200, 630, 100, 30);
             harissaClick++;
             harissaInput.setText(Integer.toString(harissaClick));
 
         } else if (e.getSource() == sauceBtn) {
-            sauceLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[13].setBounds(1200, 40 + height, 100, 30);
+            sauceLabel.setBounds(1000, 680, 100, 30);
+            inputArr[13].setBounds(1200, 680, 100, 30);
             tzatzikiSauceClick++;
             sauceInput.setText(Integer.toString(tzatzikiSauceClick));
 
         } else if (e.getSource() == vinegarBtn) {
-            vinegarLabel.setBounds(1000, 40 + height, 100, 30);
-            inputArr[14].setBounds(1200, 40 + height, 100, 30);
+            vinegarLabel.setBounds(1000, 730, 100, 30);
+            inputArr[14].setBounds(1200, 730, 100, 30);
             vinegarClick++;
             vinegarInput.setText(Integer.toString(vinegarClick));
 
@@ -270,7 +270,7 @@ public class inventoryPerOrder implements ActionListener {
             // TODO: Implement
         }
 
-        height += 50;
+        // height += 50;
     }
 
     public static void main(String[] args) {
