@@ -114,62 +114,59 @@ public class loginGUI implements ActionListener {
             passCode = Integer.parseInt(tempCode);
 
             // TODO: Check if password = employeeid
-            if (checkPassword(passCode) ){
+            if (checkPassword(passCode)) {
                 // If yes, go directly to cashierGUI
                 f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-                //new cashierGUI();
+                new cashierGUI();
                 JOptionPane.showMessageDialog(null, "Pincode is correct.");
-                 System.out.println(" true");
-            }
-            else{
+                System.out.println(" true");
+            } else {
                 System.out.println("not true");
                 JOptionPane.showMessageDialog(null, "Pincode is incorrect. Please retry.");
                 tempCode = "";
-                //ADD ME: GET IT TO PRINT THAT THE PASSWORD IS INCORRECT. RESET. 
+                // ADD ME: GET IT TO PRINT THAT THE PASSWORD IS INCORRECT. RESET.
             }
         }
     }
 
-    public boolean checkPassword(int password){
+    public boolean checkPassword(int password) {
         Connection conn = connectionSet();
         boolean value = false;
-        try{
-            PreparedStatement employeeCheck = conn.prepareStatement("SELECT exists (SELECT 1 FROM employee WHERE employeeid = (?))");
+        try {
+            PreparedStatement employeeCheck = conn
+                    .prepareStatement("SELECT exists (SELECT 1 FROM employee WHERE employeeid = (?))");
             employeeCheck.setInt(1, password);
             ResultSet employees = employeeCheck.executeQuery();
 
             while (employees.next()) {
-                value= employees.getBoolean("exists");
+                value = employees.getBoolean("exists");
             }
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error accessing Database.");
         }
 
-        
-        return value; 
+        return value;
     }
 
-    public Connection connectionSet(){
+    public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
         Connection conn = null;
         try {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                my.user, my.pswd);
+                    my.user, my.pswd);
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
         } // end try catch
-        //JOptionPane.showMessageDialog(null, "Opened database successfully");
+          // JOptionPane.showMessageDialog(null, "Opened database successfully");
         return conn;
     }
 
     public static void main(String args[]) {
         new loginGUI();
-        
 
     }
 
