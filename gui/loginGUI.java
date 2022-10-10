@@ -8,13 +8,13 @@ public class loginGUI implements ActionListener {
         aFrame.setSize(screenSize.width, screenSize.height);
     }
 
-    // Store the passcode 
+    // Store the passcode
     String tempCode = "";
     int passCode;
 
     // Title Declaration
     JLabel title = new JLabel("LOGIN");
-    
+
     // Button Declaration
     JButton btn0 = new JButton("0");
     JButton btn1 = new JButton("1");
@@ -31,7 +31,7 @@ public class loginGUI implements ActionListener {
     // Frame Declaration
     JFrame f = new JFrame("Login GUI");
 
-    loginGUI(){
+    loginGUI() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
@@ -63,7 +63,7 @@ public class loginGUI implements ActionListener {
         btn0.addActionListener(this);
         btn10.addActionListener(this);
 
-        // Frame 
+        // Frame
         f.add(btn1);
         f.add(btn2);
         f.add(btn3);
@@ -85,34 +85,39 @@ public class loginGUI implements ActionListener {
 
     public void actionPerformed(ActionEvent e) {
         // Collect each digit to a passtempCode
-        if(e.getSource() == btn1){
+        if (e.getSource() == btn1) {
             tempCode += "1";
-        } else if(e.getSource() == btn2){
+        } else if (e.getSource() == btn2) {
             tempCode += "2";
-        } else if(e.getSource() == btn3){
+        } else if (e.getSource() == btn3) {
             tempCode += "3";
-        } else if(e.getSource() == btn4){
+        } else if (e.getSource() == btn4) {
             tempCode += "4";
-        } else if(e.getSource() == btn5){
+        } else if (e.getSource() == btn5) {
             tempCode += "5";
-        } else if(e.getSource() == btn6){
+        } else if (e.getSource() == btn6) {
             tempCode += "6";
-        } else if(e.getSource() == btn7){
+        } else if (e.getSource() == btn7) {
             tempCode += "7";
-        } else if(e.getSource() == btn8){
+        } else if (e.getSource() == btn8) {
             tempCode += "8";
-        } else if(e.getSource() == btn9){
+        } else if (e.getSource() == btn9) {
             tempCode += "9";
-        } else if(e.getSource() == btn0){
+        } else if (e.getSource() == btn0) {
             tempCode += "0";
-        } else if(e.getSource() == btn10){
+        } else if (e.getSource() == btn10) {
             passCode = Integer.parseInt(tempCode);
+
+            // TODO: Check if password = employeeid
+            // If yes, go directly to cashierGUI
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            new cashierGUI();
         }
     }
 
-    public static void main(String args[]){
+    public static void main(String args[]) {
         new loginGUI();
-        
+
     }
 
 }
