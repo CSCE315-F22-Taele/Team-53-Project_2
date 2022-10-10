@@ -1,9 +1,10 @@
+package db;
+
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
 import java.nio.file.*;
-import java.text.SimpleDateFormat; 
-
+import java.text.SimpleDateFormat;
 
 public class inventoryPopulate {
 
@@ -41,32 +42,32 @@ public class inventoryPopulate {
       // create a statement object
       Statement stmt = conn.createStatement();
 
-			String sqlStatement = "UPDATE inventory SET cost = ? WHERE itemid = ?";
-			PreparedStatement statement = conn.prepareStatement(sqlStatement);
+      String sqlStatement = "UPDATE inventory SET cost = ? WHERE itemid = ?";
+      PreparedStatement statement = conn.prepareStatement(sqlStatement);
       int itemId = 0;
-			String itemName;
+      String itemName;
       double amount;
       double cost;
       Date expirationData;
       String vendor;
 
-      List<String> lines = Files.readAllLines(Paths.get("inventory_Data.csv"));  
-        for(String line : lines){
-          String[] elements = line.split(",");
-						itemId = Integer.parseInt(elements[0]);
-						//itemName = elements[1];
-            amount = Double. parseDouble(elements[2]);
-            cost = Double.parseDouble(elements[3]);
-            vendor = elements[5];
+      List<String> lines = Files.readAllLines(Paths.get("inventory_Data.csv"));
+      for (String line : lines) {
+        String[] elements = line.split(",");
+        itemId = Integer.parseInt(elements[0]);
+        // itemName = elements[1];
+        amount = Double.parseDouble(elements[2]);
+        cost = Double.parseDouble(elements[3]);
+        vendor = elements[5];
 
-						statement.setInt(2, itemId);
-						//statement.setString(2, itemName);
-            // statement.setDouble(1, amount);
-            statement.setDouble(1, cost);
-            //statement.setString(1, vendor);
-						statement.executeUpdate();
-					}
-      
+        statement.setInt(2, itemId);
+        // statement.setString(2, itemName);
+        // statement.setDouble(1, amount);
+        statement.setDouble(1, cost);
+        // statement.setString(1, vendor);
+        statement.executeUpdate();
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName() + ": " + e.getMessage());

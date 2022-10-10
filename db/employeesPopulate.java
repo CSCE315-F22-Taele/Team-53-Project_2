@@ -1,7 +1,8 @@
+package db;
+
 import java.sql.*;
 import java.util.List;
 import java.nio.file.*;
-
 
 public class employeesPopulate {
 
@@ -39,29 +40,29 @@ public class employeesPopulate {
       // create a statement object
       Statement stmt = conn.createStatement();
       String sqlStatement = "INSERT INTO employee (employeeid, hoursWorked, salary,employeename) VALUES (?, ?, ?, ?)";
-			PreparedStatement statement = conn.prepareStatement(sqlStatement);
+      PreparedStatement statement = conn.prepareStatement(sqlStatement);
       int employeeId = 0;
       double hoursWorked = 0;
       double salary = 0;
       int managerId;
       String employeeName;
 
-      List<String> lines = Files.readAllLines(Paths.get("manage_employee data.csv"));  
-        for(String line : lines){
-          String[] elements = line.split(",");
-						employeeId = Integer.parseInt(elements[0]);
-						hoursWorked = Double. parseDouble(elements[1]);
-            salary = Double. parseDouble(elements[2]) ;
-            managerId = Integer.parseInt(elements[3]);
-            employeeName = elements[4];
+      List<String> lines = Files.readAllLines(Paths.get("manage_employee data.csv"));
+      for (String line : lines) {
+        String[] elements = line.split(",");
+        employeeId = Integer.parseInt(elements[0]);
+        hoursWorked = Double.parseDouble(elements[1]);
+        salary = Double.parseDouble(elements[2]);
+        managerId = Integer.parseInt(elements[3]);
+        employeeName = elements[4];
 
-						statement.setInt(1, employeeId);
-						statement.setDouble(2, hoursWorked);
-            statement.setDouble(3, salary);
-            statement.setString(4, employeeName);
-						statement.executeUpdate();
-					}
-      
+        statement.setInt(1, employeeId);
+        statement.setDouble(2, hoursWorked);
+        statement.setDouble(3, salary);
+        statement.setString(4, employeeName);
+        statement.executeUpdate();
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
       System.err.println(e.getClass().getName() + ": " + e.getMessage());
