@@ -270,9 +270,9 @@ public class inventoryGUI implements ActionListener{
         for(int j = 0; j < 24; ++j){
             if(quantityArr[j] == 0){
                 if(j % 5 == 0 && j != 0){
-                    out_of_stack.append(labelArr[j].getText() + "\n");
+                    out_of_stack.append(labelArr.get(j).getText() + "\n");
                 } else {
-                    out_of_stack.append(labelArr[j].getText() + ", ");
+                    out_of_stack.append(labelArr.get(j).getText() + ", ");
                 }
                 
             }
@@ -285,9 +285,14 @@ public class inventoryGUI implements ActionListener{
         f.add(orderBtn);
         
         
-        for (int i = 0; i < 24; ++i) {
-            f.add(labelArr[i]);
-            f.add(inputArr[i]);
+        // for (int i = 0; i < 24; ++i) {
+        //     f.add(labelArr[i]);
+        //     f.add(inputArr[i]);
+        // }
+
+        for (int i = 0; i < labelArr.size(); i++){
+            f.add(labelArr.get(i));
+            f.add(inputArr.get(i));
         }
 
 
@@ -299,7 +304,7 @@ public class inventoryGUI implements ActionListener{
     }
 
     public void action(int k){
-        itemName.setText(labelArr[i].getText());
+        itemName.setText(labelArr.get(i).getText());
         itemQuantity.setText(Integer.toString(quantityArr[k]));
         itemExpirationDate.setText(dateFormat.format(expirationDataArr[k]));
         i = k;
@@ -383,8 +388,8 @@ public class inventoryGUI implements ActionListener{
             i = 23;
             action(i);
         } else if(e.getSource() == restockBtn){
-            labelArr[i].setBounds(1100, 360 + height_restock, 100, 30);
-            inputArr[i].setBounds(1200, 360 + height_restock, 100, 30);
+            labelArr.get(i).setBounds(1100, 360 + height_restock, 100, 30);
+            inputArr.get(i).setBounds(1200, 360 + height_restock, 100, 30);
 
 
         } else if(e.getSource() == clearBtn){
@@ -397,7 +402,7 @@ public class inventoryGUI implements ActionListener{
             height_restock -= 15;
         } else if(e.getSource() == orderBtn){
             for(int i = 0; i < 24; ++i){
-                restockQuantity[i] = Integer.parseInt(inputArr[i].getText());
+                restockQuantity[i] = Integer.parseInt(inputArr.get(i).getText());
             }
         } else if(e.getSource() == logOutBtn){
             // FIX ME: TODO: Implement
