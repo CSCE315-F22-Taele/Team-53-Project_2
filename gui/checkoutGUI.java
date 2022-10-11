@@ -62,14 +62,14 @@ public class checkoutGUI{
 
         ////////// Options Area //////////
         JPanel optionsPanel = new JPanel();
-        optionsPanel.setBounds(400, (int) (height * 0.09), 400, (int) (height * 0.7));
+        optionsPanel.setBounds((int) (width * 0.06), (int) ((height * 0.75)), (int) (width * 0.6), (int) (height * 0.1));
         optionsPanel.setLayout(new GridLayout(1, 3));
 
         optionsPanel.add(logoutButton);
         optionsPanel.add(cancelButton);
         optionsPanel.add(editButton);
 
-        itemsPanel.add(optionsPanel);
+        f.add(optionsPanel);
 
         f.add(itemsPanel, BorderLayout.NORTH);
         
