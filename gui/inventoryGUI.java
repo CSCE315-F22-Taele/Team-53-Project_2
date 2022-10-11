@@ -2,8 +2,11 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.Date;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList; 
+
 
 
 
@@ -13,104 +16,7 @@ public class inventoryGUI implements ActionListener{
 
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
-    JMenu ingredientsMenu = new JMenu("Ingredient");
-    JMenu miscellaneousMenu = new JMenu("Miscellaneous");
-
-    JMenuItem riceItem = new JMenuItem("Rice");
-    JMenuItem chickenItem = new JMenuItem("Chicken");
-    JMenuItem meatballItem = new JMenuItem("Spicy meatball");
-    JMenuItem falafelItem = new JMenuItem("FalafelItem");
-    JMenuItem cucumbersItem = new JMenuItem("Cucumbers");
-    JMenuItem cauliflowerItem = new JMenuItem("Cauliflower");
-    JMenuItem tomatoItem = new JMenuItem("Tomato");
-    JMenuItem spinachItem = new JMenuItem("Spinach");
-    JMenuItem kaleItem = new JMenuItem("Kale");
-    JMenuItem cabbageItem = new JMenuItem("Cabbage");
-    JMenuItem romaineItem = new JMenuItem("Romaine");
-    JMenuItem peppersItem = new JMenuItem("Banana peppers");
-    JMenuItem cheeseItem = new JMenuItem("Feta cheese");
-    JMenuItem harissaItem = new JMenuItem("Harissa");
-    JMenuItem sauceItem = new JMenuItem("Tzatziki sauce");
-    JMenuItem vinegarItem = new JMenuItem("Balsamic vinegar");
-    JMenuItem pitaItem= new JMenuItem("Pita");
-    JMenuItem hummusItem = new JMenuItem("Hummus");
-    JMenuItem saltItem = new JMenuItem("Salt");
-    JMenuItem bowlItem = new JMenuItem("Bowl");
-    JMenuItem cupItem = new JMenuItem("Cup");
-    JMenuItem lidItem = new JMenuItem("Lid");
-    JMenuItem strawItem = new JMenuItem("Straw");
-    JMenuItem napkinsItem = new JMenuItem("Napkins");
-
-    JMenuItem itemArr[] = {riceItem, chickenItem, meatballItem, falafelItem, cucumbersItem,
-                                cauliflowerItem, tomatoItem, spinachItem ,kaleItem, cabbageItem, 
-                                romaineItem, peppersItem, cheeseItem,  harissaItem, sauceItem, 
-                                vinegarItem, pitaItem, hummusItem,saltItem, bowlItem, cupItem, lidItem, strawItem, napkinsItem};
-
-
-    // Inventory Item (Label)
-    JLabel riceLabel = new JLabel("Rice");
-    JLabel chickenLabel = new JLabel("Chicken");
-    JLabel meatballsLabel = new JLabel("Sp Meatballs");
-    JLabel falafelLabel = new JLabel("Falafel");
-    JLabel cucumbersLabel = new JLabel("Cucumbers");
-    JLabel cauliflowerLabel = new JLabel("Cauliflower");
-    JLabel tomatoLabel = new JLabel("Tomato");
-    JLabel spinachLabel = new JLabel("Spinach");
-    JLabel kaleLabel = new JLabel("Kale");
-    JLabel cabbageLabel = new JLabel("Cabbage");
-    JLabel romaineLabel = new JLabel("Romaine");
-    JLabel peppersLabel = new JLabel("Banana Peppers");
-    JLabel cheesesLabel = new JLabel("Feta Cheese");
-    JLabel harissaLabel = new JLabel("Harissa");
-    JLabel sauceLabel = new JLabel("Tzatziki Sauce");
-    JLabel vinegarLabel = new JLabel("Balsamic Vinegar");
-    JLabel pitaLabel = new JLabel("Pita");
-    JLabel hummusLabel = new JLabel("Hummus");
-    JLabel saltLabel = new JLabel("Salt");
-    JLabel bowlLabel = new JLabel("Bowl");
-    JLabel cupLabel = new JLabel("Cup");
-    JLabel lidLabel= new JLabel("Lid");
-    JLabel strawLabel = new JLabel("Straw");
-    JLabel napkinsLabel = new JLabel("Napkins");
-    JLabel labelArr[] = {riceLabel, chickenLabel, meatballsLabel, falafelLabel, cucumbersLabel, cauliflowerLabel,
-        tomatoLabel, spinachLabel, kaleLabel, cabbageLabel, romaineLabel, peppersLabel,cheesesLabel, harissaLabel, 
-        sauceLabel, vinegarLabel, pitaLabel, hummusLabel,saltLabel, bowlLabel, cupLabel, lidLabel, strawLabel, napkinsLabel};
-
-
-    // Input (For inventory item quantities)
-    JTextField riceInput = new JTextField("0");
-    JTextField chickenInput = new JTextField("0");
-    JTextField meatballsInput = new JTextField("0");
-    JTextField falafelInput = new JTextField("0");
-    JTextField cucumbersInput = new JTextField("0");
-    JTextField cauliflowerInput = new JTextField("0");
-    JTextField tomatoInput = new JTextField("0");
-    JTextField spinachInput = new JTextField("0");
-    JTextField kaleInput = new JTextField("0");
-    JTextField cabbageInput = new JTextField("0");
-    JTextField romaineInput = new JTextField("0");
-    JTextField peppersInput = new JTextField("0");
-    JTextField cheesesInput = new JTextField("0");
-    JTextField harissaInput = new JTextField("0");
-    JTextField sauceInput = new JTextField("0");
-    JTextField vinegarInput = new JTextField("0");
-    
-    JTextField pitaInput= new JTextField("0");
-    JTextField hummusInput = new JTextField("0");
-    JTextField saltInput = new JTextField("0");
-
-    JTextField bowlInput = new JTextField("0");
-    JTextField cupInput = new JTextField("0");
-    JTextField lidInput= new JTextField("0");
-    JTextField strawInput = new JTextField("0");
-    JTextField napkinsInput= new JTextField("0");
-
-    JTextField inputArr[] = {riceInput, chickenInput, meatballsInput,falafelInput, cucumbersInput, cauliflowerInput,
-            tomatoInput, spinachInput, kaleInput, cabbageInput, romaineInput, peppersInput,cheesesInput, 
-            harissaInput, sauceInput, vinegarInput,  pitaInput, hummusInput,saltInput, bowlInput, cupInput, 
-            lidInput, strawInput, napkinsInput};
-
-
+    JMenu inventoryMenu = new JMenu("Inventory");
     
     // Data Output Area (for each item)
     JLabel nameInfo = new JLabel("Item Name: ");
@@ -125,7 +31,8 @@ public class inventoryGUI implements ActionListener{
     JButton clearBtn = new JButton("Clear");
 
     // Action Items & Restock Areas
-    
+    String inventory_names[]; 
+
     JLabel actionItemsTitle = new JLabel("ACTION ITEMS");
     JTextArea out_of_stack = new JTextArea("");
     
@@ -134,17 +41,6 @@ public class inventoryGUI implements ActionListener{
 
     // Logout 
     JButton logOutBtn = new JButton("LOG OUT");
-
-    // Store data
-    int quantityArr[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0};
-    int restockQuantity[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0};
-    Date expirationDataArr[] = {
-        new Date(), new Date(), new Date(), new Date(), new Date(), new Date(),
-        new Date(), new Date(), new Date(), new Date(), new Date(), new Date(),
-        new Date(), new Date(), new Date(), new Date(), new Date(), new Date(),
-        new Date(), new Date(), new Date(), new Date(), new Date(), new Date()
-    };
-    
  
     // Frame 
     JFrame f = new JFrame();
@@ -156,6 +52,44 @@ public class inventoryGUI implements ActionListener{
 
 
     inventoryGUI(){
+        
+        //ANNIE
+        Connection conn = connectionSet();
+        inventory_names = get_inventory_name(conn);
+
+        // Menu Declatation
+        // I moved it here bc need to access inventory_names
+        ArrayList <JMenuItem> itemArr = new ArrayList <JMenuItem>();
+
+        for (int index = 0; index < inventory_names.length; index++){
+            itemArr.add(new JMenuItem(inventory_names[index]));
+        }
+
+        // Inventory Item (Label)
+        ArrayList <JLabel> labelArr = new ArrayList <JLabel>();
+        
+        for (int index = 0; index < inventory_names.length; index++){
+            labelArr.add(new JLabel(inventory_names[index]));
+        }
+
+        // Input (For inventory item quantities)
+        ArrayList <JTextField> inputArr = new ArrayList <JTextField>();
+
+        for (int index = 0; index < inventory_names.length; index++){
+            inputArr.add(new JTextField("0"));
+        }
+
+        // Store data
+        ArrayList <Integer> quantityArr = new ArrayList<Integer>();
+        ArrayList <Integer> restockQuantity = new ArrayList<Integer>();
+        ArrayList <Date> expirationDataArr = new ArrayList<Date>();
+
+        for (int index = 0; index < inventory_names.length; index++){
+            quantityArr.add(0);
+            restockQuantity.add(0);
+            expirationDataArr.add(new Date());
+        }
+
         ////////// Background //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -169,16 +103,13 @@ public class inventoryGUI implements ActionListener{
         ////////// Menu Setup //////////
 
         // Add each menu-items to the menu bar and addActionListener
-        for(int i = 0; i < 19; i++){
-            ingredientsMenu.add(itemArr[i]);
-            itemArr[i].addActionListener(this);
+
+        for (int i = 0; i < inventory_names.length; i++){
+            inventoryMenu.add(itemArr.get(i));
+            itemArr.get(i).addActionListener(this);
         }
-        for(int j = 19; j < 24; ++j){
-            miscellaneousMenu.add(itemArr[j]);
-            itemArr[j].addActionListener(this);
-        }
-        menuBar.add(ingredientsMenu);
-        menuBar.add(miscellaneousMenu);
+
+        menuBar.add(inventoryMenu);
 
         ////////// Data Output Area for each inventory item //////////
 
@@ -231,11 +162,11 @@ public class inventoryGUI implements ActionListener{
         orderBtn.setBounds(1150, 800, 100, 80);
         
         for(int j = 0; j < 24; ++j){
-            if(quantityArr[j] == 0){
+            if(quantityArr.get(j) == 0){
                 if(j % 5 == 0 && j != 0){
-                    out_of_stack.append(labelArr[j].getText() + "\n");
+                    out_of_stack.append(labelArr.get(j).getText() + "\n");
                 } else {
-                    out_of_stack.append(labelArr[j].getText() + ", ");
+                    out_of_stack.append(labelArr.get(j).getText() + ", ");
                 }
                 
             }
@@ -248,9 +179,14 @@ public class inventoryGUI implements ActionListener{
         f.add(orderBtn);
         
         
-        for (int i = 0; i < 24; ++i) {
-            f.add(labelArr[i]);
-            f.add(inputArr[i]);
+        // for (int i = 0; i < 24; ++i) {
+        //     f.add(labelArr[i]);
+        //     f.add(inputArr[i]);
+        // }
+
+        for (int i = 0; i < labelArr.size(); i++){
+            f.add(labelArr.get(i));
+            f.add(inputArr.get(i));
         }
 
 
@@ -262,9 +198,9 @@ public class inventoryGUI implements ActionListener{
     }
 
     public void action(int k){
-        itemName.setText(labelArr[i].getText());
-        itemQuantity.setText(Integer.toString(quantityArr[k]));
-        itemExpirationDate.setText(dateFormat.format(expirationDataArr[k]));
+        itemName.setText(labelArr.get(i).getText());
+        itemQuantity.setText(Integer.toString(quantityArr.get(k)));
+        itemExpirationDate.setText(dateFormat.format(expirationDataArr.get(k)));
         i = k;
         restockBtn.setVisible(true);
         isRestock.setVisible(true);
@@ -346,8 +282,10 @@ public class inventoryGUI implements ActionListener{
             i = 23;
             action(i);
         } else if(e.getSource() == restockBtn){
-            labelArr[i].setBounds(1100, 360 + height_restock, 100, 30);
-            inputArr[i].setBounds(1200, 360 + height_restock, 100, 30);
+            labelArr.get(i).setBounds(1100, 360 + height_restock, 100, 30);
+            inputArr.get(i).setBounds(1200, 360 + height_restock, 100, 30);
+
+
         } else if(e.getSource() == clearBtn){
             itemName.setText("");
             itemQuantity.setText("");
@@ -358,14 +296,47 @@ public class inventoryGUI implements ActionListener{
             height_restock -= 15;
         } else if(e.getSource() == orderBtn){
             for(int i = 0; i < 24; ++i){
-                restockQuantity[i] = Integer.parseInt(inputArr[i].getText());
+                restockQuantity.get(i)= Integer.parseInt(inputArr.get(i).getText());
             }
         } else if(e.getSource() == logOutBtn){
-            // TODO: Implement
+            // FIX ME: TODO: Implement
 
         }
         height_restock += 15;
     }
+
+    public String[] get_inventory_name(Connection conn){
+        
+       
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
+        int count = 0; // Increments inventory array
+
+        while (findInventory.next()) {
+            inventory_names.push_back( findInventory.getString("itemname") );
+            count++;
+        }
+
+    }
+
+    public Connection connectionSet(){
+        dbSetup my = new dbSetup();
+        // Building the connection
+        Connection conn = null;
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
+                my.user, my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } 
+
+        return conn;
+    }
+   
 
     public static void main(String[] args){
         new inventoryGUI();
