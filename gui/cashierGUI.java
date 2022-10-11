@@ -90,7 +90,7 @@ public class cashierGUI implements ActionListener {
 
     // Global Var --> Unused, hardcoded can change later
     int height_items;
-
+    int employeeid; 
     // Store quantity of each menu item
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -131,8 +131,8 @@ public class cashierGUI implements ActionListener {
 
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
-        System.out.println(screenSize.height);
-        System.out.println(screenSize.width);
+        // System.out.println(screenSize.height);
+        // System.out.println(screenSize.width);
 
         ////////// Buttons //////////
         // Button 1
@@ -283,6 +283,7 @@ public class cashierGUI implements ActionListener {
         f.setVisible(true);
     }
 
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btn1) {
             // l1.setBounds(1000, 60 + height, 100, 50); --> hardcoded
@@ -378,6 +379,12 @@ public class cashierGUI implements ActionListener {
 
         // height += 70; --> Hardcoded height, can fix later
 
+    }
+
+    public void set_employeeid(int id){
+        employeeid = id;
+        System.out.println("EMPLOYEE PASSED IN:");
+        System.out.println(employeeid);
     }
 
     public int getDateforId(){
