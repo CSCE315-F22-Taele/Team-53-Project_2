@@ -16,6 +16,7 @@ import java.util.Date;
 public class combined {
 
     public combined() {
+        
         class loginGUI implements ActionListener {
             private void makeFrameFullSize(JFrame aFrame) {
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -125,9 +126,10 @@ public class combined {
                     if (checkPassword(passCode)) {
                         // If yes, go directly to cashierGUI
 
-                        // cashierGUI newGui = new cashierGUI();
-                        new cashierGUI();
-                        // newGui.get_employee(passCode);
+                        cashierGUI newGui = new cashierGUI();
+                        //new cashierGUI();
+                        newGui.setEmployee(passCode);
+                        newGui.setVisible();
 
                         f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
                         // FIX ME: ADD A WAY TO GET THE EMPLOYEE ID TO THE CASHIER PAGE
@@ -234,10 +236,10 @@ public class combined {
 
             // Global Var --> Unused, hardcoded can change later
             int height_items;
-
+            
             // Store quantity of each menu item
             int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
+            int employeeid;
             // Price of each menu item
             double priceArr[] = priceArr();
 
@@ -264,7 +266,7 @@ public class combined {
             int item_width = (int) (width * 0.092);
             int quantity_width = (int) (width * 0.19);
 
-            public cashierGUI() {
+            cashierGUI() {
                 ////////// Background //////////
                 for (int i = 0; i < 24; i++) {
                     inventory[i] = 0;
@@ -427,6 +429,9 @@ public class combined {
                 f.setVisible(true);
             }
 
+            public void setEmployee( int id){
+                employeeid = id;
+            }
             public void actionPerformed(ActionEvent e) {
                 if (e.getSource() == btn1) {
                     // l1.setBounds(1000, 60 + height, 100, 50); --> hardcoded
