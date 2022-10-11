@@ -1,16 +1,20 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
+
 
 public class inventoryGUI_hexin implements ActionListener {
 
@@ -22,7 +26,9 @@ public class inventoryGUI_hexin implements ActionListener {
     JMenu editMenu = new JMenu("Edit");
 
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
+    int inventory_id[];
     String inventory_names[];
+
 
     // View
     JLabel idInfo = new JLabel("Item ID: ");
@@ -45,9 +51,6 @@ public class inventoryGUI_hexin implements ActionListener {
 
     JButton clearBtn = new JButton("Clear");
 
-    // Action Areas
-    JLabel actionItemsTitle = new JLabel("ACTION ITEMS");
-    JTextArea out_of_stack = new JTextArea("");
 
     // Logout
     JButton logOutBtn = new JButton("LOG OUT");
@@ -88,12 +91,11 @@ public class inventoryGUI_hexin implements ActionListener {
 
     // Const Vars
     int i = 0;
+    Connection conn = connectionSet();
 
     inventoryGUI_hexin() {
 
         // // ANNIE
-        Connection conn = connectionSet();
-
         try {
             inventory_names = get_inventory_name(conn, get_inventory_size(conn));
         } catch (SQLException e) {
@@ -101,8 +103,18 @@ public class inventoryGUI_hexin implements ActionListener {
             e.printStackTrace();
         }
 
+        // Add the inventory items from array to Arraylist 
+        for(int i = 0; i < inventory_names.length; ++i){
+            nameList.add(inventory_names[i]);
+        }
+
+        // Add the inventory items
         for (int i = 0; i < inventory_names.length; i++) {
             System.out.println(inventory_names[i]);
+            JMenuItem newItem = new JMenuItem(nameList.get(i));
+            newItem.addActionListener(this);
+            viewMenu.add(newItem);
+            itemList.add(newItem);
         }
 
         ////////// Background //////////
@@ -170,26 +182,6 @@ public class inventoryGUI_hexin implements ActionListener {
         f.add(itemVendor);
         f.add(clearBtn);
 
-        ////////// Action Area//////////
-        // The Action area looks awful, I will modifiy it later
-        actionItemsTitle.setBounds(1260, 10, 100, 100);
-        out_of_stack.setBounds(1200, 80, 300, 250);
-
-        // if the quantities of a item is 0, then display the item name as red color
-        out_of_stack.setForeground(Color.RED);
-
-        for (int j = 0; j < nameList.size(); ++j) {
-            if (quantityList.get(j) == 0) {
-                if (j % 5 == 0 && j != 0) {
-                    out_of_stack.append(nameList.get(j) + "\n");
-                } else {
-                    out_of_stack.append(nameList.get(j) + " ");
-                }
-            }
-        }
-
-        f.add(actionItemsTitle);
-        f.add(out_of_stack);
 
         ////////// Logout //////////
         logOutBtn.addActionListener(this);
@@ -342,12 +334,12 @@ public class inventoryGUI_hexin implements ActionListener {
             String vendor = inputVendor.getText();
             try {
                 expirationDate = new SimpleDateFormat("yyyy-mm-dd").parse(inputDate.getText());
-                System.out.println(expirationDate);
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
                 error.printStackTrace();
             }
 
+            // idList.add(id); 
             idList.add(id);
             nameList.add(name);
             quantityList.add(quantity);
@@ -360,6 +352,7 @@ public class inventoryGUI_hexin implements ActionListener {
             viewMenu.add(newItem);
             itemList.add(newItem);
             clearInputText();
+
 
         } else if (e.getSource() == updateItem) {
             ask_Id.setVisible(true);
@@ -389,6 +382,7 @@ public class inventoryGUI_hexin implements ActionListener {
             inputName.setText(nameList.get(i));
             inputQuantity.setText(String.valueOf(quantityList.get(i)));
             inputCost.setText(String.valueOf(costList.get(i)));
+            
             inputDate.setText(dateFormat.format(expirationDateList.get(i)));
             inputVendor.setText(vendorList.get(i));
 
@@ -397,7 +391,14 @@ public class inventoryGUI_hexin implements ActionListener {
             nameList.set(i, inputName.getText());
             quantityList.set(i, Integer.parseInt(inputQuantity.getText()));
             costList.set(i, Double.parseDouble(inputCost.getText()));
-            // expirationDataList.set(i, sdf.format(null))
+            Date expirationDate = null;
+            try {
+                expirationDate = new SimpleDateFormat("yyyy-mm-dd").parse(inputDate.getText());
+            } catch (ParseException error) {
+                // TODO Auto-generated catch block
+                error.printStackTrace();
+            }
+            expirationDateList.set(i, expirationDate);
             vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
             addBtn.setVisible(false);
@@ -442,7 +443,6 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public String[] get_inventory_name(Connection conn, int inventory_size) throws SQLException {
-
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
         int count = 0; // Increments inventory array
@@ -455,7 +455,6 @@ public class inventoryGUI_hexin implements ActionListener {
             count++;
         }
         return temp;
-
     }
 
     public Connection connectionSet() {
@@ -475,7 +474,7 @@ public class inventoryGUI_hexin implements ActionListener {
 
         return conn;
     }
-
+ 
     public static void main(String[] args) {
         new inventoryGUI_hexin();
     }
