@@ -95,25 +95,17 @@ public class cashierGUI implements ActionListener {
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     // Price of each menu item
-<<<<<<< Updated upstream
-    // TODO: Reassign the price after the db finished
-    double priceArr[] = { 1.2, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
-=======
     // FIX ME: Reassign the price after the db finished
     double priceArr[] = priceArr();
     
->>>>>>> Stashed changes
     JLabel sale = new JLabel("0");
     double totalPrice = 0;
 
-<<<<<<< Updated upstream
-=======
     Integer inventory[] = new Integer[24];
 
     //FIX ME: ADD THE 
 
 
->>>>>>> Stashed changes
     // Increments
     int gyroClick = 0;
     int bowlClick = 0;
@@ -129,17 +121,8 @@ public class cashierGUI implements ActionListener {
     int height = screenSize.height;
     int width = screenSize.width;
     int width_item = 0;
-<<<<<<< Updated upstream
     int item_width = (int) (width * 0.092);
     int quantity_width = (int) (width * 0.19);
-=======
-    int item_width = (int)(width * 0.092);
-    int quantity_width = (int)(width * 0.19);
-    
-    // public void get_employee(int id){
-    //     labelEmployee = new J(id);
-    // }
->>>>>>> Stashed changes
 
     
     public cashierGUI() {
@@ -384,18 +367,15 @@ public class cashierGUI implements ActionListener {
                     quantityArray[i] = Integer.parseInt(inputArr[i].getText());
                 }
             }
-<<<<<<< Updated upstream
-        } else if (e.getSource() == logoutBtn) {
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-            new loginGUI();
-=======
-
+            
             insertOrder();
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             //FIX ME: ADD CONNECTION TO CHECKOUT
             //FIX ME: PUSH THE VALUES OF AMOUNT AND CHECKOUT INFO TO CHECKOUT. 
 
->>>>>>> Stashed changes
+        } else if (e.getSource() == logoutBtn) {
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            new loginGUI();
         }
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
