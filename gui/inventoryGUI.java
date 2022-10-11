@@ -5,6 +5,7 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList; 
 
 
 
@@ -17,99 +18,99 @@ public class inventoryGUI implements ActionListener{
     JMenuBar menuBar = new JMenuBar();
     JMenu inventoryMenu = new JMenu("Inventory");
 
-    JMenuItem riceItem = new JMenuItem("Rice");
-    JMenuItem chickenItem = new JMenuItem("Chicken");
-    JMenuItem meatballItem = new JMenuItem("Spicy meatball");
-    JMenuItem falafelItem = new JMenuItem("FalafelItem");
-    JMenuItem cucumbersItem = new JMenuItem("Cucumbers");
-    JMenuItem cauliflowerItem = new JMenuItem("Cauliflower");
-    JMenuItem tomatoItem = new JMenuItem("Tomato");
-    JMenuItem spinachItem = new JMenuItem("Spinach");
-    JMenuItem kaleItem = new JMenuItem("Kale");
-    JMenuItem cabbageItem = new JMenuItem("Cabbage");
-    JMenuItem romaineItem = new JMenuItem("Romaine");
-    JMenuItem peppersItem = new JMenuItem("Banana peppers");
-    JMenuItem cheeseItem = new JMenuItem("Feta cheese");
-    JMenuItem harissaItem = new JMenuItem("Harissa");
-    JMenuItem sauceItem = new JMenuItem("Tzatziki sauce");
-    JMenuItem vinegarItem = new JMenuItem("Balsamic vinegar");
-    JMenuItem pitaItem= new JMenuItem("Pita");
-    JMenuItem hummusItem = new JMenuItem("Hummus");
-    JMenuItem saltItem = new JMenuItem("Salt");
-    JMenuItem bowlItem = new JMenuItem("Bowl");
-    JMenuItem cupItem = new JMenuItem("Cup");
-    JMenuItem lidItem = new JMenuItem("Lid");
-    JMenuItem strawItem = new JMenuItem("Straw");
-    JMenuItem napkinsItem = new JMenuItem("Napkins");
+    // JMenuItem riceItem = new JMenuItem("Rice");
+    // JMenuItem chickenItem = new JMenuItem("Chicken");
+    // JMenuItem meatballItem = new JMenuItem("Spicy meatball");
+    // JMenuItem falafelItem = new JMenuItem("FalafelItem");
+    // JMenuItem cucumbersItem = new JMenuItem("Cucumbers");
+    // JMenuItem cauliflowerItem = new JMenuItem("Cauliflower");
+    // JMenuItem tomatoItem = new JMenuItem("Tomato");
+    // JMenuItem spinachItem = new JMenuItem("Spinach");
+    // JMenuItem kaleItem = new JMenuItem("Kale");
+    // JMenuItem cabbageItem = new JMenuItem("Cabbage");
+    // JMenuItem romaineItem = new JMenuItem("Romaine");
+    // JMenuItem peppersItem = new JMenuItem("Banana peppers");
+    // JMenuItem cheeseItem = new JMenuItem("Feta cheese");
+    // JMenuItem harissaItem = new JMenuItem("Harissa");
+    // JMenuItem sauceItem = new JMenuItem("Tzatziki sauce");
+    // JMenuItem vinegarItem = new JMenuItem("Balsamic vinegar");
+    // JMenuItem pitaItem= new JMenuItem("Pita");
+    // JMenuItem hummusItem = new JMenuItem("Hummus");
+    // JMenuItem saltItem = new JMenuItem("Salt");
+    // JMenuItem bowlItem = new JMenuItem("Bowl");
+    // JMenuItem cupItem = new JMenuItem("Cup");
+    // JMenuItem lidItem = new JMenuItem("Lid");
+    // JMenuItem strawItem = new JMenuItem("Straw");
+    // JMenuItem napkinsItem = new JMenuItem("Napkins");
 
-    JMenuItem itemArr[] = {riceItem, chickenItem, meatballItem, falafelItem, cucumbersItem,
-                                cauliflowerItem, tomatoItem, spinachItem ,kaleItem, cabbageItem, 
-                                romaineItem, peppersItem, cheeseItem,  harissaItem, sauceItem, 
-                                vinegarItem, pitaItem, hummusItem,saltItem, bowlItem, cupItem, lidItem, strawItem, napkinsItem};
+    // JMenuItem itemArr[] = {riceItem, chickenItem, meatballItem, falafelItem, cucumbersItem,
+    //                             cauliflowerItem, tomatoItem, spinachItem ,kaleItem, cabbageItem, 
+    //                             romaineItem, peppersItem, cheeseItem,  harissaItem, sauceItem, 
+    //                             vinegarItem, pitaItem, hummusItem,saltItem, bowlItem, cupItem, lidItem, strawItem, napkinsItem};
 
 
     // Inventory Item (Label)
-    JLabel riceLabel = new JLabel("Rice");
-    JLabel chickenLabel = new JLabel("Chicken");
-    JLabel meatballsLabel = new JLabel("Sp Meatballs");
-    JLabel falafelLabel = new JLabel("Falafel");
-    JLabel cucumbersLabel = new JLabel("Cucumbers");
-    JLabel cauliflowerLabel = new JLabel("Cauliflower");
-    JLabel tomatoLabel = new JLabel("Tomato");
-    JLabel spinachLabel = new JLabel("Spinach");
-    JLabel kaleLabel = new JLabel("Kale");
-    JLabel cabbageLabel = new JLabel("Cabbage");
-    JLabel romaineLabel = new JLabel("Romaine");
-    JLabel peppersLabel = new JLabel("Banana Peppers");
-    JLabel cheesesLabel = new JLabel("Feta Cheese");
-    JLabel harissaLabel = new JLabel("Harissa");
-    JLabel sauceLabel = new JLabel("Tzatziki Sauce");
-    JLabel vinegarLabel = new JLabel("Balsamic Vinegar");
-    JLabel pitaLabel = new JLabel("Pita");
-    JLabel hummusLabel = new JLabel("Hummus");
-    JLabel saltLabel = new JLabel("Salt");
-    JLabel bowlLabel = new JLabel("Bowl");
-    JLabel cupLabel = new JLabel("Cup");
-    JLabel lidLabel= new JLabel("Lid");
-    JLabel strawLabel = new JLabel("Straw");
-    JLabel napkinsLabel = new JLabel("Napkins");
-    JLabel labelArr[] = {riceLabel, chickenLabel, meatballsLabel, falafelLabel, cucumbersLabel, cauliflowerLabel,
-        tomatoLabel, spinachLabel, kaleLabel, cabbageLabel, romaineLabel, peppersLabel,cheesesLabel, harissaLabel, 
-        sauceLabel, vinegarLabel, pitaLabel, hummusLabel,saltLabel, bowlLabel, cupLabel, lidLabel, strawLabel, napkinsLabel};
+    // JLabel riceLabel = new JLabel("Rice");
+    // JLabel chickenLabel = new JLabel("Chicken");
+    // JLabel meatballsLabel = new JLabel("Sp Meatballs");
+    // JLabel falafelLabel = new JLabel("Falafel");
+    // JLabel cucumbersLabel = new JLabel("Cucumbers");
+    // JLabel cauliflowerLabel = new JLabel("Cauliflower");
+    // JLabel tomatoLabel = new JLabel("Tomato");
+    // JLabel spinachLabel = new JLabel("Spinach");
+    // JLabel kaleLabel = new JLabel("Kale");
+    // JLabel cabbageLabel = new JLabel("Cabbage");
+    // JLabel romaineLabel = new JLabel("Romaine");
+    // JLabel peppersLabel = new JLabel("Banana Peppers");
+    // JLabel cheesesLabel = new JLabel("Feta Cheese");
+    // JLabel harissaLabel = new JLabel("Harissa");
+    // JLabel sauceLabel = new JLabel("Tzatziki Sauce");
+    // JLabel vinegarLabel = new JLabel("Balsamic Vinegar");
+    // JLabel pitaLabel = new JLabel("Pita");
+    // JLabel hummusLabel = new JLabel("Hummus");
+    // JLabel saltLabel = new JLabel("Salt");
+    // JLabel bowlLabel = new JLabel("Bowl");
+    // JLabel cupLabel = new JLabel("Cup");
+    // JLabel lidLabel= new JLabel("Lid");
+    // JLabel strawLabel = new JLabel("Straw");
+    // JLabel napkinsLabel = new JLabel("Napkins");
+    // JLabel labelArr[] = {riceLabel, chickenLabel, meatballsLabel, falafelLabel, cucumbersLabel, cauliflowerLabel,
+    //     tomatoLabel, spinachLabel, kaleLabel, cabbageLabel, romaineLabel, peppersLabel,cheesesLabel, harissaLabel, 
+    //     sauceLabel, vinegarLabel, pitaLabel, hummusLabel,saltLabel, bowlLabel, cupLabel, lidLabel, strawLabel, napkinsLabel};
 
 
     // Input (For inventory item quantities)
-    JTextField riceInput = new JTextField("0");
-    JTextField chickenInput = new JTextField("0");
-    JTextField meatballsInput = new JTextField("0");
-    JTextField falafelInput = new JTextField("0");
-    JTextField cucumbersInput = new JTextField("0");
-    JTextField cauliflowerInput = new JTextField("0");
-    JTextField tomatoInput = new JTextField("0");
-    JTextField spinachInput = new JTextField("0");
-    JTextField kaleInput = new JTextField("0");
-    JTextField cabbageInput = new JTextField("0");
-    JTextField romaineInput = new JTextField("0");
-    JTextField peppersInput = new JTextField("0");
-    JTextField cheesesInput = new JTextField("0");
-    JTextField harissaInput = new JTextField("0");
-    JTextField sauceInput = new JTextField("0");
-    JTextField vinegarInput = new JTextField("0");
+    // JTextField riceInput = new JTextField("0");
+    // JTextField chickenInput = new JTextField("0");
+    // JTextField meatballsInput = new JTextField("0");
+    // JTextField falafelInput = new JTextField("0");
+    // JTextField cucumbersInput = new JTextField("0");
+    // JTextField cauliflowerInput = new JTextField("0");
+    // JTextField tomatoInput = new JTextField("0");
+    // JTextField spinachInput = new JTextField("0");
+    // JTextField kaleInput = new JTextField("0");
+    // JTextField cabbageInput = new JTextField("0");
+    // JTextField romaineInput = new JTextField("0");
+    // JTextField peppersInput = new JTextField("0");
+    // JTextField cheesesInput = new JTextField("0");
+    // JTextField harissaInput = new JTextField("0");
+    // JTextField sauceInput = new JTextField("0");
+    // JTextField vinegarInput = new JTextField("0");
     
-    JTextField pitaInput= new JTextField("0");
-    JTextField hummusInput = new JTextField("0");
-    JTextField saltInput = new JTextField("0");
+    // JTextField pitaInput= new JTextField("0");
+    // JTextField hummusInput = new JTextField("0");
+    // JTextField saltInput = new JTextField("0");
 
-    JTextField bowlInput = new JTextField("0");
-    JTextField cupInput = new JTextField("0");
-    JTextField lidInput= new JTextField("0");
-    JTextField strawInput = new JTextField("0");
-    JTextField napkinsInput= new JTextField("0");
+    // JTextField bowlInput = new JTextField("0");
+    // JTextField cupInput = new JTextField("0");
+    // JTextField lidInput= new JTextField("0");
+    // JTextField strawInput = new JTextField("0");
+    // JTextField napkinsInput= new JTextField("0");
 
-    JTextField inputArr[] = {riceInput, chickenInput, meatballsInput,falafelInput, cucumbersInput, cauliflowerInput,
-            tomatoInput, spinachInput, kaleInput, cabbageInput, romaineInput, peppersInput,cheesesInput, 
-            harissaInput, sauceInput, vinegarInput,  pitaInput, hummusInput,saltInput, bowlInput, cupInput, 
-            lidInput, strawInput, napkinsInput};
+    // JTextField inputArr[] = {riceInput, chickenInput, meatballsInput,falafelInput, cucumbersInput, cauliflowerInput,
+    //         tomatoInput, spinachInput, kaleInput, cabbageInput, romaineInput, peppersInput,cheesesInput, 
+    //         harissaInput, sauceInput, vinegarInput,  pitaInput, hummusInput,saltInput, bowlInput, cupInput, 
+    //         lidInput, strawInput, napkinsInput};
 
 
     
@@ -163,6 +164,28 @@ public class inventoryGUI implements ActionListener{
         Connection conn = connectionSet();
         inventory_names = get_inventory_name(conn);
 
+        // Menu Declatation
+        // I moved it here bc need to access inventory_names
+        ArrayList <JMenuItem> itemArr = new ArrayList <JMenuItem>();
+
+        for (int index = 0; index < inventory_names.length; index++){
+            itemArr.add(new JMenuItem(inventory_names[index]));
+        }
+
+        // Inventory Item (Label)
+        ArrayList <JLabel> labelArr = new ArrayList <JLabel>();
+        
+        for (int index = 0; index < inventory_names.length; index++){
+            labelArr.add(new JLabel(inventory_names[index]));
+        }
+
+        // Input (For inventory item quantities)
+        ArrayList <JTextField> inputArr = new ArrayList <JTextField>();
+
+        for (int index = 0; index < inventory_names.length; index++){
+            inputArr.add(new JTextField("0"));
+        }
+
         ////////// Background //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -188,9 +211,11 @@ public class inventoryGUI implements ActionListener{
         // menuBar.add(miscellaneousMenu);
 
         for (int i = 0; i < inventory_names.length; i++){
-            ingredientsMenu.add(inventory_names[i]);
-            
+            inventoryMenu.add(itemArr.get(i));
+            itemArr.get(i).addActionListener(this);
         }
+
+        menuBar.add(inventoryMenu);
 
         ////////// Data Output Area for each inventory item //////////
 
