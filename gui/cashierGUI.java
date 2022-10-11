@@ -95,7 +95,6 @@ public class cashierGUI implements ActionListener {
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     // Price of each menu item
-    // FIX ME: Reassign the price after the db finished
     double priceArr[] = priceArr();
     
     JLabel sale = new JLabel("0");
@@ -103,7 +102,6 @@ public class cashierGUI implements ActionListener {
 
     Integer inventory[] = new Integer[24];
 
-    //FIX ME: ADD THE 
 
 
     // Increments
@@ -285,7 +283,6 @@ public class cashierGUI implements ActionListener {
         f.setVisible(true);
     }
 
-
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btn1) {
             // l1.setBounds(1000, 60 + height, 100, 50); --> hardcoded
@@ -432,7 +429,6 @@ public class cashierGUI implements ActionListener {
         int orderId = getOrderId(conn); 
         
 
-        //FIX ME: GET TIME;
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         String stringVal = formatTime.format(calendar.getTime());
@@ -458,7 +454,7 @@ public class cashierGUI implements ActionListener {
           statement.setInt(9, dressing);
           statement.setInt(10, drinkClick);
 
-        // FIX ME: MUST GET THIS FROM POPUPS 
+        // FIX ME: MUST GET THIS FROM POPUPS. ALSO MUST KEEP inventory as global version. 
         Array inventoryused = conn.createArrayOf("INT", inventory);
         statement.setArray(11, inventoryused);
             

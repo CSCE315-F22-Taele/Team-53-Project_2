@@ -266,8 +266,10 @@ public class inventoryPerOrder implements ActionListener {
                     quantityArray[i] = Integer.parseInt(inputArr[i].getText());
                 }
             }
+            //FIX ME: GET TO GO BACK AND SEND BACK THE INVENTORY ARRAY. 
+            
         } else if (e.getSource() == backBtn) {
-            // TODO: Implement
+            // FIX ME: TODO: Implement
         }
 
         // height += 50;
