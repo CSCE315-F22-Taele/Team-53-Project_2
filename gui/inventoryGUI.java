@@ -2,8 +2,10 @@ import java.awt.*;
 import javax.swing.*;
 import java.util.Date;
 import java.awt.event.*;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+
 
 
 
@@ -125,7 +127,8 @@ public class inventoryGUI implements ActionListener{
     JButton clearBtn = new JButton("Clear");
 
     // Action Items & Restock Areas
-    
+    String inventory_names[]; 
+
     JLabel actionItemsTitle = new JLabel("ACTION ITEMS");
     JTextArea out_of_stack = new JTextArea("");
     
@@ -156,6 +159,11 @@ public class inventoryGUI implements ActionListener{
 
 
     inventoryGUI(){
+        
+        //ANNIE
+        Connection conn = connectionSet();
+        inventory_names = get_inventory_name(conn);
+
         ////////// Background //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -348,6 +356,8 @@ public class inventoryGUI implements ActionListener{
         } else if(e.getSource() == restockBtn){
             labelArr[i].setBounds(1100, 360 + height_restock, 100, 30);
             inputArr[i].setBounds(1200, 360 + height_restock, 100, 30);
+
+
         } else if(e.getSource() == clearBtn){
             itemName.setText("");
             itemQuantity.setText("");
@@ -361,11 +371,44 @@ public class inventoryGUI implements ActionListener{
                 restockQuantity[i] = Integer.parseInt(inputArr[i].getText());
             }
         } else if(e.getSource() == logOutBtn){
-            // TODO: Implement
+            // FIX ME: TODO: Implement
 
         }
         height_restock += 15;
     }
+
+    public String[] get_inventory_name(Connection conn){
+        
+       
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
+        int count = 0; // Increments inventory array
+
+        while (findInventory.next()) {
+            inventory_names.push_back( findInventory.getString("itemname") );
+            count++;
+        }
+
+    }
+
+    public Connection connectionSet(){
+        dbSetup my = new dbSetup();
+        // Building the connection
+        Connection conn = null;
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
+                my.user, my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } 
+
+        return conn;
+    }
+   
 
     public static void main(String[] args){
         new inventoryGUI();
