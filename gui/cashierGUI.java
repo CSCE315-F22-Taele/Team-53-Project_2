@@ -223,8 +223,8 @@ public class cashierGUI implements ActionListener {
         receiptTitle.setBounds((int)(width * 0.3 / 2 - 50), 0, 200, 100);
         itemTitle.setBounds((int)(width * 0.092), 70, 100, 100);
         quantityTitle.setBounds((int)(width * 0.19), 70, 100, 100);
-        totalSale.setBounds((int)(width * 0.1), 600, 200, 200);
-        sale.setBounds((int)(width * 0.2), 600, 200, 200);
+        totalSale.setBounds((int)(width * 0.11), (int)(height * 0.6), 200, (int)(height * 0.08));
+        sale.setBounds((int)(width * 0.2), (int)(height * 0.6), 200, (int)(height * 0.08));
         checkoutBtn.setBounds((int)(width * 0.09), (int)(height * 0.8), (int)(width * 0.15), (int)(height * 0.1));
 
         // Font
