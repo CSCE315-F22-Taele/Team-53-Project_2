@@ -2,16 +2,16 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.AbstractDocument.LeafElement;
-import java.sql.*;
-import java.sql.DriverManager;
-import java.awt.event.*;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;  
-import java.time.LocalDateTime;  
-import javax.swing.JOptionPane;
-import java.util.Calendar;
-import java.util.Date;
+// import javax.swing.text.AbstractDocument.LeafElement;
+// import java.sql.*;
+// import java.sql.DriverManager;
+// import java.awt.event.*;
+// import java.text.DateFormat;
+// import java.text.SimpleDateFormat;  
+// import java.time.LocalDateTime;  
+// import javax.swing.JOptionPane;
+// import java.util.Calendar;
+// import java.util.Date;
 
 public class checkoutGUI{
 
@@ -75,7 +75,7 @@ public class checkoutGUI{
 
         ////////// Recipt Area //////////
         // TODO: integrate w cashier, get actual values from cashier
-        
+
         JPanel receiptPanel = new JPanel();
         JLabel receiptTitle = new JLabel("RECEIPT");
         JLabel itemTitle = new JLabel("ITEM");
