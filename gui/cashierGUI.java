@@ -225,8 +225,7 @@ public class cashierGUI implements ActionListener {
         quantityTitle.setBounds((int)(width * 0.19), 70, 100, 100);
         totalSale.setBounds((int)(width * 0.1), 600, 200, 200);
         sale.setBounds((int)(width * 0.2), 600, 200, 200);
-        checkoutBtn.setBounds((int)(width * 0.09), 800, (int)(width * 0.15), 100);
-
+        checkoutBtn.setBounds((int)(width * 0.09), (int)(height * 0.8), (int)(width * 0.15), (int)(height * 0.1));
 
         // Font
         receiptTitle.setFont(new Font("Arial", Font.PLAIN, 28));
