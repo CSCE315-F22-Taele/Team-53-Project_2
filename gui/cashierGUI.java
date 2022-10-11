@@ -36,7 +36,7 @@ public class cashierGUI implements ActionListener {
     JButton btn10;
     JButton logoutBtn;
     JButton checkoutBtn;
-    JButton btnArr[] = {btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn};
+    JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
     // Label Declaration
     JLabel l1 = new JLabel("GYRO");
@@ -63,7 +63,7 @@ public class cashierGUI implements ActionListener {
     JTextField input_9 = new JTextField("0");
     JTextField input_10 = new JTextField("0");
     JTextField inputArr[] = { input_1, input_2, input_3, input_4, input_5, input_6, input_7,
-                              input_8, input_9, input_10 };
+            input_8, input_9, input_10 };
 
     // Frame Declaraiton
     JFrame f = new JFrame("Cashier GUI");
@@ -71,16 +71,15 @@ public class cashierGUI implements ActionListener {
     // Global Var --> Unused, hardcoded can change later
     int height_items;
 
-    // Store quantity of each menu item 
+    // Store quantity of each menu item
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     // Price of each menu item
     // TODO: Reassign the price after the db finished
-    double priceArr[] = {1.2,1,1,1,1,1,1,1,1,1};
+    double priceArr[] = { 1.2, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
     JLabel sale = new JLabel("0");
 
     double totalPrice = 0;
-
 
     // Increments
     int gyroClick = 0;
@@ -97,8 +96,8 @@ public class cashierGUI implements ActionListener {
     int height = screenSize.height;
     int width = screenSize.width;
     int width_item = 0;
-    int item_width = (int)(width * 0.092);
-    int quantity_width = (int)(width * 0.19);
+    int item_width = (int) (width * 0.092);
+    int quantity_width = (int) (width * 0.19);
 
     public cashierGUI() {
         ////////// Background //////////
@@ -110,7 +109,7 @@ public class cashierGUI implements ActionListener {
         ////////// Buttons //////////
         // Button 1
         btn1 = new JButton("Gyro");
-        btn1.setBackground(Color.RED); 
+        btn1.setBackground(Color.RED);
         btn1.addActionListener(this);
 
         // Button 2
@@ -160,7 +159,7 @@ public class cashierGUI implements ActionListener {
 
         // Button 11
         logoutBtn = new JButton("LOGOUT");
-        logoutBtn.setBounds((int)(width * 0.17), (int)(height * 0.8), 300, 80);
+        logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 300, 80);
         logoutBtn.setBackground(Color.LIGHT_GRAY);
         logoutBtn.addActionListener(this);
 
@@ -169,19 +168,18 @@ public class cashierGUI implements ActionListener {
         checkoutBtn.setBackground(Color.LIGHT_GRAY);
         checkoutBtn.addActionListener(this);
 
-
         ////////// Welcome Area //////////
         // TODO: Update after db finished
         String userName = "Paul Taele";
         JLabel weclomeTitle = new JLabel("Welcome " + userName);
-        weclomeTitle.setBounds((int)(width * 0.29), (int)(height * 0.02), 300, 50);
+        weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 300, 50);
         weclomeTitle.setFont(new Font("Arial", Font.PLAIN, 30));
         f.add(weclomeTitle);
 
         ////////// Menu-items Area //////////
         JPanel itemsPanel = new JPanel();
         itemsPanel.setBackground(Color.yellow);
-        itemsPanel.setBounds((int)(width * 0.06), (int)(height * 0.09), (int)(width * 0.6),(int)(height * 0.7));
+        itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
 
         itemsPanel.add(btn1);
@@ -200,7 +198,7 @@ public class cashierGUI implements ActionListener {
         ////////// Logout Area //////////
         JPanel logoutPanel = new JPanel();
         logoutPanel.setBackground(Color.pink);
-        logoutPanel.setBounds((int)(width * 0.06), (int)((height * 0.82)), (int)(width * 0.6),(int)(height * 0.1));
+        logoutPanel.setBounds((int) (width * 0.06), (int) ((height * 0.82)), (int) (width * 0.6), (int) (height * 0.1));
         logoutPanel.setLayout(new BorderLayout());
         logoutBtn.setVerticalAlignment(JButton.CENTER);
         logoutBtn.setHorizontalAlignment(JButton.CENTER);
@@ -216,16 +214,16 @@ public class cashierGUI implements ActionListener {
 
         // Panel Setup
         receiptPanel.setBackground(Color.green);
-        receiptPanel.setBounds((int)(width * 0.7),0 , (int)(width * 0.3),(int)height);
+        receiptPanel.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) height);
         receiptPanel.setLayout(null);
-        
+
         // Position
-        receiptTitle.setBounds((int)(width * 0.3 / 2 - 50), 0, 200, 100);
-        itemTitle.setBounds((int)(width * 0.092), 70, 100, 100);
-        quantityTitle.setBounds((int)(width * 0.19), 70, 100, 100);
-        totalSale.setBounds((int)(width * 0.11), (int)(height * 0.6), 200, (int)(height * 0.08));
-        sale.setBounds((int)(width * 0.2), (int)(height * 0.6), 200, (int)(height * 0.08));
-        checkoutBtn.setBounds((int)(width * 0.09), (int)(height * 0.8), (int)(width * 0.15), (int)(height * 0.1));
+        receiptTitle.setBounds((int) (width * 0.3 / 2 - 50), 0, 200, 100);
+        itemTitle.setBounds((int) (width * 0.092), 70, 100, 100);
+        quantityTitle.setBounds((int) (width * 0.19), 70, 100, 100);
+        totalSale.setBounds((int) (width * 0.11), (int) (height * 0.6), 200, (int) (height * 0.08));
+        sale.setBounds((int) (width * 0.2), (int) (height * 0.6), 200, (int) (height * 0.08));
+        checkoutBtn.setBounds((int) (width * 0.09), (int) (height * 0.8), (int) (width * 0.15), (int) (height * 0.1));
 
         // Font
         receiptTitle.setFont(new Font("Arial", Font.PLAIN, 28));
@@ -264,7 +262,9 @@ public class cashierGUI implements ActionListener {
             gyroClick++;
             input_1.setText(Integer.toString(gyroClick));
             totalPrice += priceArr[0] * gyroClick;
-            
+            // TESTING
+            new inventoryPerOrder();
+
         } else if (e.getSource() == btn2) {
             l2.setBounds(item_width, 180, 100, 30);
             inputArr[1].setBounds(quantity_width, 180, 100, 30);
@@ -334,6 +334,9 @@ public class cashierGUI implements ActionListener {
                     quantityArray[i] = Integer.parseInt(inputArr[i].getText());
                 }
             }
+        } else if (e.getSource() == logoutBtn) {
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            new loginGUI();
         }
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
