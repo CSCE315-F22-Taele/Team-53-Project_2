@@ -60,6 +60,8 @@ public class checkoutGUI{
         itemsPanel.add(ddButton);
         itemsPanel.add(mealswipeButton);
 
+        f.add(itemsPanel, BorderLayout.NORTH);
+
         ////////// Options Area //////////
         JPanel optionsPanel = new JPanel();
         optionsPanel.setBounds((int) (width * 0.06), (int) ((height * 0.75)), (int) (width * 0.6), (int) (height * 0.1));
@@ -71,8 +73,50 @@ public class checkoutGUI{
 
         f.add(optionsPanel);
 
-        f.add(itemsPanel, BorderLayout.NORTH);
+        ////////// Recipt Area //////////
+        // TODO: integrate w cashier, get actual values from cashier
         
+        JPanel receiptPanel = new JPanel();
+        JLabel receiptTitle = new JLabel("RECEIPT");
+        JLabel itemTitle = new JLabel("ITEM");
+        JLabel quantityTitle = new JLabel("QUANTITY");
+        JLabel totalSale = new JLabel("Total Sale: ");
+
+        // Panel Setup
+        receiptPanel.setBackground(Color.green);
+        receiptPanel.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) height);
+        receiptPanel.setLayout(null);
+
+        // Position
+        receiptTitle.setBounds((int) (width * 0.3 / 2 - 60), 0, 200, 100);
+        itemTitle.setBounds((int) (width * 0.065), 70, 100, 100);
+        quantityTitle.setBounds((int) (width * 0.19), 70, 100, 100);
+        totalSale.setBounds((int) (width * 0.11), (int) (height * 0.6), 200, (int) (height * 0.08));
+        // sale.setBounds((int) (width * 0.2), (int) (height * 0.6), 200, (int) (height * 0.08));
+        // checkoutBtn.setBounds((int) (width * 0.09), (int) (height * 0.8), (int) (width * 0.15), (int) (height * 0.1));
+
+        // Font
+        receiptTitle.setFont(new Font("Arial", Font.PLAIN, 28));
+        itemTitle.setFont(new Font("Arial", Font.PLAIN, 20));
+        quantityTitle.setFont(new Font("Arial", Font.PLAIN, 20));
+        totalSale.setFont(new Font("Arial", Font.PLAIN, 20));
+        // sale.setFont(new Font("Arial", Font.PLAIN, 20));
+
+        // Add to panel
+        receiptPanel.add(receiptTitle);
+        receiptPanel.add(itemTitle);
+        receiptPanel.add(quantityTitle);
+        receiptPanel.add(totalSale);
+        // receiptPanel.add(sale);
+        // receiptPanel.add(checkoutBtn);
+
+        // for (int i = 0; i < 10; ++i) {
+        //     receiptPanel.add(labelArr[i]);
+        //     receiptPanel.add(inputArr[i]);
+        // }
+
+        f.add(receiptPanel);
+    
         f.setSize(screenSize.width, screenSize.height);
         f.setLayout(null);
         f.setVisible(true);
