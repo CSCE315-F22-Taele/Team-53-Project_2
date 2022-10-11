@@ -7,6 +7,7 @@ import java.awt.event.*;
 import java.sql.*;
 import java.sql.DriverManager;
 
+
 public class loginGUI implements ActionListener {
     private void makeFrameFullSize(JFrame aFrame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -37,6 +38,7 @@ public class loginGUI implements ActionListener {
     JFrame f = new JFrame("Login GUI");
 
     loginGUI() {
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
@@ -86,6 +88,7 @@ public class loginGUI implements ActionListener {
         f.setSize(400, 400);
         f.setLayout(null);
         f.setVisible(true);
+        
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -117,8 +120,10 @@ public class loginGUI implements ActionListener {
             if (checkPassword(passCode)) {
                 // If yes, go directly to cashierGUI
                 
-                // cashierGUI newGui = new cashierGUI();
-                new cashierGUI();
+                openWindow openPOS= new openWindow(passCode); 
+                //openPOS.set_employeeid();
+                
+                //new cashierGUI();
                 //newGui.get_employee(passCode);
                 
                 
@@ -126,7 +131,7 @@ public class loginGUI implements ActionListener {
                 // FIX ME: ADD A WAY TO GET THE EMPLOYEE ID TO THE CASHIER PAGE
                 
                 JOptionPane.showMessageDialog(null, "Pincode is correct.");
-                System.out.println(" true");
+                // System.out.println(" true");
             } else {
                 System.out.println("not true");
                 JOptionPane.showMessageDialog(null, "Pincode is incorrect. Please retry.");
