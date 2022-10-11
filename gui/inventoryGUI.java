@@ -15,8 +15,7 @@ public class inventoryGUI implements ActionListener{
 
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
-    JMenu ingredientsMenu = new JMenu("Ingredient");
-    JMenu miscellaneousMenu = new JMenu("Miscellaneous");
+    JMenu inventoryMenu = new JMenu("Inventory");
 
     JMenuItem riceItem = new JMenuItem("Rice");
     JMenuItem chickenItem = new JMenuItem("Chicken");
@@ -177,16 +176,21 @@ public class inventoryGUI implements ActionListener{
         ////////// Menu Setup //////////
 
         // Add each menu-items to the menu bar and addActionListener
-        for(int i = 0; i < 19; i++){
-            ingredientsMenu.add(itemArr[i]);
-            itemArr[i].addActionListener(this);
+        // for(int i = 0; i < 19; i++){
+        //     ingredientsMenu.add(itemArr[i]);
+        //     itemArr[i].addActionListener(this);
+        // }
+        // for(int j = 19; j < 24; ++j){
+        //     miscellaneousMenu.add(itemArr[j]);
+        //     itemArr[j].addActionListener(this);
+        // }
+        // menuBar.add(ingredientsMenu);
+        // menuBar.add(miscellaneousMenu);
+
+        for (int i = 0; i < inventory_names.length; i++){
+            ingredientsMenu.add(inventory_names[i]);
+            
         }
-        for(int j = 19; j < 24; ++j){
-            miscellaneousMenu.add(itemArr[j]);
-            itemArr[j].addActionListener(this);
-        }
-        menuBar.add(ingredientsMenu);
-        menuBar.add(miscellaneousMenu);
 
         ////////// Data Output Area for each inventory item //////////
 
