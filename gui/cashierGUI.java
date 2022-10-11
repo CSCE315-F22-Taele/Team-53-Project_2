@@ -1,8 +1,17 @@
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.text.AbstractDocument.LeafElement;
-
+import java.sql.*;
+import java.sql.DriverManager;
 import java.awt.event.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;  
+import java.time.LocalDateTime;  
+import javax.swing.JOptionPane;
+import java.util.Calendar;
+import java.util.Date;
+
+
 
 /* Array Index 
  * 0 - GYRO
@@ -15,6 +24,16 @@ import java.awt.event.*;
  * 7 - Extra Tzatziki Sauce
  * 8 - Extra Balsamic Vinegar
  * 9 - Fountain drink
+ */
+
+/* Prices Index 
+ * 0 - GYRO
+ * 1 - BOWL
+ * 2 - Extra pita and humus 
+ * 3 - 2 falafels 
+ * 4 - extra dressing 
+ * 5 - drink
+ * 6 - extra protein
  */
 
 public class cashierGUI implements ActionListener {
@@ -38,6 +57,7 @@ public class cashierGUI implements ActionListener {
     JButton checkoutBtn;
     JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
+    private JLabel labelEmployee; 
     // Label Declaration
     JLabel l1 = new JLabel("GYRO");
     JLabel l2 = new JLabel("BOWL");
@@ -75,12 +95,25 @@ public class cashierGUI implements ActionListener {
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     // Price of each menu item
+<<<<<<< Updated upstream
     // TODO: Reassign the price after the db finished
     double priceArr[] = { 1.2, 1, 1, 1, 1, 1, 1, 1, 1, 1 };
+=======
+    // FIX ME: Reassign the price after the db finished
+    double priceArr[] = priceArr();
+    
+>>>>>>> Stashed changes
     JLabel sale = new JLabel("0");
-
     double totalPrice = 0;
 
+<<<<<<< Updated upstream
+=======
+    Integer inventory[] = new Integer[24];
+
+    //FIX ME: ADD THE 
+
+
+>>>>>>> Stashed changes
     // Increments
     int gyroClick = 0;
     int bowlClick = 0;
@@ -96,11 +129,25 @@ public class cashierGUI implements ActionListener {
     int height = screenSize.height;
     int width = screenSize.width;
     int width_item = 0;
+<<<<<<< Updated upstream
     int item_width = (int) (width * 0.092);
     int quantity_width = (int) (width * 0.19);
+=======
+    int item_width = (int)(width * 0.092);
+    int quantity_width = (int)(width * 0.19);
+    
+    // public void get_employee(int id){
+    //     labelEmployee = new J(id);
+    // }
+>>>>>>> Stashed changes
 
+    
     public cashierGUI() {
         ////////// Background //////////
+        for( int i=0; i< 24; i++){
+            inventory[i] = 0;
+        }
+
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
         System.out.println(screenSize.height);
@@ -169,7 +216,9 @@ public class cashierGUI implements ActionListener {
         checkoutBtn.addActionListener(this);
 
         ////////// Welcome Area //////////
+        //FIX ME: GET THIS TO WORK BASED OFF THE EMPLOYEE ID BASED ON THE LOGIN
         // TODO: Update after db finished
+
         String userName = "Paul Taele";
         JLabel weclomeTitle = new JLabel("Welcome " + userName);
         weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 300, 50);
@@ -253,6 +302,7 @@ public class cashierGUI implements ActionListener {
         f.setVisible(true);
     }
 
+
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btn1) {
             // l1.setBounds(1000, 60 + height, 100, 50); --> hardcoded
@@ -277,28 +327,28 @@ public class cashierGUI implements ActionListener {
             inputArr[2].setBounds(quantity_width, 220, 100, 30);
             falafelClick++;
             input_3.setText(Integer.toString(falafelClick));
-            totalPrice += priceArr[2] * falafelClick;
+            totalPrice += priceArr[3] * falafelClick;
 
         } else if (e.getSource() == btn4) {
             l4.setBounds(item_width, 260, 160, 30);
             inputArr[3].setBounds(quantity_width, 260, 100, 30);
             pitaAndHumusClick++;
             input_4.setText(Integer.toString(pitaAndHumusClick));
-            totalPrice += priceArr[3] * pitaAndHumusClick;
+            totalPrice += priceArr[2] * pitaAndHumusClick;
 
         } else if (e.getSource() == btn5) {
             l5.setBounds(item_width, 300, 100, 30);
             inputArr[4].setBounds(quantity_width, 300, 100, 30);
             extraChickenClick++;
             input_5.setText(Integer.toString(extraChickenClick));
-            totalPrice += priceArr[4] * extraChickenClick;
+            totalPrice += priceArr[6] * extraChickenClick;
 
         } else if (e.getSource() == btn6) {
             l6.setBounds(item_width, 340, 100, 30);
             inputArr[5].setBounds(quantity_width, 340, 100, 30);
             extraHarissaClick++;
             input_6.setText(Integer.toString(extraHarissaClick));
-            totalPrice += priceArr[5] * extraHarissaClick;
+            totalPrice += priceArr[4] * extraHarissaClick;
 
         } else if (e.getSource() == btn7) {
             l7.setBounds(item_width, 380, 100, 30);
@@ -312,21 +362,21 @@ public class cashierGUI implements ActionListener {
             inputArr[7].setBounds(quantity_width, 420, 100, 30);
             extraTzatzikiSauceClick++;
             input_8.setText(Integer.toString(extraTzatzikiSauceClick));
-            totalPrice += priceArr[7] * extraTzatzikiSauceClick;
+            totalPrice += priceArr[4] * extraTzatzikiSauceClick;
 
         } else if (e.getSource() == btn9) {
             l9.setBounds(item_width, 460, 160, 30);
             inputArr[8].setBounds(quantity_width, 460, 100, 30);
             extraVinegarClick++;
             input_9.setText(Integer.toString(extraVinegarClick));
-            totalPrice += priceArr[8] * extraVinegarClick;
+            totalPrice += priceArr[4] * extraVinegarClick;
 
         } else if (e.getSource() == btn10) {
             l10.setBounds(item_width, 500, 100, 30);
             inputArr[9].setBounds(quantity_width, 500, 100, 30);
             drinkClick++;
             input_10.setText(Integer.toString(drinkClick));
-            totalPrice += priceArr[9] * drinkClick;
+            totalPrice += priceArr[5] * drinkClick;
 
         } else if (e.getSource() == checkoutBtn) {
             for (int i = 0; i < 10; ++i) {
@@ -334,15 +384,178 @@ public class cashierGUI implements ActionListener {
                     quantityArray[i] = Integer.parseInt(inputArr[i].getText());
                 }
             }
+<<<<<<< Updated upstream
         } else if (e.getSource() == logoutBtn) {
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             new loginGUI();
+=======
+
+            insertOrder();
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            //FIX ME: ADD CONNECTION TO CHECKOUT
+            //FIX ME: PUSH THE VALUES OF AMOUNT AND CHECKOUT INFO TO CHECKOUT. 
+
+>>>>>>> Stashed changes
         }
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
         // height += 70; --> Hardcoded height, can fix later
 
     }
+
+    public int getDateforId(){
+        // transform java data into proper SQL variables
+        DateFormat formatDate= new SimpleDateFormat("yyMMdd");
+        Date date = Calendar.getInstance().getTime();
+        String strDate = formatDate.format(date);
+        
+
+        int value = Integer.valueOf( strDate);
+
+        return value*1000;
+    }
+
+    public int getOrderId(Connection conn){
+
+        int lastRecord = 0;
+        int date = getDateforId();
+
+        try{
+            PreparedStatement lastOrder = conn.prepareStatement(
+                "SELECT orderid FROM ordering ORDER BY orderid DESC LIMIT 1");
+
+            ResultSet orderInfo = lastOrder.executeQuery();
+            
+            while (orderInfo.next()) {
+                lastRecord = orderInfo.getInt("orderid");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        
+        if( lastRecord % 1000 == date ){
+            return lastRecord +1; 
+        }
+      
+        return date + 1; 
+        
+    }
+
+    public void insertOrder(){
+
+        Connection conn = connectionSet();
+
+        try{
+        int orderId = getOrderId(conn); 
+        
+
+        //FIX ME: GET TIME;
+        Calendar calendar = Calendar.getInstance();
+        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
+        String stringVal = formatTime.format(calendar.getTime());
+        Time time = java.sql.Time.valueOf( stringVal ); //
+        
+
+        PreparedStatement statement = conn.prepareStatement(
+              "INSERT INTO ordering(orderid , timeoforder , amount , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?)");
+
+          
+          int protein = extraChickenClick + extraMeatballClick;
+          int dressing = extraHarissaClick + extraTzatzikiSauceClick + extraVinegarClick;
+          double amount = getAmount( gyroClick, bowlClick, pitaAndHumusClick, falafelClick, protein, dressing, drinkClick );
+
+          statement.setInt(1, orderId);
+          statement.setTime(2, time);
+          statement.setDouble(3, amount);
+          statement.setInt(4, gyroClick);
+          statement.setInt(5, bowlClick);
+          statement.setInt(6, pitaAndHumusClick);
+          statement.setInt(7, falafelClick);
+          statement.setInt(8, protein);
+          statement.setInt(9, dressing);
+          statement.setInt(10, drinkClick);
+
+        // FIX ME: MUST GET THIS FROM POPUPS 
+        Array inventoryused = conn.createArrayOf("INT", inventory);
+        statement.setArray(11, inventoryused);
+            
+          statement.executeUpdate();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } 
+
+          
+    }
+    
+    public double getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
+      int orderedprotein, int ordereddressing, int ordereddrink) {
+        
+        //FIX ME: MUST GET THE AMOUNTS FROM THE AMOUNTS TABLE 
+        double ordertotal = (8.09 * orderedgyro) +
+        (8.09 * orderedbowl) +
+        (3.49 * orderedpitahummus) +
+        (3.49 * orderedfalafel) +
+        (1.99 * orderedprotein) +
+        (0.39 * ordereddressing) +
+        (2.45 * ordereddrink);
+
+        return (double) ordertotal;
+    }
+
+  
+
+    public double[] priceArr(){
+        Connection conn = connectionSet();
+        double items[] = new double[10];
+        double cost;
+        int i =0;
+        try{
+            PreparedStatement itemsStat = conn.prepareStatement(
+                "SELECT cost FROM menucost");
+
+            ResultSet itemInfo = itemsStat.executeQuery();
+            
+
+            while (itemInfo.next()) {
+                cost = itemInfo.getDouble("cost");
+                items[i] = cost; 
+                i++;
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        return items;
+    }
+
+    public Connection connectionSet(){
+        dbSetup my = new dbSetup();
+        // Building the connection
+        Connection conn = null;
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
+                my.user, my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        } 
+
+        return conn;
+    }
+   
 
     public static void main(String args[]) {
         new cashierGUI();

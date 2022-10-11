@@ -113,18 +113,25 @@ public class loginGUI implements ActionListener {
         } else if (e.getSource() == btn10) {
             passCode = Integer.parseInt(tempCode);
 
-            // TODO: Check if password = employeeid
+            
             if (checkPassword(passCode)) {
                 // If yes, go directly to cashierGUI
-                f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+                
+                // cashierGUI newGui = new cashierGUI();
                 new cashierGUI();
+                //newGui.get_employee(passCode);
+                
+                
+                f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+                // FIX ME: ADD A WAY TO GET THE EMPLOYEE ID TO THE CASHIER PAGE
+                
                 JOptionPane.showMessageDialog(null, "Pincode is correct.");
                 System.out.println(" true");
             } else {
                 System.out.println("not true");
                 JOptionPane.showMessageDialog(null, "Pincode is incorrect. Please retry.");
                 tempCode = "";
-                // ADD ME: GET IT TO PRINT THAT THE PASSWORD IS INCORRECT. RESET.
+                
             }
         }
     }
