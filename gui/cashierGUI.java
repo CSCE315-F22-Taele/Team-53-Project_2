@@ -296,7 +296,7 @@ public class cashierGUI implements ActionListener {
             input_1.setText(Integer.toString(gyroClick));
             totalPrice += priceArr[0] * gyroClick;
             // TESTING
-            new inventoryPerOrder();
+            // new inventoryPerOrder();
 
         } else if (e.getSource() == btn2) {
             l2.setBounds(item_width, 180, 100, 30);
@@ -416,8 +416,7 @@ public class cashierGUI implements ActionListener {
             System.exit(0);
         }
 
-        
-        if( lastRecord % 1000 == date ){
+        if( lastRecord / 1000 == date  / 1000){
             return lastRecord +1; 
         }
       
@@ -488,8 +487,6 @@ public class cashierGUI implements ActionListener {
 
         return (double) ordertotal;
     }
-
-  
 
     public double[] priceArr(){
         Connection conn = connectionSet();
