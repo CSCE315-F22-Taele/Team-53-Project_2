@@ -111,7 +111,6 @@ public class inventoryGUI_hexin implements ActionListener {
 
         // Add the inventory items to menu bar
         for (int i = 0; i < nameList.size(); i++) {
-            // System.out.println(nameList.get(i));
             JMenuItem newItem = new JMenuItem(nameList.get(i));
             newItem.addActionListener(this);
             viewMenu.add(newItem);
@@ -311,7 +310,6 @@ public class inventoryGUI_hexin implements ActionListener {
     public int generateId(){
         if(idList.isEmpty()){
             idList.add(0);
-            System.out.println("add 0");
             return 0;
         } else {
             int id = 0;
@@ -322,7 +320,6 @@ public class inventoryGUI_hexin implements ActionListener {
             }
             id += 1;
             idList.add(id);
-            System.out.println("ID: " + id);
             return id;
         }
     }
@@ -332,7 +329,6 @@ public class inventoryGUI_hexin implements ActionListener {
             if (e.getSource() == itemList.get(h)) {
                 add_input_Display(false);
                 action(h);
-                // System.out.println(itemList.get(h).getText());
             }
             btnDisplay(false);
             ask_Name.setVisible(false);
@@ -444,7 +440,6 @@ public class inventoryGUI_hexin implements ActionListener {
             } else {
                 info_display(true);
                 add_input_Display(true);
-                // inputId.setVisible(false);
                 ask_Name.setVisible(false);
     
                 itemId.setText(String.valueOf(idList.get(i)));
@@ -486,7 +481,6 @@ public class inventoryGUI_hexin implements ActionListener {
             } else {
                 info_display(true);
                 add_input_Display(false);
-                //inputId.setVisible(false);
                 ask_Name.setVisible(false);
     
                 itemId.setText(String.valueOf(idList.get(i)));
@@ -500,7 +494,6 @@ public class inventoryGUI_hexin implements ActionListener {
 
         } else if (e.getSource() == updateBtn) {
             // NOTE: MUST BE REMOVED: WE ARE NOT UPDATING PRIMARY KEY
-            // idList.set(i, Integer.parseInt(inputId.getText()));
             btnDisplay(false);
             nameList.set(i, inputName.getText());
             quantityList.set(i, Integer.parseInt(inputQuantity.getText()));
