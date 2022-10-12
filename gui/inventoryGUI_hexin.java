@@ -469,44 +469,37 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
-    public float[] get_cost(Connection conn, int inventory_size) throws SQLException {
+    public ArrayList<Float> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
-        int count = 0; // Increments inventory array
 
-        float temp[] = new float[inventory_size];
+        ArrayList<Float> temp = new ArrayList<Float>();
 
         while (findInventory.next()) {
-            temp[count] = findInventory.getFloat("cost");
-            count++;
+            temp.add(findInventory.getFloat("cost"));
         }
         return temp;
     }
 
-    public Date[] get_expiration_date(Connection conn, int inventory_size) throws SQLException {
+    public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory");
-        int count = 0; // Increments inventory array
 
-        Date temp[] = new Date[inventory_size];
+        ArrayList<Date> temp = new ArrayList<Date>();
 
         while (findInventory.next()) {
-            temp[count] = findInventory.getDate("expirationdate ");
-            count++;
+            temp.add(findInventory.getDate("expirationdate"));
         }
         return temp;
     }
 
-    public String[] get_vendor(Connection conn, int inventory_size) throws SQLException {
+    public ArrayList<String> get_vendor(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory");
-        int count = 0; // Increments inventory array
-
-        String temp[] = new String[inventory_size];
+        ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
-            temp[count] = findInventory.getString("vendor ");
-            count++;
+            temp.add(findInventory.getString("vendor"));
         }
         return temp;
     }
