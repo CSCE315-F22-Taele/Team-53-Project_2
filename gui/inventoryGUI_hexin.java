@@ -92,7 +92,6 @@ public class inventoryGUI_hexin implements ActionListener {
 
     inventoryGUI_hexin() {
 
-        
         try {
             int size = get_inventory_size(conn);
             inventory_names = get_inventory_name(conn, size);
@@ -108,7 +107,7 @@ public class inventoryGUI_hexin implements ActionListener {
             nameList.add(inventory_names[i]);
         }
 
-        // Add the inventory items to menu bar 
+        // Add the inventory items to menu bar
         for (int i = 0; i < inventory_names.length; i++) {
             System.out.println(inventory_names[i]);
             JMenuItem newItem = new JMenuItem(nameList.get(i));
@@ -465,6 +464,21 @@ public class inventoryGUI_hexin implements ActionListener {
         while (findInventory.next()) {
             // inventory_names.push_back(findInventory.getString("itemname"));
             temp[count] = findInventory.getString("itemname");
+            count++;
+        }
+        return temp;
+    }
+
+    // cost, vendor, expiration date
+    public float[] get_cost(Connection conn, int inventory_size) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
+        int count = 0; // Increments inventory array
+
+        float temp[] = new float[inventory_size];
+
+        while (findInventory.next()) {
+            temp[count] = findInventory.getFloat("cost");
             count++;
         }
         return temp;
