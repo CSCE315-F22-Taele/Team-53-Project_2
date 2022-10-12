@@ -18,12 +18,34 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+
+/**
+   * @author Preksha Vaghela, Victoria Pham, Hexin Hu
+*/
+
+
 public class cashierGUI {
+        /**
+         *
+         *
+         * @param aFrame
+         * @returns nothing
+         *
+         */
+
         private void makeFrameFullSize(JFrame aFrame) {
                 Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
                 aFrame.setSize(screenSize.width, screenSize.height);
         }
 
+        /**
+         *
+         * @parms [none].
+         *
+         * @returns a cashierGUI item
+         *
+         *
+         */
         cashierGUI() {
                 JFrame f = new JFrame("Cashier GUI");
                 JPanel panel = new JPanel();
@@ -60,12 +82,16 @@ public class cashierGUI {
                 f.setVisible(true);
         }
 
-
+        /**
+         *
+         *
+         * @return [database connection]
+         */
         public Connection connectionSet() {
                 dbSetup my = new dbSetup();
                 // Building the connection
                 Connection conn = null;
-        
+
                 try {
                     Class.forName("org.postgresql.Driver");
                     conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
@@ -75,10 +101,17 @@ public class cashierGUI {
                     System.err.println(e.getClass().getName() + ": " + e.getMessage());
                     System.exit(0);
                 }
-        
+
                 return conn;
         }
-        
+
+        /**
+         *
+         *
+         * @param args[]  [main function Declaration]
+         *
+         *
+         */
         public static void main(String args[]) {
                 new cashierGUI();
         }

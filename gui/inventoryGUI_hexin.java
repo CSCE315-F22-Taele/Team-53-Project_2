@@ -16,6 +16,10 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+/**
+ * Creates the inventory page.
+ * @author Preksha Vaghela, Victoria Pham, Hexin Hu
+ */
 public class inventoryGUI_hexin implements ActionListener {
 
     ////////// Declaration //////////
@@ -91,6 +95,10 @@ public class inventoryGUI_hexin implements ActionListener {
     int i = 0;
     Connection conn;
 
+    /**
+     *
+     * call inventory GUI
+     */
     inventoryGUI_hexin() {
 
         try {
@@ -238,6 +246,12 @@ public class inventoryGUI_hexin implements ActionListener {
 
     }
 
+    /**
+     * Action to make item names based off the arrays
+     * @param k  [index in array where action should occur]
+     *
+     *
+     */
     public void action(int k) {
         itemId.setText(String.valueOf(idList.get(k)));
         itemName.setText(nameList.get(k));
@@ -251,6 +265,12 @@ public class inventoryGUI_hexin implements ActionListener {
         clearBtn.setVisible(true);
     }
 
+    /**
+     *
+     *
+     * @param b  [boolean of whether to display info]
+     */
+
     public void info_display(Boolean b) {
         idInfo.setVisible(b);
         nameInfo.setVisible(b);
@@ -260,6 +280,11 @@ public class inventoryGUI_hexin implements ActionListener {
         vendorInfo.setVisible(b);
     }
 
+    /**
+     *
+     *
+     * @param b  [boolean to add display of inputs]
+     */
     public void add_input_Display(Boolean b) {
         inputId.setVisible(b);
         inputName.setVisible(b);
@@ -269,6 +294,10 @@ public class inventoryGUI_hexin implements ActionListener {
         inputVendor.setVisible(b);
     }
 
+    /**
+     *
+     * clears labels
+     */
     public void clearItemLabel() {
         itemId.setText("");
         itemName.setText("");
@@ -278,6 +307,10 @@ public class inventoryGUI_hexin implements ActionListener {
         itemVendor.setText("");
     }
 
+    /**
+     *
+     * clears input text
+     */
     public void clearInputText() {
         inputId.setText("");
         inputName.setText("");
@@ -287,6 +320,11 @@ public class inventoryGUI_hexin implements ActionListener {
         inputVendor.setText("");
     }
 
+    /**
+     *
+     *
+     * @param e  [Action Event when the button is clicked]
+     */
     public void actionPerformed(ActionEvent e) {
         for (int h = 0; h < itemList.size(); ++h) {
             if (e.getSource() == itemList.get(h)) {
@@ -451,6 +489,18 @@ public class inventoryGUI_hexin implements ActionListener {
         }
     }
 
+    /**
+     *
+     *
+     * @param  conn                         [database connection]
+     * @param  id                           [itemid]
+     * @param  name                         [name]
+     * @param  quantity                     [quantity in inventory]
+     * @param  cost                         [cost in inventory]
+     * @param  expirationDate               [expiration date in inventory]
+     * @param  vendor                       [vendor in inventory]
+     * @throws SQLException   [When issue adding item in database.]
+     */
     public void add_item(Connection conn, int id, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
@@ -467,6 +517,13 @@ public class inventoryGUI_hexin implements ActionListener {
         addStatement.executeUpdate();
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Database connection]
+     * @param  index                      [index to update from the Lists of items]
+     * @throws SQLException [When issue updating item in database.]
+     */
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
                 "DELETE FROM inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
@@ -481,12 +538,25 @@ public class inventoryGUI_hexin implements ActionListener {
         updateStat.executeUpdate();
     }
 
+    /**
+     * delete item from inventory
+     * @param  conn                       [connection to database]
+     * @param  id                         [item id]
+     * @throws SQLException [description]
+     */
     public void delete_item(Connection conn, int id) throws SQLException {
         PreparedStatement delStatement = conn.prepareStatement("DELETE FROM inventory WHERE itemid=(?)");
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Connection to database]
+     * @return              [Integer Array List that gets ids from database]
+     * @throws SQLException [When issue retreiving item in database.]
+     */
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory");
@@ -502,6 +572,13 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Connection to database]
+     * @return              [Integer Array List that gets quantity from database]
+     * @throws SQLException [When issue retreiving item in database.]
+     */
     public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory");
@@ -518,6 +595,13 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Connection to database]
+     * @return              [String Array List that gets names from database]
+     * @throws SQLException [When issue retreiving item in database.]
+     */
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
@@ -533,6 +617,14 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Connection to database]
+     * @return              [Double Array List that gets cost from database]
+     * @throws SQLException [When issue retreiving item in database.]
+     */
+
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
@@ -545,6 +637,13 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Connection to database]
+     * @return              [Integer Array List that gets expirationDate from database]
+     * @throws SQLException [When issue retreiving item in database.]
+     */
     public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory");
@@ -557,6 +656,15 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    /**
+     *
+     *
+     * @param  conn                       [Connection to database]
+     * @return              [Integer Array List that gets vendor from database]
+     * @throws SQLException [When issue retreiving item in database.]
+     */
+
+
     public ArrayList<String> get_vendor(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory");
@@ -568,6 +676,11 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    /**
+     *
+     *
+     * @return [Connection to database]
+     */
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -586,6 +699,10 @@ public class inventoryGUI_hexin implements ActionListener {
         return conn;
     }
 
+    /**
+     *
+     * @param args  [the main to call inventory]
+     */
     public static void main(String[] args) {
         new inventoryGUI_hexin();
     }

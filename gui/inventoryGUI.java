@@ -6,8 +6,7 @@ import java.awt.event.*;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList; 
-
+import java.util.ArrayList;
 
 
 
@@ -18,7 +17,7 @@ public class inventoryGUI implements ActionListener{
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
     JMenu inventoryMenu = new JMenu("Inventory");
-    
+
     // Data Output Area (for each item)
     JLabel nameInfo = new JLabel("Item Name: ");
     JLabel itemName = new JLabel("");
@@ -26,24 +25,24 @@ public class inventoryGUI implements ActionListener{
     JLabel itemQuantity = new JLabel("");
     JLabel expirationInfo = new JLabel("Expiration Date: ");
     JLabel itemExpirationDate = new JLabel("");
-    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd"); 
+    DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");
     JLabel isRestock = new JLabel("Do you want restock? ");
     JButton restockBtn = new JButton("Yes");
     JButton clearBtn = new JButton("Clear");
 
     // Action Items & Restock Areas
-    String inventory_names[]; 
+    String inventory_names[];
 
     JLabel actionItemsTitle = new JLabel("ACTION ITEMS");
     JTextArea out_of_stack = new JTextArea("");
-    
+
     JLabel restockTitle = new JLabel("RESTOCK");
     JButton orderBtn = new JButton("ORDER NOW");
 
-    // Logout 
+    // Logout
     JButton logOutBtn = new JButton("LOG OUT");
- 
-    // Frame 
+
+    // Frame
     JFrame f = new JFrame();
 
     // Const Vars
@@ -53,7 +52,7 @@ public class inventoryGUI implements ActionListener{
 
 
     inventoryGUI(){
-        
+
         //ANNIE
         Connection conn = connectionSet();
         inventory_names = get_inventory_name(conn);
@@ -68,7 +67,7 @@ public class inventoryGUI implements ActionListener{
 
         // Inventory Item (Label)
         ArrayList <JLabel> labelArr = new ArrayList <JLabel>();
-        
+
         for (int index = 0; index < inventory_names.length; index++){
             labelArr.add(new JLabel(inventory_names[index]));
         }
@@ -116,7 +115,7 @@ public class inventoryGUI implements ActionListener{
 
         nameInfo.setBounds(620, 200, 200, 200);
         itemName.setBounds(730, 200, 200, 200);
-        
+
         quantityInfo.setBounds(620, 220, 200, 200);
         itemQuantity.setBounds(730, 220, 200, 200);
 
@@ -161,7 +160,7 @@ public class inventoryGUI implements ActionListener{
         restockTitle.setBounds(1160, 340, 100, 30);
         orderBtn.addActionListener(this);
         orderBtn.setBounds(1150, 800, 100, 80);
-        
+
         for(int j = 0; j < 24; ++j){
             if(quantityArr.get(j) == 0){
                 if(j % 5 == 0 && j != 0){
@@ -169,7 +168,7 @@ public class inventoryGUI implements ActionListener{
                 } else {
                     out_of_stack.append(labelArr.get(j).getText() + ", ");
                 }
-                
+
             }
         }
 
@@ -178,8 +177,8 @@ public class inventoryGUI implements ActionListener{
 
         f.add(restockTitle);
         f.add(orderBtn);
-        
-        
+
+
         // for (int i = 0; i < 24; ++i) {
         //     f.add(labelArr[i]);
         //     f.add(inputArr[i]);
@@ -209,7 +208,7 @@ public class inventoryGUI implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
-        
+
         if(e.getSource() == riceItem){
             i = 0;
             action(i);
@@ -307,8 +306,8 @@ public class inventoryGUI implements ActionListener{
     }
 
     public String[] get_inventory_name(Connection conn){
-        
-       
+
+
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
         int count = 0; // Increments inventory array
@@ -333,11 +332,11 @@ public class inventoryGUI implements ActionListener{
             e.printStackTrace();
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
             System.exit(0);
-        } 
+        }
 
         return conn;
     }
-   
+
 
     public static void main(String[] args){
         new inventoryGUI();
