@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import java.util.Calendar;
 import java.util.Date;
-
+import java.util.ArrayList;
 
 
 /* Array Index 
@@ -491,31 +491,28 @@ public class cashierGUI implements ActionListener {
         return (double) ordertotal;
     }
 
-    public double[] priceArr(){
-        Connection conn = connectionSet();
-        double items[] = new double[10];
-        double cost;
-        int i =0;
-        try{
-            PreparedStatement itemsStat = conn.prepareStatement(
-                "SELECT cost FROM menucost");
+    public ArrayList<Double> get_price(Connection conn) throws SQLException {
 
-            ResultSet itemInfo = itemsStat.executeQuery();
-            
+        Statement stmt = conn.createStatement();
+        ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost");
+        ArrayList <Double> items = new ArrayList <Double>();
 
-            while (itemInfo.next()) {
-                cost = itemInfo.getDouble("cost");
-                items[i] = cost; 
-                i++;
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+        while (findCost.next()) {
+            items.add(findCost.getDouble("cost"));
         }
 
         return items;
+    }   
+
+    public ArrayList<String> get_menu(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost");
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findMenu.next()) {
+            temp.add(findMenu.getString("menuitem"));
+        }
+        return temp;
     }
 
     public Connection connectionSet(){
@@ -535,7 +532,6 @@ public class cashierGUI implements ActionListener {
 
         return conn;
     }
-   
 
     public static void main(String args[]) {
         new cashierGUI();
