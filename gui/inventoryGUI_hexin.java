@@ -470,7 +470,7 @@ public class inventoryGUI_hexin implements ActionListener {
         updateStat.setInt(2, quantityList.get(index));
         updateStat.setDouble(3, costList.get(index));
         //FIX ME: RIGHT DATE FORMAT
-        updateStat.setDate(4,expirationDateList.get(index));
+        updateStat.setDate(4, (java.sql.Date) expirationDateList.get(index));
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
         updateStat.executeUpdate();
