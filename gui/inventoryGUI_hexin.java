@@ -96,7 +96,7 @@ public class inventoryGUI_hexin implements ActionListener {
         try {
             conn = connectionSet();
             // int size = get_inventory_size(conn);
-           
+
             nameList = get_inventory_name(conn);
             idList = get_id(conn);
             quantityList = get_quantity(conn);
@@ -108,7 +108,7 @@ public class inventoryGUI_hexin implements ActionListener {
 
         // Add the inventory items to menu bar
         for (int i = 0; i < nameList.size(); i++) {
-            System.out.println(nameList.get(i));
+            // System.out.println(nameList.get(i));
             JMenuItem newItem = new JMenuItem(nameList.get(i));
             newItem.addActionListener(this);
             viewMenu.add(newItem);
@@ -348,6 +348,7 @@ public class inventoryGUI_hexin implements ActionListener {
                 add_item(conn, id, name, quantity, cost, expirationDate, vendor);
                 JOptionPane.showMessageDialog(null, "Item added to Database.");
             } catch (SQLException addException) {
+                System.out.println(addException);
                 JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
             }
             JMenuItem newItem = new JMenuItem(name);
@@ -405,11 +406,11 @@ public class inventoryGUI_hexin implements ActionListener {
             vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
             try {
-            update_item(conn, i);
-            JOptionPane.showMessageDialog(null, "Updated item.");
+                update_item(conn, i);
+                JOptionPane.showMessageDialog(null, "Updated item.");
             } catch (SQLException errorUpdate) {
-            //PRINT OUT. UPDATE UNSUCCESSFUL.
-            JOptionPane.showMessageDialog(null, "Update unsuccessful.");
+                // PRINT OUT. UPDATE UNSUCCESSFUL.
+                JOptionPane.showMessageDialog(null, "Update unsuccessful.");
             }
             addBtn.setVisible(false);
             clearInputText();
@@ -451,30 +452,34 @@ public class inventoryGUI_hexin implements ActionListener {
     public void add_item(Connection conn, int id, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
-                "INSERT INTO inventory(itemid, itemname, amount, cost, expirationdate,vendor) VALUES(?,?,?,?,? ?)");
+                "INSERT INTO inventory(itemid, itemname, amount, cost, expirationdate,vendor) VALUES(?,?,?,?,?,?)");
         addStatement.setInt(1, id);
         addStatement.setString(2, name);
         addStatement.setInt(3, quantity);
         addStatement.setDouble(4, cost);
-        addStatement.setDate(5, (java.sql.Date) expirationDate);
+        // addStatement.setDate(5, (java.sql.Date) expirationDate);
+        java.util.Date utilDate = expirationDate;
+        java.sql.Date sqlDate = new java.sql.Date(expirationDate.getTime());
+
+        addStatement.setDate(5, sqlDate);
         addStatement.setString(6, vendor);
 
         addStatement.executeUpdate();
     }
 
-    public void update_item(Connection conn, int index) throws SQLException{
-        PreparedStatement updateStat = conn.prepareStatement("DELETE FROM inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
-       
+    public void update_item(Connection conn, int index) throws SQLException {
+        PreparedStatement updateStat = conn.prepareStatement(
+                "DELETE FROM inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
+
         updateStat.setString(1, nameList.get(index));
         updateStat.setInt(2, quantityList.get(index));
         updateStat.setDouble(3, costList.get(index));
-        //FIX ME: RIGHT DATE FORMAT
+        // FIX ME: RIGHT DATE FORMAT
         updateStat.setDate(4, (java.sql.Date) expirationDateList.get(index));
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
         updateStat.executeUpdate();
-    }   
-
+    }
 
     public void delete_item(Connection conn, int id) throws SQLException {
         PreparedStatement delStatement = conn.prepareStatement("DELETE FROM inventory WHERE itemid=(?)");
