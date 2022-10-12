@@ -60,7 +60,7 @@ public class cashierGUI {
                 f.setVisible(true);
         }
 
-        
+
         public Connection connectionSet() {
                 dbSetup my = new dbSetup();
                 // Building the connection
@@ -78,6 +78,7 @@ public class cashierGUI {
         
                 return conn;
         }
+        
 
         public static void main(String args[]) {
                 new cashierGUI();
