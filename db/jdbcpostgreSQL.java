@@ -5,6 +5,8 @@ import java.sql.Time;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+import gui.dbSetup;
+
 public class jdbcpostgreSQL {
 
   public static int getRandomValue(int Min, int Max) {

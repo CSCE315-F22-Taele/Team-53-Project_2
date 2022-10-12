@@ -1,5 +1,8 @@
 import java.sql.*;
 import javax.swing.JOptionPane;
+
+import gui.dbSetup;
+
 import java.sql.DriverManager;
 
 public class jdbcpostgreSQLGUI {
