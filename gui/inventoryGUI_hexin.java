@@ -457,16 +457,23 @@ public class inventoryGUI_hexin implements ActionListener {
         addStatement.setString(2, name);
         addStatement.setInt(3, quantity);
         addStatement.setDouble(4, cost);
-        addStatement.setDate(5,expirationDate);
+        addStatement.setDate(5, expirationDate); //FIX ME: RIGHT DATE FORMAT
         addStatement.setString(6, vendor);
 
         addStatement.executeUpdate();
     }   
 
-    public void update_quantity(Connection conn, int id) throws SQLException{
-        // PreparedStatement delStatement = conn.prepareStatement("DELETE FROM inventory WHERE itemid=(?)");
-        // delStatement.setInt(1, id);
-        // delStatement.executeUpdate();
+    public void update_item(Connection conn, int index) throws SQLException{
+        PreparedStatement updateStat = conn.prepareStatement("DELETE FROM inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
+       
+        updateStat.setString(1, nameList.get(index));
+        updateStat.setInt(2, quantityList.get(index));
+        updateStat.setDouble(3, costList.get(index));
+        //FIX ME: RIGHT DATE FORMAT
+        updateStat.setDate(4,expirationDateList.get(index));
+        updateStat.setString(5, vendorList.get(index));
+        updateStat.setInt(6, idList.get(index));
+        updateStat.executeUpdate();
     }   
 
 
