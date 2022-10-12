@@ -58,7 +58,7 @@ public class inventoryGUI_hexin implements ActionListener {
     ArrayList<String> nameList = new ArrayList<String>();
     ArrayList<Integer> quantityList = new ArrayList<Integer>();
     ArrayList<Date> expirationDateList = new ArrayList<Date>();
-    ArrayList<Double> costList = new ArrayList<Double>();
+    ArrayList<Float> costList = new ArrayList<Float>();
     ArrayList<String> vendorList = new ArrayList<String>();
 
     DateFormat dateFormat;
@@ -94,12 +94,16 @@ public class inventoryGUI_hexin implements ActionListener {
     inventoryGUI_hexin() {
 
         try {
-            conn = connectionSet();
+            Connection conn = connectionSet();
             // int size = get_inventory_size(conn);
-
+            System.out.println("enters");
             nameList = get_inventory_name(conn);
             idList = get_id(conn);
+            System.out.println("enters");
             quantityList = get_quantity(conn);
+            costList = get_cost(conn);
+            expirationDateList = get_expiration_date(conn);
+            vendorList = get_vendor(conn);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -210,7 +214,7 @@ public class inventoryGUI_hexin implements ActionListener {
         f.add(inputDate);
         f.add(inputVendor);
 
-        dateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         ///// Update /////
         ask_Id = new JLabel("Please enter the Item's ID");
@@ -326,11 +330,11 @@ public class inventoryGUI_hexin implements ActionListener {
             int id = Integer.parseInt(inputId.getText());
             String name = inputName.getText();
             int quantity = Integer.parseInt(inputQuantity.getText());
-            double cost = Double.parseDouble(inputCost.getText());
+            Float cost = Float.parseFloat(inputCost.getText());
             Date expirationDate = null;
             String vendor = inputVendor.getText();
             try {
-                expirationDate = new SimpleDateFormat("yyyy-mm-dd").parse(inputDate.getText());
+                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
                 error.printStackTrace();
@@ -393,10 +397,10 @@ public class inventoryGUI_hexin implements ActionListener {
             idList.set(i, Integer.parseInt(inputId.getText()));
             nameList.set(i, inputName.getText());
             quantityList.set(i, Integer.parseInt(inputQuantity.getText()));
-            costList.set(i, Double.parseDouble(inputCost.getText()));
+            costList.set(i, Float.parseFloat(inputCost.getText()));
             Date expirationDate = null;
             try {
-                expirationDate = new SimpleDateFormat("yyyy-mm-dd").parse(inputDate.getText());
+                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
                 error.printStackTrace();
