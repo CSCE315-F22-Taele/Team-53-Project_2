@@ -3,6 +3,23 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.awt.*;
+import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 
 public class inventoryPerOrderGUI implements ActionListener {
@@ -20,17 +37,14 @@ public class inventoryPerOrderGUI implements ActionListener {
 
     ////////// Store value //////////
     /* Use these two arraylists to connect db */
-    ArrayList <String> nameList = new ArrayList<String>(
-        Arrays.asList("rice", "chicken", "salt")        
-    );         
-    ArrayList <Integer> quantityList = new ArrayList<Integer>(
-        Arrays.asList(400, 300, 200)
-    );    
+    ArrayList <String> nameList = new ArrayList<String>();         
+    ArrayList <Integer> quantityList = new ArrayList<Integer>();    
 
     /*  The rest of these arraylists are using for the front-end */
     // Store btns 
     ArrayList <JButton> btnList = new ArrayList<JButton>();   
     JButton submitBtn = new JButton("Submit");
+    JButton backToCashier = new JButton("Back to Cashier");
     
     // Store the names which have already clicked by user to prevent show up repeatly 
     ArrayList <String> nameOccursList = new ArrayList<String>();
@@ -49,14 +63,14 @@ public class inventoryPerOrderGUI implements ActionListener {
     ////////// Global Vars //////////
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
+    Connection conn;
+
 
     // Item's index in buttonList
     int btnIndex = -1;
 
     // Item's index in the nameOccursList
     int nameOccursIndex = -1;
-
-
 
     //////////// Panel //////////
     JPanel itemsPanel = new JPanel();
@@ -75,6 +89,17 @@ public class inventoryPerOrderGUI implements ActionListener {
 
 
     inventoryPerOrderGUI(){
+
+        try {
+            conn = connectionSet();
+            nameList = get_inventory_name(conn);
+            quantityList = get_quantity(conn);
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -94,7 +119,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         ////////// generate btns //////////
         for(int i = 0; i < nameList.size(); ++i){
             JButton newBtn = new JButton(nameList.get(i));
-            newBtn.setPreferredSize(new Dimension(100, 60));
+            newBtn.setPreferredSize(new Dimension(200, 60));
             newBtn.addActionListener(this);
             btnList.add(newBtn);
             itemsPanel.add(newBtn);
@@ -138,6 +163,12 @@ public class inventoryPerOrderGUI implements ActionListener {
         f.add(receiptPanel_Left);
         f.add(receiptPanel_Right);
         f.add(receiptPanel_Down);
+
+        ///// Back to Cashier /////
+        backToCashier.addActionListener(this);
+        backToCashier.setBounds((int)(width * 0.06), (int)(height* 0.8), (int)(width * 0.1), (int)(height * 0.05));
+        f.add(backToCashier);
+
     }
 
     public int checkNameList(String name){
@@ -196,15 +227,78 @@ public class inventoryPerOrderGUI implements ActionListener {
                 int outItem = clickList.get(k);
                 int item_amount = quantityList.get(indexList.get(k)) - outItem;
                 quantityList.set(indexList.get(k), item_amount);
+                try {
+                    update_item(conn, indexList.get(k));
+                } catch (SQLException e1) {
+                    // TODO Auto-generated catch block
+                    e1.printStackTrace();
+                }
             }
-            
-            // Test
-            for(int k = 0; k < nameList.size(); ++k){
-                System.out.println("Name: " + nameList.get(k) + " " + quantityList.get(k));
-            }
+        } else if(e.getSource() == backToCashier){
+            // FIX ME: Implement
+        }
+    }
+
+    ///// Backend /////
+    public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp.add(findInventory.getString("itemname"));
+
         }
 
+        return temp;
     }
+
+    public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory");
+        // int count = 0; // Increments inventory array
+
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp.add(findInventory.getInt("amount"));
+
+        }
+
+        return temp;
+    }
+
+    public void update_item(Connection conn, int index) throws SQLException {
+        PreparedStatement updateStat = conn.prepareStatement(
+                "UPDATE inventory SET amount=(?) WHERE itemname=(?)");
+
+        updateStat.setString(2, nameList.get(index));
+        updateStat.setInt(1, quantityList.get(index));
+
+        updateStat.executeUpdate();
+    }
+
+    public Connection connectionSet() {
+        dbSetup my = new dbSetup();
+        // Building the connection
+        Connection conn = null;
+
+        try {
+            Class.forName("org.postgresql.Driver");
+            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
+                    my.user, my.pswd);
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
+        return conn;
+    }
+
 
     public static void main(String[] args){
         new inventoryPerOrderGUI();
