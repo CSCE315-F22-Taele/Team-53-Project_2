@@ -1,6 +1,7 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -12,11 +13,13 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 public class inventoryGUI_hexin implements ActionListener {
 
     ////////// Declaration //////////
+
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
     JMenu viewMenu = new JMenu("View");
@@ -62,7 +65,7 @@ public class inventoryGUI_hexin implements ActionListener {
 
     // Add
     JButton addBtn = new JButton("Add");
-    // JTextField inputId = new JTextField("");
+    JTextField inputId = new JTextField("");
     JTextField inputName = new JTextField("");
     JTextField inputQuantity = new JTextField("");
     JTextField inputCost = new JTextField("");
@@ -82,11 +85,8 @@ public class inventoryGUI_hexin implements ActionListener {
     JMenuItem deleteItem = new JMenuItem("Delete");
     JButton deleteBtn = new JButton("Delete");
 
-    // Layout Size
-    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    // Frame
     JFrame f = new JFrame();
-    int screenHeight = screenSize.height;
-    int screenWidth = screenSize.width;
 
     // Const Vars
     int i = 0;
@@ -119,6 +119,7 @@ public class inventoryGUI_hexin implements ActionListener {
         }
 
         ////////// Background //////////
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
         f.setSize(400, 400);
@@ -182,20 +183,20 @@ public class inventoryGUI_hexin implements ActionListener {
         f.add(itemVendor);
         f.add(clearBtn);
 
-        ////////// Back to Cashier //////////
+        ////////// Logout //////////
         backToCashier.addActionListener(this);
-        backToCashier.setBounds((int)(screenWidth * 0.1), (int)(screenHeight * 0.7), 200, (int)(screenHeight * 0.1));
+        backToCashier.setBounds(300, 780, 200, 100);
         f.add(backToCashier);
 
         // ADD Items
-        //inputId.setBounds(730, 180, 160, 20);
+        inputId.setBounds(730, 180, 160, 20);
         inputName.setBounds(730, 210, 160, 20);
         inputQuantity.setBounds(730, 240, 160, 20);
         inputCost.setBounds(730, 270, 160, 20);
         inputDate.setBounds(730, 300, 160, 20);
         inputVendor.setBounds(730, 330, 160, 20);
 
-        //inputId.setVisible(false);
+        inputId.setVisible(false);
         inputName.setVisible(false);
         inputQuantity.setVisible(false);
         inputCost.setVisible(false);
@@ -205,7 +206,7 @@ public class inventoryGUI_hexin implements ActionListener {
         addBtn.addActionListener(this);
         addBtn.setVisible(false);
         f.add(addBtn);
-        //f.add(inputId);
+        f.add(inputId);
         f.add(inputName);
         f.add(inputQuantity);
         f.add(inputCost);
@@ -238,25 +239,7 @@ public class inventoryGUI_hexin implements ActionListener {
         deleteBtn.addActionListener(this);
         deleteBtn.setBounds(910, 300, 100, 20);
         deleteBtn.setVisible(false);
-    }
 
-    public int generateId(){
-        if(idList.isEmpty()){
-            idList.add(0);
-            System.out.println("add 0");
-            return 0;
-        } else {
-            int id = 0;
-            for(int i = 0; i < idList.size(); ++i){
-                if(idList.get(i) > id){
-                    id = idList.get(i);
-                }
-            }
-            id += 1;
-            idList.add(id);
-            System.out.println("ID: " + id);
-            return id;
-        }
     }
 
     public void action(int k) {
@@ -282,7 +265,7 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public void add_input_Display(Boolean b) {
-        //inputId.setVisible(b);
+        inputId.setVisible(b);
         inputName.setVisible(b);
         inputQuantity.setVisible(b);
         inputCost.setVisible(b);
@@ -300,7 +283,7 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public void clearInputText() {
-        //inputId.setText("");
+        inputId.setText("");
         inputName.setText("");
         inputQuantity.setText("");
         inputCost.setText("");
@@ -325,11 +308,31 @@ public class inventoryGUI_hexin implements ActionListener {
         return false;
     }
 
+    public int generateId(){
+        if(idList.isEmpty()){
+            idList.add(0);
+            System.out.println("add 0");
+            return 0;
+        } else {
+            int id = 0;
+            for(int i = 0; i < idList.size(); ++i){
+                if(idList.get(i) > id){
+                    id = idList.get(i);
+                }
+            }
+            id += 1;
+            idList.add(id);
+            System.out.println("ID: " + id);
+            return id;
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         for (int h = 0; h < itemList.size(); ++h) {
             if (e.getSource() == itemList.get(h)) {
                 add_input_Display(false);
                 action(h);
+                // System.out.println(itemList.get(h).getText());
             }
             btnDisplay(false);
             ask_Name.setVisible(false);
@@ -342,7 +345,6 @@ public class inventoryGUI_hexin implements ActionListener {
 
             ask_Name.setVisible(false);
             
-
             clearInputText();
             clearItemLabel();
             add_input_Display(true);
@@ -359,11 +361,11 @@ public class inventoryGUI_hexin implements ActionListener {
 
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
-
+            // new cashierGUI();
+            // f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             
 
         } else if (e.getSource() == addBtn) {
-            
             btnDisplay(false);
             addBtn.setVisible(true);
             
@@ -376,8 +378,9 @@ public class inventoryGUI_hexin implements ActionListener {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
-                error.printStackTrace();
+                //error.printStackTrace();
             }
+
             if(checkItemExit(name)){
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
@@ -399,7 +402,6 @@ public class inventoryGUI_hexin implements ActionListener {
                 newItem.addActionListener(this);
                 viewMenu.add(newItem);
                 itemList.add(newItem);
-                
             }
             clearInputText();
 
@@ -439,7 +441,6 @@ public class inventoryGUI_hexin implements ActionListener {
                 inputName.setVisible(true);
                 searchBtn_Update.setVisible(true);
                 JOptionPane.showMessageDialog(null, "Item doesn't exist!");
-
             } else {
                 info_display(true);
                 add_input_Display(true);
@@ -454,9 +455,6 @@ public class inventoryGUI_hexin implements ActionListener {
                 inputDate.setText(dateFormat.format(expirationDateList.get(i)));
                 inputVendor.setText(vendorList.get(i));
             }
-
-            
-
 
         } else if (e.getSource() == searchBtn_Delete) {
             btnDisplay(false);
@@ -499,8 +497,6 @@ public class inventoryGUI_hexin implements ActionListener {
                 itemExpirationDate.setText(dateFormat.format(expirationDateList.get(i)));
                 itemVendor.setText(vendorList.get(i));
             }
-
-
 
         } else if (e.getSource() == updateBtn) {
             // NOTE: MUST BE REMOVED: WE ARE NOT UPDATING PRIMARY KEY
