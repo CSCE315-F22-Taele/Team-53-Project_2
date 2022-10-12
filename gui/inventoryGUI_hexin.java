@@ -88,28 +88,26 @@ public class inventoryGUI_hexin implements ActionListener {
 
     // Const Vars
     int i = 0;
-    Connection conn = connectionSet();
 
     inventoryGUI_hexin() {
 
         try {
-            int size = get_inventory_size(conn);
-            inventory_names = get_inventory_name(conn, size);
-            inventory_id = get_id(conn, size);
+            Connection conn = connectionSet();
+            // int size = get_inventory_size(conn);
+            System.out.println("enters");
+            nameList = get_inventory_name(conn);
+            idList = get_id(conn);
+            System.out.println("enters");
+            quantityList = get_quantity(conn);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
-        // Add the inventory items from array to Arraylist
-        for (int i = 0; i < inventory_names.length; ++i) {
-            nameList.add(inventory_names[i]);
-        }
-
         // Add the inventory items to menu bar
-        for (int i = 0; i < inventory_names.length; i++) {
-            System.out.println(inventory_names[i]);
+        for (int i = 0; i < nameList.size(); i++) {
+            System.out.println(nameList.get(i));
             JMenuItem newItem = new JMenuItem(nameList.get(i));
             newItem.addActionListener(this);
             viewMenu.add(newItem);
@@ -428,44 +426,61 @@ public class inventoryGUI_hexin implements ActionListener {
         }
     }
 
-    public int get_inventory_size(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
-        int count = 0;
-        while (findInventory.next()) {
-            count++;
-        }
+    // public int get_inventory_size(Connection conn) throws SQLException {
+    // Statement stmt = conn.createStatement();
+    // ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM
+    // inventory");
+    // int count = 0;
+    // while (findInventory.next()) {
+    // count++;
+    // }
 
-        return count;
-    }
+    // return count;
+    // }
 
-    public Integer[] get_id(Connection conn, int inventory_size) throws SQLException {
+    public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory");
-        int count = 0; // Increments inventory array
 
-        Integer temp[] = new Integer[inventory_size];
+        ArrayList<Integer> temp = new ArrayList<Integer>();
 
         while (findInventory.next()) {
             // inventory_names.push_back(findInventory.getString("itemname"));
-            temp[count] = findInventory.getInt("itemid");
-            count++;
+            temp.add(findInventory.getInt("itemid"));
+
         }
+
         return temp;
     }
 
-    public String[] get_inventory_name(Connection conn, int inventory_size) throws SQLException {
+    public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
-        int count = 0; // Increments inventory array
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory");
+        // int count = 0; // Increments inventory array
 
-        String temp[] = new String[inventory_size];
+        ArrayList<Integer> temp = new ArrayList<Integer>();
 
         while (findInventory.next()) {
             // inventory_names.push_back(findInventory.getString("itemname"));
-            temp[count] = findInventory.getString("itemname");
-            count++;
+            temp.add(findInventory.getInt("amount"));
+
         }
+
+        return temp;
+    }
+
+    public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp.add(findInventory.getString("itemname"));
+
+        }
+
         return temp;
     }
 
