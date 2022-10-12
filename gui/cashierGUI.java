@@ -79,7 +79,6 @@ public class cashierGUI {
                 return conn;
         }
         
-
         public static void main(String args[]) {
                 new cashierGUI();
         }
