@@ -95,8 +95,6 @@ public class cashierGUI implements ActionListener {
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
     // Price of each menu item
-    double priceArr[] = priceArr();
-    
     JLabel sale = new JLabel("0");
     double totalPrice = 0;
 
@@ -124,6 +122,13 @@ public class cashierGUI implements ActionListener {
 
     
     public cashierGUI() {
+
+        Connection conn = connectionSet();
+
+        // getting menu and prices from db
+        ArrayList <Double> priceArr = get_price(conn);
+        ArrayList <String> menuArr = get_menu(conn);
+
         ////////// Background //////////
         for( int i=0; i< 24; i++){
             inventory[i] = 0;
@@ -131,59 +136,16 @@ public class cashierGUI implements ActionListener {
 
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
-        // System.out.println(screenSize.height);
-        // System.out.println(screenSize.width);
+
 
         ////////// Buttons //////////
-        // Button 1
-        btn1 = new JButton("Gyro");
-        btn1.setBackground(Color.RED);
-        btn1.addActionListener(this);
+        ArrayList <JButton> menu_buttons = new ArrayList<JButton>();
 
-        // Button 2
-        btn2 = new JButton("Bowl");
-        btn2.setBackground(Color.RED);
-        btn2.addActionListener(this);
-
-        // Button 3
-        btn3 = new JButton("2 Falafels");
-        btn3.setBackground(Color.BLUE);
-        btn3.addActionListener(this);
-
-        // Button 4
-        btn4 = new JButton("Extra pita and humus");
-        btn4.setBackground(Color.BLUE);
-        btn4.addActionListener(this);
-
-        // Button 5
-        btn5 = new JButton("Extra Chicken");
-        btn5.setBackground(Color.GREEN);
-        btn5.addActionListener(this);
-
-        // Button 6
-        btn6 = new JButton("Extra Harissa");
-        btn6.setBackground(Color.GREEN);
-        btn6.addActionListener(this);
-
-        // Button 7
-        btn7 = new JButton("Extra Sp Meatball");
-        btn7.setBackground(Color.GREEN);
-        btn7.addActionListener(this);
-
-        // Button 8
-        btn8 = new JButton("Extra Tzatziki Sauce");
-        btn8.setBackground(Color.GREEN);
-        btn8.addActionListener(this);
-
-        // Button 9
-        btn9 = new JButton("Extra Balsamic Vinegar");
-        btn9.setBackground(Color.GREEN);
-        btn9.addActionListener(this);
-
-        // Button 10
-        btn10 = new JButton("Fountain drink");
-        btn10.setBackground(Color.GREEN);
-        btn10.addActionListener(this);
+        for (int i = 0; i < menuArr.size(); i++){
+                menu_buttons.add(new JButton(menuArr.get(i)));
+                menu_buttons.get(i).setBackground(Color.RED);
+                menu_buttons.get(i).addActionListener(this);
+        }
 
         // Button 11
         logoutBtn = new JButton("LOGOUT");
@@ -212,16 +174,9 @@ public class cashierGUI implements ActionListener {
         itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
 
-        itemsPanel.add(btn1);
-        itemsPanel.add(btn2);
-        itemsPanel.add(btn3);
-        itemsPanel.add(btn4);
-        itemsPanel.add(btn5);
-        itemsPanel.add(btn6);
-        itemsPanel.add(btn7);
-        itemsPanel.add(btn8);
-        itemsPanel.add(btn9);
-        itemsPanel.add(btn10);
+        for (int i = 0; i < menu_buttons.size(); i++){
+                itemsPanel.add(menu_buttons.get(i));
+        }
 
         f.add(itemsPanel);
 
