@@ -2,7 +2,21 @@ package gui;
 
 import java.awt.*;
 import javax.swing.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.awt.event.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import javax.swing.JOptionPane;
 
 public class cashierGUI {
         private void makeFrameFullSize(JFrame aFrame) {
@@ -44,6 +58,25 @@ public class cashierGUI {
                 f.setSize(400, 400);
                 f.setLayout(null);
                 f.setVisible(true);
+        }
+
+        
+        public Connection connectionSet() {
+                dbSetup my = new dbSetup();
+                // Building the connection
+                Connection conn = null;
+        
+                try {
+                    Class.forName("org.postgresql.Driver");
+                    conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
+                            my.user, my.pswd);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    System.err.println(e.getClass().getName() + ": " + e.getMessage());
+                    System.exit(0);
+                }
+        
+                return conn;
         }
 
         public static void main(String args[]) {
