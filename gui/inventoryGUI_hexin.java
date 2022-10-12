@@ -50,8 +50,8 @@ public class inventoryGUI_hexin implements ActionListener {
 
     JButton clearBtn = new JButton("Clear");
 
-    // Logout
-    JButton logOutBtn = new JButton("LOG OUT");
+    // Back to Cashier
+    JButton backToCashier = new JButton("Back To Cashier");
 
     // Store data
     ArrayList<Integer> idList = new ArrayList<Integer>();
@@ -75,10 +75,12 @@ public class inventoryGUI_hexin implements ActionListener {
     JMenuItem addItem = new JMenuItem("Add");
 
     // Update
-    JLabel ask_Id;
+    JLabel ask_Name;
     JMenuItem updateItem = new JMenuItem("Update");
     JButton updateBtn = new JButton("Update");
-    JButton searchBtn = new JButton("Search");
+    JButton searchBtn_Update = new JButton("Search");
+    JButton searchBtn_Delete = new JButton("Search");
+
 
     // Delete
     JMenuItem deleteItem = new JMenuItem("Delete");
@@ -185,9 +187,9 @@ public class inventoryGUI_hexin implements ActionListener {
         f.add(clearBtn);
 
         ////////// Logout //////////
-        logOutBtn.addActionListener(this);
-        logOutBtn.setBounds(300, 780, 200, 100);
-        f.add(logOutBtn);
+        backToCashier.addActionListener(this);
+        backToCashier.setBounds(300, 780, 200, 100);
+        f.add(backToCashier);
 
         // ADD Items
         inputId.setBounds(730, 180, 160, 20);
@@ -217,22 +219,28 @@ public class inventoryGUI_hexin implements ActionListener {
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
         ///// Update /////
-        ask_Id = new JLabel("Please enter the Item's ID");
-        ask_Id.setBounds(530, 180, 160, 20);
-        f.add(ask_Id);
-        f.add(searchBtn);
+        ask_Name = new JLabel("Please enter the Item's name");
+        ask_Name.setBounds(510, 210, 200, 20);
+        f.add(ask_Name);
+        f.add(searchBtn_Update);
+        f.add(searchBtn_Delete);
         f.add(updateBtn);
 
-        ask_Id.setVisible(false);
-        searchBtn.addActionListener(this);
+        ask_Name.setVisible(false);
+        searchBtn_Update.addActionListener(this);
         updateBtn.addActionListener(this);
-        searchBtn.setBounds(910, 180, 100, 20);
+        searchBtn_Update.setBounds(910, 210, 100, 20);
         updateBtn.setBounds(910, 300, 100, 20);
-        searchBtn.setVisible(false);
+        searchBtn_Update.setVisible(false);
         updateBtn.setVisible(false);
+
+
 
         // Delete
         f.add(deleteBtn);
+        searchBtn_Delete.addActionListener(this);
+        searchBtn_Delete.setBounds(910, 210, 100, 20);
+        searchBtn_Delete.setVisible(false);
         deleteBtn.addActionListener(this);
         deleteBtn.setBounds(910, 300, 100, 20);
         deleteBtn.setVisible(false);
@@ -295,16 +303,16 @@ public class inventoryGUI_hexin implements ActionListener {
                 action(h);
                 System.out.println(itemList.get(h).getText());
             }
-            searchBtn.setVisible(false);
-            ask_Id.setVisible(false);
+            searchBtn_Update.setVisible(false);
+            ask_Name.setVisible(false);
             addBtn.setVisible(false);
         }
         if (e.getSource() == addItem) {
             addBtn.setVisible(true);
             clearBtn.setVisible(true);
 
-            ask_Id.setVisible(false);
-            searchBtn.setVisible(false);
+            ask_Name.setVisible(false);
+            searchBtn_Update.setVisible(false);
             updateBtn.setVisible(false);
 
             clearInputText();
@@ -319,11 +327,11 @@ public class inventoryGUI_hexin implements ActionListener {
             add_input_Display(false);
             addBtn.setVisible(false);
             clearBtn.setVisible(false);
-            searchBtn.setVisible(false);
+            searchBtn_Update.setVisible(false);
             updateBtn.setVisible(false);
-            ask_Id.setVisible(false);
+            ask_Name.setVisible(false);
 
-        } else if (e.getSource() == logOutBtn) {
+        } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
 
         } else if (e.getSource() == addBtn) {
@@ -347,7 +355,7 @@ public class inventoryGUI_hexin implements ActionListener {
             costList.add(cost);
             expirationDateList.add(expirationDate);
             vendorList.add(vendor);
-
+/* 
             try {
                 add_item(conn, id, name, quantity, cost, expirationDate, vendor);
                 JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -359,23 +367,28 @@ public class inventoryGUI_hexin implements ActionListener {
             viewMenu.add(newItem);
             itemList.add(newItem);
             clearInputText();
+            */
 
         } else if (e.getSource() == updateItem) {
-            ask_Id.setVisible(true);
+            ask_Name.setVisible(true);
             clearBtn.setVisible(true);
             clearInputText();
             clearItemLabel();
-            idInfo.setVisible(false);
+            info_display(false);
             addBtn.setVisible(false);
-            add_input_Display(true);
-            searchBtn.setVisible(true);
-            updateBtn.setVisible(true);
+            add_input_Display(false);
+            inputName.setVisible(true);
+            searchBtn_Update.setVisible(true);
+            updateBtn.setVisible(false);
 
-        } else if (e.getSource() == searchBtn) {
-            int id = Integer.parseInt(inputId.getText());
+        } else if (e.getSource() == searchBtn_Update) {
+            
+            updateBtn.setVisible(true);
+            deleteBtn.setVisible(false);
+            String name = inputName.getText();
             i = -1;
-            for (int h = 0; h < idList.size(); ++h) {
-                if (idList.get(h) == id) {
+            for (int h = 0; h < nameList.size(); ++h) {
+                if (nameList.get(h).equals(name)) {
                     i = h;
                     break;
                 }
@@ -383,14 +396,44 @@ public class inventoryGUI_hexin implements ActionListener {
             addBtn.setVisible(false);
             clearInputText();
             info_display(true);
-            ask_Id.setVisible(false);
-            inputId.setText(String.valueOf(idList.get(i)));
+            add_input_Display(true);
+            inputId.setVisible(false);
+            ask_Name.setVisible(false);
+            
+            itemId.setText(String.valueOf(idList.get(i)));
             inputName.setText(nameList.get(i));
             inputQuantity.setText(String.valueOf(quantityList.get(i)));
             inputCost.setText(String.valueOf(costList.get(i)));
 
             inputDate.setText(dateFormat.format(expirationDateList.get(i)));
             inputVendor.setText(vendorList.get(i));
+
+        } else if (e.getSource() == searchBtn_Delete) {
+            deleteBtn.setVisible(true);
+            updateBtn.setVisible(false);
+            searchBtn_Delete.setVisible(false);
+            String name = inputName.getText();
+            i = -1;
+            for (int h = 0; h < nameList.size(); ++h) {
+                if (nameList.get(h).equals(name)) {
+                    i = h;
+                    break;
+                }
+            }
+            addBtn.setVisible(false);
+            clearInputText();
+            info_display(true);
+            add_input_Display(false);
+            inputId.setVisible(false);
+            ask_Name.setVisible(false);
+            
+            itemId.setText(String.valueOf(idList.get(i)));
+            itemName.setText(nameList.get(i));
+            itemQuantity.setText(String.valueOf(quantityList.get(i)));
+            itemCost.setText(String.valueOf(costList.get(i)));
+
+            itemExpirationDate.setText(dateFormat.format(expirationDateList.get(i)));
+            itemVendor.setText(vendorList.get(i));
 
         } else if (e.getSource() == updateBtn) {
             idList.set(i, Integer.parseInt(inputId.getText()));
@@ -408,27 +451,30 @@ public class inventoryGUI_hexin implements ActionListener {
             expirationDateList.set(i, expirationDate);
             vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
-            try {
-            update_item(conn, i);
-            JOptionPane.showMessageDialog(null, "Updated item.");
-            } catch (SQLException errorUpdate) {
-            //PRINT OUT. UPDATE UNSUCCESSFUL.
-            JOptionPane.showMessageDialog(null, "Update unsuccessful.");
-            }
+            // try {
+            // update_item(conn, i);
+            // JOptionPane.showMessageDialog(null, "Updated item.");
+            // } catch (SQLException errorUpdate) {
+            // //PRINT OUT. UPDATE UNSUCCESSFUL.
+            // JOptionPane.showMessageDialog(null, "Update unsuccessful.");
+            // }
             addBtn.setVisible(false);
             clearInputText();
             updateBtn.setVisible(false);
 
         } else if (e.getSource() == deleteItem) {
-            addBtn.setVisible(false);
-            searchBtn.setVisible(true);
-            ask_Id.setVisible(true);
+            
+            deleteBtn.setVisible(false);
+            ask_Name.setVisible(true);
+            clearBtn.setVisible(true);
             clearInputText();
             clearItemLabel();
-            add_input_Display(true);
-            info_display(true);
-            idInfo.setVisible(false);
-            deleteBtn.setVisible(true);
+            info_display(false);
+            addBtn.setVisible(false);
+            add_input_Display(false);
+            inputName.setVisible(true);
+            searchBtn_Delete.setVisible(true);
+            updateBtn.setVisible(false);
 
         } else if (e.getSource() == deleteBtn) {
             System.out.println(idList.get(i));
