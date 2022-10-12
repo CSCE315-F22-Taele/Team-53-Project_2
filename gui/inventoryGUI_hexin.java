@@ -469,13 +469,14 @@ public class inventoryGUI_hexin implements ActionListener {
 
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
-                "DELETE FROM inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
-
+                "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
         updateStat.setString(1, nameList.get(index));
         updateStat.setInt(2, quantityList.get(index));
         updateStat.setDouble(3, costList.get(index));
         // FIX ME: RIGHT DATE FORMAT
-        updateStat.setDate(4, (java.sql.Date) expirationDateList.get(index));
+        java.sql.Date sqlDate = new java.sql.Date(expirationDateList.get(index).getTime());
+
+        updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
         updateStat.executeUpdate();
