@@ -328,6 +328,9 @@ public class inventoryGUI_hexin implements ActionListener {
 
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
+            // new cashierGUI();
+            // f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            
 
         } else if (e.getSource() == addBtn) {
             int id = Integer.parseInt(inputId.getText());
@@ -340,7 +343,8 @@ public class inventoryGUI_hexin implements ActionListener {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
-                error.printStackTrace();
+                //error.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Date incorrect format.");
             }
 
             idList.add(id);
