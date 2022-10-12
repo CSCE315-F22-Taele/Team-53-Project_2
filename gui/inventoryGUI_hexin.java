@@ -469,7 +469,6 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
-    // cost, vendor, expiration date
     public float[] get_cost(Connection conn, int inventory_size) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
@@ -493,6 +492,20 @@ public class inventoryGUI_hexin implements ActionListener {
 
         while (findInventory.next()) {
             temp[count] = findInventory.getDate("expirationdate ");
+            count++;
+        }
+        return temp;
+    }
+
+    public String[] get_vendor(Connection conn, int inventory_size) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory");
+        int count = 0; // Increments inventory array
+
+        String temp[] = new String[inventory_size];
+
+        while (findInventory.next()) {
+            temp[count] = findInventory.getString("vendor ");
             count++;
         }
         return temp;
