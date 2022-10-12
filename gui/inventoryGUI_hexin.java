@@ -484,6 +484,20 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
+    public Date[] get_expiration_date(Connection conn, int inventory_size) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory");
+        int count = 0; // Increments inventory array
+
+        Date temp[] = new Date[inventory_size];
+
+        while (findInventory.next()) {
+            temp[count] = findInventory.getDate("expirationdate ");
+            count++;
+        }
+        return temp;
+    }
+
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
