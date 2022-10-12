@@ -251,7 +251,7 @@ public class inventoryGUI_hexin implements ActionListener {
         itemId.setText(String.valueOf(idList.get(k)));
         itemName.setText(nameList.get(k));
         itemQuantity.setText(Integer.toString(quantityList.get(k)));
-        itemCost.setText(String.valueOf(costList.get(k)));
+        itemCost.setText(String.valueOf(costList.get(k))); 
         itemVendor.setText(vendorList.get(k));
         itemExpirationDate.setText(dateFormat.format(expirationDateList.get(k)));
         i = k;
@@ -578,14 +578,14 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
-    public ArrayList<Float> get_cost(Connection conn) throws SQLException {
+    public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
 
-        ArrayList<Float> temp = new ArrayList<Float>();
+        ArrayList<Double> temp = new ArrayList<Double>();
 
         while (findInventory.next()) {
-            temp.add(findInventory.getFloat("cost"));
+            temp.add(findInventory.getDouble("cost"));
         }
         return temp;
     }
