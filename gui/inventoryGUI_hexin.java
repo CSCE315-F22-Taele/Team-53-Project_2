@@ -1,7 +1,6 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.*;
 import java.sql.Connection;
@@ -13,13 +12,11 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import javax.swing.JOptionPane;
 
 public class inventoryGUI_hexin implements ActionListener {
 
     ////////// Declaration //////////
-
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
     JMenu viewMenu = new JMenu("View");
@@ -58,14 +55,14 @@ public class inventoryGUI_hexin implements ActionListener {
     ArrayList<String> nameList = new ArrayList<String>();
     ArrayList<Integer> quantityList = new ArrayList<Integer>();
     ArrayList<Date> expirationDateList = new ArrayList<Date>();
-    ArrayList<Float> costList = new ArrayList<Float>();
+    ArrayList<Double> costList = new ArrayList<Double>();
     ArrayList<String> vendorList = new ArrayList<String>();
 
     DateFormat dateFormat;
 
     // Add
     JButton addBtn = new JButton("Add");
-    JTextField inputId = new JTextField("");
+    // JTextField inputId = new JTextField("");
     JTextField inputName = new JTextField("");
     JTextField inputQuantity = new JTextField("");
     JTextField inputCost = new JTextField("");
@@ -85,8 +82,11 @@ public class inventoryGUI_hexin implements ActionListener {
     JMenuItem deleteItem = new JMenuItem("Delete");
     JButton deleteBtn = new JButton("Delete");
 
-    // Frame
+    // Layout Size
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     JFrame f = new JFrame();
+    int screenHeight = screenSize.height;
+    int screenWidth = screenSize.width;
 
     // Const Vars
     int i = 0;
@@ -119,7 +119,6 @@ public class inventoryGUI_hexin implements ActionListener {
         }
 
         ////////// Background //////////
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
         f.setSize(400, 400);
@@ -183,20 +182,20 @@ public class inventoryGUI_hexin implements ActionListener {
         f.add(itemVendor);
         f.add(clearBtn);
 
-        ////////// Logout //////////
+        ////////// Back to Cashier //////////
         backToCashier.addActionListener(this);
-        backToCashier.setBounds(300, 780, 200, 100);
+        backToCashier.setBounds((int)(screenWidth * 0.1), (int)(screenHeight * 0.7), 200, (int)(screenHeight * 0.1));
         f.add(backToCashier);
 
         // ADD Items
-        inputId.setBounds(730, 180, 160, 20);
+        //inputId.setBounds(730, 180, 160, 20);
         inputName.setBounds(730, 210, 160, 20);
         inputQuantity.setBounds(730, 240, 160, 20);
         inputCost.setBounds(730, 270, 160, 20);
         inputDate.setBounds(730, 300, 160, 20);
         inputVendor.setBounds(730, 330, 160, 20);
 
-        inputId.setVisible(false);
+        //inputId.setVisible(false);
         inputName.setVisible(false);
         inputQuantity.setVisible(false);
         inputCost.setVisible(false);
@@ -206,7 +205,7 @@ public class inventoryGUI_hexin implements ActionListener {
         addBtn.addActionListener(this);
         addBtn.setVisible(false);
         f.add(addBtn);
-        f.add(inputId);
+        //f.add(inputId);
         f.add(inputName);
         f.add(inputQuantity);
         f.add(inputCost);
@@ -239,7 +238,25 @@ public class inventoryGUI_hexin implements ActionListener {
         deleteBtn.addActionListener(this);
         deleteBtn.setBounds(910, 300, 100, 20);
         deleteBtn.setVisible(false);
+    }
 
+    public int generateId(){
+        if(idList.isEmpty()){
+            idList.add(0);
+            System.out.println("add 0");
+            return 0;
+        } else {
+            int id = 0;
+            for(int i = 0; i < idList.size(); ++i){
+                if(idList.get(i) > id){
+                    id = idList.get(i);
+                }
+            }
+            id += 1;
+            idList.add(id);
+            System.out.println("ID: " + id);
+            return id;
+        }
     }
 
     public void action(int k) {
@@ -265,7 +282,7 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public void add_input_Display(Boolean b) {
-        inputId.setVisible(b);
+        //inputId.setVisible(b);
         inputName.setVisible(b);
         inputQuantity.setVisible(b);
         inputCost.setVisible(b);
@@ -283,7 +300,7 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public void clearInputText() {
-        inputId.setText("");
+        //inputId.setText("");
         inputName.setText("");
         inputQuantity.setText("");
         inputCost.setText("");
@@ -291,97 +308,116 @@ public class inventoryGUI_hexin implements ActionListener {
         inputVendor.setText("");
     }
 
+    public void btnDisplay(boolean b){
+        addBtn.setVisible(b);
+        updateBtn.setVisible(b);
+        searchBtn_Update.setVisible(b);
+        searchBtn_Delete.setVisible(b);
+        deleteBtn.setVisible(b);
+    }
+
+    public boolean checkItemExit(String name){
+        for(int i = 0; i < nameList.size(); ++i){
+            if(name.equals(nameList.get(i))){
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void actionPerformed(ActionEvent e) {
         for (int h = 0; h < itemList.size(); ++h) {
             if (e.getSource() == itemList.get(h)) {
                 add_input_Display(false);
                 action(h);
-                // System.out.println(itemList.get(h).getText());
             }
-            searchBtn_Update.setVisible(false);
+            btnDisplay(false);
             ask_Name.setVisible(false);
-            addBtn.setVisible(false);
         }
+
         if (e.getSource() == addItem) {
+            btnDisplay(false);
             addBtn.setVisible(true);
             clearBtn.setVisible(true);
 
             ask_Name.setVisible(false);
-            searchBtn_Update.setVisible(false);
-            updateBtn.setVisible(false);
+            
 
             clearInputText();
             clearItemLabel();
             add_input_Display(true);
             info_display(true);
+            idInfo.setVisible(false);
 
         } else if (e.getSource() == clearBtn) {
             clearInputText();
             clearItemLabel();
             info_display(false);
             add_input_Display(false);
-            addBtn.setVisible(false);
-            clearBtn.setVisible(false);
-            searchBtn_Update.setVisible(false);
-            updateBtn.setVisible(false);
+            btnDisplay(false);
             ask_Name.setVisible(false);
 
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
-            // new cashierGUI();
-            // f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+
             
 
         } else if (e.getSource() == addBtn) {
-            int id = Integer.parseInt(inputId.getText());
+            
+            btnDisplay(false);
+            addBtn.setVisible(true);
+            
             String name = inputName.getText();
             int quantity = Integer.parseInt(inputQuantity.getText());
-            Float cost = Float.parseFloat(inputCost.getText());
+            Double cost = Double.parseDouble(inputCost.getText());
             Date expirationDate = null;
             String vendor = inputVendor.getText();
             try {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
-                //error.printStackTrace();
-                JOptionPane.showMessageDialog(null, "Date incorrect format.");
+                error.printStackTrace();
             }
-
-            idList.add(id);
-            nameList.add(name);
-            quantityList.add(quantity);
-            costList.add(cost);
-            expirationDateList.add(expirationDate);
-            vendorList.add(vendor);
-
-            try {
-                add_item(conn, id, name, quantity, cost, expirationDate, vendor);
-                JOptionPane.showMessageDialog(null, "Item added to Database.");
-            } catch (SQLException addException) {
-                JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
+            if(checkItemExit(name)){
+                JOptionPane.showMessageDialog(null, "Item already exists!");
+            } else {
+                int id = generateId();
+                idList.add(id);
+                nameList.add(name);
+                quantityList.add(quantity);
+                costList.add(cost);
+                expirationDateList.add(expirationDate);
+                vendorList.add(vendor);
+            
+                try {
+                    add_item(conn, id, name, quantity, cost, expirationDate, vendor);
+                    JOptionPane.showMessageDialog(null, "Item added to Database.");
+                } catch (SQLException addException) {
+                    JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
+                }
+                JMenuItem newItem = new JMenuItem(name);
+                newItem.addActionListener(this);
+                viewMenu.add(newItem);
+                itemList.add(newItem);
+                
             }
-            JMenuItem newItem = new JMenuItem(name);
-            newItem.addActionListener(this);
-            viewMenu.add(newItem);
-            itemList.add(newItem);
             clearInputText();
 
         } else if (e.getSource() == updateItem) {
+            btnDisplay(false);
             ask_Name.setVisible(true);
             clearBtn.setVisible(true);
             clearInputText();
             clearItemLabel();
             info_display(false);
-            addBtn.setVisible(false);
             add_input_Display(false);
             inputName.setVisible(true);
             searchBtn_Update.setVisible(true);
-            updateBtn.setVisible(false);
 
         } else if (e.getSource() == searchBtn_Update) {
-
+            btnDisplay(false);
             updateBtn.setVisible(true);
-            deleteBtn.setVisible(false);
+            
             String name = inputName.getText();
             i = -1;
             for (int h = 0; h < nameList.size(); ++h) {
@@ -390,26 +426,44 @@ public class inventoryGUI_hexin implements ActionListener {
                     break;
                 }
             }
-            addBtn.setVisible(false);
+
             clearInputText();
-            info_display(true);
-            add_input_Display(true);
-            inputId.setVisible(false);
-            ask_Name.setVisible(false);
+            if(i == -1){
+                btnDisplay(false);
+                ask_Name.setVisible(true);
+                clearBtn.setVisible(true);
+                clearInputText();
+                clearItemLabel();
+                info_display(false);
+                add_input_Display(false);
+                inputName.setVisible(true);
+                searchBtn_Update.setVisible(true);
+                JOptionPane.showMessageDialog(null, "Item doesn't exist!");
 
-            itemId.setText(String.valueOf(idList.get(i)));
-            inputName.setText(nameList.get(i));
-            inputQuantity.setText(String.valueOf(quantityList.get(i)));
-            inputCost.setText(String.valueOf(costList.get(i)));
+            } else {
+                info_display(true);
+                add_input_Display(true);
+                // inputId.setVisible(false);
+                ask_Name.setVisible(false);
+    
+                itemId.setText(String.valueOf(idList.get(i)));
+                inputName.setText(nameList.get(i));
+                inputQuantity.setText(String.valueOf(quantityList.get(i)));
+                inputCost.setText(String.valueOf(costList.get(i)));
+    
+                inputDate.setText(dateFormat.format(expirationDateList.get(i)));
+                inputVendor.setText(vendorList.get(i));
+            }
 
-            inputDate.setText(dateFormat.format(expirationDateList.get(i)));
-            inputVendor.setText(vendorList.get(i));
+            
+
 
         } else if (e.getSource() == searchBtn_Delete) {
+            btnDisplay(false);
             deleteBtn.setVisible(true);
-            updateBtn.setVisible(false);
             searchBtn_Delete.setVisible(false);
             String name = inputName.getText();
+            
             i = -1;
             for (int h = 0; h < nameList.size(); ++h) {
                 if (nameList.get(h).equals(name)) {
@@ -417,27 +471,44 @@ public class inventoryGUI_hexin implements ActionListener {
                     break;
                 }
             }
-            addBtn.setVisible(false);
             clearInputText();
-            info_display(true);
-            add_input_Display(false);
-            inputId.setVisible(false);
-            ask_Name.setVisible(false);
 
-            itemId.setText(String.valueOf(idList.get(i)));
-            itemName.setText(nameList.get(i));
-            itemQuantity.setText(String.valueOf(quantityList.get(i)));
-            itemCost.setText(String.valueOf(costList.get(i)));
+            if(i == -1){
+                btnDisplay(false);
+                ask_Name.setVisible(true);
+                clearBtn.setVisible(true);
+                clearItemLabel();
+                info_display(false);
+                addBtn.setVisible(false);
+                add_input_Display(false);
+                inputName.setVisible(true);
+                searchBtn_Delete.setVisible(true);
+                JOptionPane.showMessageDialog(null, "Item doesn't exist!");
 
-            itemExpirationDate.setText(dateFormat.format(expirationDateList.get(i)));
-            itemVendor.setText(vendorList.get(i));
+            } else {
+                info_display(true);
+                add_input_Display(false);
+                //inputId.setVisible(false);
+                ask_Name.setVisible(false);
+    
+                itemId.setText(String.valueOf(idList.get(i)));
+                itemName.setText(nameList.get(i));
+                itemQuantity.setText(String.valueOf(quantityList.get(i)));
+                itemCost.setText(String.valueOf(costList.get(i)));
+    
+                itemExpirationDate.setText(dateFormat.format(expirationDateList.get(i)));
+                itemVendor.setText(vendorList.get(i));
+            }
+
+
 
         } else if (e.getSource() == updateBtn) {
             // NOTE: MUST BE REMOVED: WE ARE NOT UPDATING PRIMARY KEY
             // idList.set(i, Integer.parseInt(inputId.getText()));
+            btnDisplay(false);
             nameList.set(i, inputName.getText());
             quantityList.set(i, Integer.parseInt(inputQuantity.getText()));
-            costList.set(i, Float.parseFloat(inputCost.getText()));
+            costList.set(i, Double.parseDouble(inputCost.getText()));
             Date expirationDate = null;
             try {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
@@ -458,13 +529,20 @@ public class inventoryGUI_hexin implements ActionListener {
                 // PRINT OUT. UPDATE UNSUCCESSFUL.
                 JOptionPane.showMessageDialog(null, "Update unsuccessful.");
             }
-            addBtn.setVisible(false);
             clearInputText();
-            updateBtn.setVisible(false);
+
+            btnDisplay(false);
+            ask_Name.setVisible(true);
+            clearBtn.setVisible(true);
+            clearInputText();
+            clearItemLabel();
+            info_display(false);
+            add_input_Display(false);
+            inputName.setVisible(true);
+            searchBtn_Update.setVisible(true);
 
         } else if (e.getSource() == deleteItem) {
-
-            deleteBtn.setVisible(false);
+            btnDisplay(false);
             ask_Name.setVisible(true);
             clearBtn.setVisible(true);
             clearInputText();
@@ -474,10 +552,9 @@ public class inventoryGUI_hexin implements ActionListener {
             add_input_Display(false);
             inputName.setVisible(true);
             searchBtn_Delete.setVisible(true);
-            updateBtn.setVisible(false);
 
         } else if (e.getSource() == deleteBtn) {
-            // System.out.println(idList.get(i));
+            btnDisplay(false);
             try {
                 delete_item(conn, idList.get(i));
                 JOptionPane.showMessageDialog(null, "Delete successful.");
@@ -493,8 +570,17 @@ public class inventoryGUI_hexin implements ActionListener {
             itemList.remove(i);
             viewMenu.remove(i);
             add_input_Display(false);
-            deleteBtn.setVisible(false);
-            // FIX ME: MAYBE WE CAN ADD A DELETED MESSAGE.
+
+            btnDisplay(false);
+            ask_Name.setVisible(true);
+            clearBtn.setVisible(true);
+            clearInputText();
+            clearItemLabel();
+            info_display(false);
+            addBtn.setVisible(false);
+            add_input_Display(false);
+            inputName.setVisible(true);
+            searchBtn_Delete.setVisible(true);
         }
     }
 
@@ -582,14 +668,14 @@ public class inventoryGUI_hexin implements ActionListener {
         return temp;
     }
 
-    public ArrayList<Float> get_cost(Connection conn) throws SQLException {
+    public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
 
-        ArrayList<Float> temp = new ArrayList<Float>();
+        ArrayList<Double> temp = new ArrayList<Double>();
 
         while (findInventory.next()) {
-            temp.add(findInventory.getFloat("cost"));
+            temp.add(findInventory.getDouble("cost"));
         }
         return temp;
     }
