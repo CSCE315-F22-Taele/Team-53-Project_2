@@ -25,7 +25,7 @@ public class inventoryGUI_hexin implements ActionListener {
     JMenu editMenu = new JMenu("Edit");
 
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
-    int inventory_id[];
+    Integer inventory_id[];
     String inventory_names[];
 
     // View
@@ -92,9 +92,12 @@ public class inventoryGUI_hexin implements ActionListener {
 
     inventoryGUI_hexin() {
 
-        // // ANNIE
+        
         try {
-            inventory_names = get_inventory_name(conn, get_inventory_size(conn));
+            int size = get_inventory_size(conn);
+            inventory_names = get_inventory_name(conn, size);
+            inventory_id = get_id(conn, size);
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -105,7 +108,7 @@ public class inventoryGUI_hexin implements ActionListener {
             nameList.add(inventory_names[i]);
         }
 
-        // Add the inventory items
+        // Add the inventory items to menu bar 
         for (int i = 0; i < inventory_names.length; i++) {
             System.out.println(inventory_names[i]);
             JMenuItem newItem = new JMenuItem(nameList.get(i));
@@ -435,6 +438,21 @@ public class inventoryGUI_hexin implements ActionListener {
         }
 
         return count;
+    }
+
+    public Integer[] get_id(Connection conn, int inventory_size) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory");
+        int count = 0; // Increments inventory array
+
+        Integer temp[] = new Integer[inventory_size];
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp[count] = findInventory.getInt("itemid");
+            count++;
+        }
+        return temp;
     }
 
     public String[] get_inventory_name(Connection conn, int inventory_size) throws SQLException {
