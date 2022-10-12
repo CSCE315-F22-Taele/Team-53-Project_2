@@ -96,10 +96,9 @@ public class inventoryGUI_hexin implements ActionListener {
         try {
             conn = connectionSet();
             // int size = get_inventory_size(conn);
-            System.out.println("enters");
+           
             nameList = get_inventory_name(conn);
             idList = get_id(conn);
-            System.out.println("enters");
             quantityList = get_quantity(conn);
 
         } catch (SQLException e) {
@@ -405,13 +404,13 @@ public class inventoryGUI_hexin implements ActionListener {
             expirationDateList.set(i, expirationDate);
             vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
-            // try {
-            // update_item(conn, i);
-            // JOptionPane.showMessageDialog(null, "Updated item.");
-            // } catch (SQLException errorUpdate) {
-            // PRINT OUT. UPDATE UNSUCCESSFUL.
-            // JOptionPane.showMessageDialog(null, "Update unsuccessful.");
-            // }
+            try {
+            update_item(conn, i);
+            JOptionPane.showMessageDialog(null, "Updated item.");
+            } catch (SQLException errorUpdate) {
+            //PRINT OUT. UPDATE UNSUCCESSFUL.
+            JOptionPane.showMessageDialog(null, "Update unsuccessful.");
+            }
             addBtn.setVisible(false);
             clearInputText();
             updateBtn.setVisible(false);
