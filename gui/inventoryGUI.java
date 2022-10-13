@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class inventoryGUI_hexin implements ActionListener {
+public class inventoryGUI implements ActionListener {
 
     ////////// Declaration //////////
 
@@ -91,7 +91,7 @@ public class inventoryGUI_hexin implements ActionListener {
     int i = 0;
     Connection conn;
 
-    inventoryGUI_hexin() {
+    inventoryGUI() {
 
         try {
             conn = connectionSet();
@@ -709,7 +709,7 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public static void main(String[] args) {
-        new inventoryGUI_hexin();
+        new inventoryGUI();
     }
 
 }
