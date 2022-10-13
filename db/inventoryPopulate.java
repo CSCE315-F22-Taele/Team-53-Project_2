@@ -3,6 +3,9 @@ package db;
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.List;
+
+import gui.dbSetup;
+
 import java.nio.file.*;
 import java.text.SimpleDateFormat;
 
