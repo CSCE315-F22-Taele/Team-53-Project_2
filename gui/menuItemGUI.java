@@ -288,7 +288,7 @@ public class menuItemGUI implements ActionListener {
                 nameList.add(name);
                 costList.add(cost);
                 try {
-                    add_item(conn,name, cost);
+                    add_item(conn, name, cost);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
                 } catch (SQLException addException) {
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
@@ -389,14 +389,12 @@ public class menuItemGUI implements ActionListener {
 
             itemList.get(i).setText(inputName.getText());
 
-            //FIX ME AFTER BACKEND DONE
-            // try {
-            //     update_item(conn, i);
-            //     JOptionPane.showMessageDialog(null, "Updated item.");
-            // } catch (SQLException errorUpdate) {
-            //     // PRINT OUT. UPDATE UNSUCCESSFUL.
-            //     JOptionPane.showMessageDialog(null, "Update unsuccessful.");
-            // }
+            try {
+                update_item(conn, nameList.get(i), i);
+                JOptionPane.showMessageDialog(null, "Updated item.");
+            } catch (SQLException errorUpdate) {
+                JOptionPane.showMessageDialog(null, "Update unsuccessful.");
+            }
 
             clearInputText();
 
@@ -426,12 +424,12 @@ public class menuItemGUI implements ActionListener {
             btnDisplay(false);
 
             // FIX ME AFTER BACKEDN DONE
-            // try {
-            //     delete_item(conn, idList.get(i));
-            //     JOptionPane.showMessageDialog(null, "Delete successful.");
-            // } catch (SQLException deleteException) {
-            //     JOptionPane.showMessageDialog(null, "Delete unsuccessful.");
-            // }
+            try {
+                delete_item(conn, nameList.get(i));
+                JOptionPane.showMessageDialog(null, "Delete successful.");
+            } catch (SQLException deleteException) {
+                JOptionPane.showMessageDialog(null, "Delete unsuccessful.");
+            }
             nameList.remove(i);
             costList.remove(i);
             itemList.remove(i);
@@ -461,29 +459,22 @@ public class menuItemGUI implements ActionListener {
         addStatement.executeUpdate();
     }
 
-    // FIXME: NOT DONE. DON'T RUN WILL FAIL
-    /* 
-    public void update_item(Connection conn, int index) throws SQLException {
+    public void update_item(Connection conn, String menu_item, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
-                "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
+                "UPDATE menucost SET menuitem=(?), cost=(?) WHERE menuitem = (?)");
 
         updateStat.setString(1, nameList.get(index));
-        updateStat.setInt(2, quantityList.get(index));
-        updateStat.setDouble(3, costList.get(index));
-        // FIX ME: RIGHT DATE FORMAT
-        java.sql.Date sqlDate = new java.sql.Date(expirationDateList.get(index).getTime());
-        updateStat.setDate(4, sqlDate);
-        updateStat.setString(5, vendorList.get(index));
-        updateStat.setInt(6, idList.get(index));
+        updateStat.setDouble(2, costList.get(index));
+        updateStat.setString(3, menu_item);
         updateStat.executeUpdate();
     }
 
-    public void delete_item(Connection conn, int id) throws SQLException {
+    public void delete_item(Connection conn, String menu_name) throws SQLException {
         PreparedStatement delStatement = conn.prepareStatement("DELETE FROM menucost WHERE menuitem=(?)");
-        delStatement.setInt(1, id);
+        delStatement.setString(1, menu_name);
         delStatement.executeUpdate();
     }
-*/
+
     // WILL GET MENU ITEM NAMES
     public ArrayList<String> get_menu_item(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
