@@ -58,6 +58,7 @@ public class inventoryPerOrderGUI implements ActionListener {
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
     Connection conn;
+    int orderid; 
 
     // Item's index in buttonList
     int btnIndex = -1;
@@ -77,8 +78,9 @@ public class inventoryPerOrderGUI implements ActionListener {
     int height = screenSize.height;
     int width = screenSize.width;
 
-    inventoryPerOrderGUI() {
+    inventoryPerOrderGUI(int id) {
 
+        orderid = id; 
         try {
             conn = connectionSet();
             nameList = get_inventory_name(conn);
@@ -86,7 +88,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
         ////////// Frame setting //////////
@@ -223,7 +225,7 @@ public class inventoryPerOrderGUI implements ActionListener {
                     update_item(conn, indexList.get(k));
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Update of item inventory failed. ");
                 }
             }
 
@@ -286,15 +288,13 @@ public class inventoryPerOrderGUI implements ActionListener {
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
                     my.user, my.pswd);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, "Database connection failed.");
         }
 
         return conn;
     }
 
     public static void main(String[] args) {
-        new inventoryPerOrderGUI();
+        new inventoryPerOrderGUI(220905001);
     }
 }

@@ -32,7 +32,7 @@ public class checkoutGUI implements ActionListener{
     int employeeid; 
     int orderid;
 
-    public checkoutGUI(int order, double price, int id){
+    public checkoutGUI( int order, double price, int id){
         conn = connectionSet();
         orderid= order;
         amount = price;
@@ -153,7 +153,7 @@ public class checkoutGUI implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Cash payment not accepted");
             }
             //FIX ME: ADD CASHIER GUI
-            new cashierGUI();
+            new cashierGUI(employeeid);
             
         } else if (e.getSource() == cardButton) {
             Random rd = new Random();
@@ -165,7 +165,7 @@ public class checkoutGUI implements ActionListener{
             catch(Exception card){
                 JOptionPane.showMessageDialog(null, "Card payment not accepted");
             }
-            new cashierGUI();
+            new cashierGUI(employeeid);
             
             
         } else if (e.getSource() == ddButton) {
@@ -177,7 +177,7 @@ public class checkoutGUI implements ActionListener{
             catch(Exception dd){
                 JOptionPane.showMessageDialog(null, "Dining Dollars payment not accepted");
             }
-            new cashierGUI();
+            new cashierGUI(employeeid);
             
         } else if (e.getSource() == mealswipeButton) {
             int uin = getRandomValue(100000000, 900000000);
@@ -188,7 +188,7 @@ public class checkoutGUI implements ActionListener{
             catch(Exception dd){
                 JOptionPane.showMessageDialog(null, "Meal Swipes payment not accepted");
             }
-            new cashierGUI();
+            new cashierGUI(employeeid);
             
         }else if (e.getSource() == logoutButton) {
             new loginGUI(); 
@@ -236,7 +236,6 @@ public class checkoutGUI implements ActionListener{
           
         return conn;
     }
-    
 
     public static void main(String args[]) {
         

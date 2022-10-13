@@ -120,11 +120,10 @@ public class loginGUI implements ActionListener {
             if (checkPassword(passCode)) {
                 // If yes, go directly to cashierGUI
                 
-                boolean manager = is_manager(passCode);
-                openWindow openPOS= new openWindow(passCode, manager); 
+                //openWindow openPOS= new openWindow(passCode, manager); 
                 //openPOS.set_employeeid();
                 
-                //new cashierGUI();
+                new cashierGUI(passCode);
                 //newGui.get_employee(passCode);
                 
                 
@@ -142,24 +141,7 @@ public class loginGUI implements ActionListener {
         }
     }
 
-    public boolean is_manager(int passCode){
-        Connection conn = connectionSet();
-        boolean value = false;
-        try {
-            PreparedStatement employeeCheck = conn
-                    .prepareStatement("SELECT ismanager FROM employee WHERE employeeid =(?)");
-            employeeCheck.setInt(1, passCode);
-            ResultSet employees = employeeCheck.executeQuery();
-
-            while (employees.next()) {
-                value = employees.getBoolean("ismanager");
-            }
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Database.");
-        }
-        return value; 
-    }
-
+    
     public boolean checkPassword(int password) {
         Connection conn = connectionSet();
         boolean value = false;
