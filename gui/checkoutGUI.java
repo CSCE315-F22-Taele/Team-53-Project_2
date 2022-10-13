@@ -135,8 +135,9 @@ public class checkoutGUI implements ActionListener{
         editButton.addActionListener(this);
 
         f.add(receiptPanel);
-    
-        f.setSize(screenSize.width, screenSize.height);
+            
+        f.setSize(1400, 1600);
+        
         f.setLayout(null);
         f.setVisible(true);
     }
@@ -152,8 +153,9 @@ public class checkoutGUI implements ActionListener{
             catch(Exception cash){
                 JOptionPane.showMessageDialog(null, "Cash payment not accepted");
             }
-            //FIX ME: ADD CASHIER GUI
+            
             new cashierGUI(employeeid);
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             
         } else if (e.getSource() == cardButton) {
             Random rd = new Random();
@@ -166,6 +168,7 @@ public class checkoutGUI implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Card payment not accepted");
             }
             new cashierGUI(employeeid);
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             
             
         } else if (e.getSource() == ddButton) {
@@ -178,6 +181,7 @@ public class checkoutGUI implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Dining Dollars payment not accepted");
             }
             new cashierGUI(employeeid);
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             
         } else if (e.getSource() == mealswipeButton) {
             int uin = getRandomValue(100000000, 900000000);
@@ -189,7 +193,8 @@ public class checkoutGUI implements ActionListener{
                 JOptionPane.showMessageDialog(null, "Meal Swipes payment not accepted");
             }
             new cashierGUI(employeeid);
-            
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+
         }else if (e.getSource() == logoutButton) {
             new loginGUI(); 
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));

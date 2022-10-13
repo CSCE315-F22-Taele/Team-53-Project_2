@@ -85,7 +85,7 @@ public class loginGUI implements ActionListener {
         f.add(btn10);
         f.add(title);
 
-        f.setSize(400, 400);
+        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
         

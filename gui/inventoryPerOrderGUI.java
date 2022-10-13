@@ -95,7 +95,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
-        f.setSize(400, 400);
+        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
         title.setBounds(30, 5, 200, 60);

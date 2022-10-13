@@ -152,10 +152,10 @@ public class cashierGUI implements ActionListener {
         
         try{
             conn = connectionSet();
-            // priceArr = priceArr();
             menuArr = get_menu(conn);
             employeeid = id; 
             is_manager = is_manager( conn, employeeid);
+
             
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database operations failed.");
@@ -213,12 +213,11 @@ public class cashierGUI implements ActionListener {
         editBtn.addActionListener(this);
 
         ////////// Welcome Area //////////
-        //FIX ME: GET THIS TO WORK BASED OFF THE EMPLOYEE ID BASED ON THE LOGIN
-        // TODO: Update after db finished
+        
         
         String userName = get_employee_name(employeeid);
         JLabel weclomeTitle = new JLabel("Welcome " + userName);
-        weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 300, 50);
+        weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 400, 50);
         weclomeTitle.setFont(new Font("Arial", Font.PLAIN, 30));
         f.add(weclomeTitle);
 
@@ -230,8 +229,11 @@ public class cashierGUI implements ActionListener {
         // logoutBtn.setVerticalAlignment(JButton.CENTER);
         // logoutBtn.setHorizontalAlignment(JButton.CENTER);
         logoutPanel.add(logoutBtn);
-        logoutPanel.add(inventoryBtn);
-        logoutPanel.add(editBtn);
+
+        if( is_manager){
+            logoutPanel.add(inventoryBtn);
+            logoutPanel.add(editBtn);
+        }
         f.add(logoutPanel);
 
     
@@ -274,7 +276,7 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Down);
 
 
-        f.setSize(400, 400);
+        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
     }
@@ -289,82 +291,7 @@ public class cashierGUI implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        // if (e.getSource() == btn1) {
-        //     // l1.setBounds(1000, 60 + height, 100, 50); --> hardcoded
-        //     l1.setBounds(item_width, 140, 100, 30);
-        //     inputArr[0].setBounds(quantity_width, 140, 100, 30);
-        //     // btn1.setEnabled(false); -- ONLY ALLOW TO BE CLICKED ONCE
-        //     gyroClick++;
-        //     input_1.setText(Integer.toString(gyroClick));
-        //     totalPrice += priceArr[0] * gyroClick;
-        //     // TESTING
-        //     // new inventoryPerOrder();
-
-        // } else if (e.getSource() == btn2) {
-        //     l2.setBounds(item_width, 180, 100, 30);
-        //     inputArr[1].setBounds(quantity_width, 180, 100, 30);
-        //     bowlClick++;
-        //     input_2.setText(Integer.toString(bowlClick));
-        //     totalPrice += priceArr[1] * bowlClick;
-
-        // } else if (e.getSource() == btn3) {
-        //     l3.setBounds(item_width, 220, 100, 30);
-        //     inputArr[2].setBounds(quantity_width, 220, 100, 30);
-        //     falafelClick++;
-        //     input_3.setText(Integer.toString(falafelClick));
-        //     totalPrice += priceArr[3] * falafelClick;
-
-        // } else if (e.getSource() == btn4) {
-        //     l4.setBounds(item_width, 260, 160, 30);
-        //     inputArr[3].setBounds(quantity_width, 260, 100, 30);
-        //     pitaAndHumusClick++;
-        //     input_4.setText(Integer.toString(pitaAndHumusClick));
-        //     totalPrice += priceArr[2] * pitaAndHumusClick;
-
-        // } else if (e.getSource() == btn5) {
-        //     l5.setBounds(item_width, 300, 100, 30);
-        //     inputArr[4].setBounds(quantity_width, 300, 100, 30);
-        //     extraChickenClick++;
-        //     input_5.setText(Integer.toString(extraChickenClick));
-        //     totalPrice += priceArr[6] * extraChickenClick;
-
-        // } else if (e.getSource() == btn6) {
-        //     l6.setBounds(item_width, 340, 100, 30);
-        //     inputArr[5].setBounds(quantity_width, 340, 100, 30);
-        //     extraHarissaClick++;
-        //     input_6.setText(Integer.toString(extraHarissaClick));
-        //     totalPrice += priceArr[4] * extraHarissaClick;
-
-        // } else if (e.getSource() == btn7) {
-        //     l7.setBounds(item_width, 380, 100, 30);
-        //     inputArr[6].setBounds(quantity_width, 380, 100, 30);
-        //     extraMeatballClick++;
-        //     input_7.setText(Integer.toString(extraMeatballClick));
-        //     totalPrice += priceArr[6] * extraMeatballClick;
-
-        // } else if (e.getSource() == btn8) {
-        //     l8.setBounds(item_width, 420, 180, 30);
-        //     inputArr[7].setBounds(quantity_width, 420, 100, 30);
-        //     extraTzatzikiSauceClick++;
-        //     input_8.setText(Integer.toString(extraTzatzikiSauceClick));
-        //     totalPrice += priceArr[4] * extraTzatzikiSauceClick;
-
-        // } else if (e.getSource() == btn9) {
-        //     l9.setBounds(item_width, 460, 160, 30);
-        //     inputArr[8].setBounds(quantity_width, 460, 100, 30);
-        //     extraVinegarClick++;
-        //     input_9.setText(Integer.toString(extraVinegarClick));
-        //     totalPrice += priceArr[4] * extraVinegarClick;
-
-        // } else if (e.getSource() == btn10) {
-        //     l10.setBounds(item_width, 500, 100, 30);
-        //     inputArr[9].setBounds(quantity_width, 500, 100, 30);
-        //     drinkClick++;
-        //     input_10.setText(Integer.toString(drinkClick));
-        //     totalPrice += priceArr[5] * drinkClick;
-
-        // } else 
-        
+ 
         if (e.getSource() == checkoutBtn) {
             for (int i = 0; i < 10; ++i) {
                 if (inputArr[i].getText() != "") {
@@ -372,6 +299,7 @@ public class cashierGUI implements ActionListener {
                 }
             }
             
+            insertOrder(); 
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
            
@@ -392,11 +320,11 @@ public class cashierGUI implements ActionListener {
 
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
-        // height += 70; --> Hardcoded height, can fix later
 
         // update receipt
         for(int i = 0; i < menu_buttons.size(); ++i){
             if(e.getSource() == menu_buttons.get(i)){
+                new inventoryPerOrderGUI(orderid);
                 String name = menu_buttons.get(i).getText();
                 btnIndex = i;
                 nameOccursIndex = checkNameList(name);
@@ -506,11 +434,11 @@ public class cashierGUI implements ActionListener {
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         String stringVal = formatTime.format(calendar.getTime());
-        Time time = java.sql.Time.valueOf( stringVal ); //
+        Time time = java.sql.Time.valueOf( stringVal ); 
         
 
         PreparedStatement statement = conn.prepareStatement(
-              "INSERT INTO ordering(orderid , timeoforder , amount , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink , inventoryused ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?,?)");
+              "INSERT INTO ordering(orderid , timeoforder , amount , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink  ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?)");
 
           
           int protein = extraChickenClick + extraMeatballClick;
@@ -528,10 +456,7 @@ public class cashierGUI implements ActionListener {
           statement.setInt(9, dressing);
           statement.setInt(10, drinkClick);
 
-        // FIX ME: MUST GET THIS FROM POPUPS. ALSO MUST KEEP inventory as global version. 
-        Array inventoryused = conn.createArrayOf("INT", inventory);
-        statement.setArray(11, inventoryused);
-            
+        
           statement.executeUpdate();
         }
         catch (Exception e) {
@@ -579,28 +504,6 @@ public class cashierGUI implements ActionListener {
         return (double) ordertotal;
     }
 
-
-    // hardcoded price, I added this back to test
-    // public double[] priceArr() throws SQLException{
-    //     Connection conn = connectionSet();
-    //     double items[] = new double[10];
-    //     double cost;
-    //     int i =0;
-    //     try{
-    //         PreparedStatement itemsStat = conn.prepareStatement(
-    //             "SELECT cost FROM menucost");
-    //         ResultSet itemInfo = itemsStat.executeQuery();
-            
-    //         while (itemInfo.next()) {
-    //             cost = itemInfo.getDouble("cost");
-    //             items[i] = cost; 
-    //             i++;
-    //         }
-    //     } catch (Exception e) {
-    //         JOptionPane.showMessageDialog(null, "cost not retreived.");
-    //     }
-    //     return items;
-    // }
 
     // dynamically get price
     public ArrayList<Double> get_price(Connection conn) throws SQLException {
