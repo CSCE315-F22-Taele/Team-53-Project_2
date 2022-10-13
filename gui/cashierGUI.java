@@ -6,8 +6,7 @@ import java.sql.DriverManager;
 import java.awt.event.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;  
-import java.time.LocalDateTime;  
-import javax.swing.JOptionPane;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -55,6 +54,8 @@ public class cashierGUI implements ActionListener {
     JButton btn10;
     JButton logoutBtn;
     JButton checkoutBtn;
+    JButton inventoryBtn;
+    JButton editBtn;
     JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
     private JLabel labelEmployee; 
@@ -164,7 +165,7 @@ public class cashierGUI implements ActionListener {
         
         // Button 11
         logoutBtn = new JButton("LOGOUT");
-        logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 300, 80);
+        logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
         logoutBtn.setBackground(Color.LIGHT_GRAY);
         logoutBtn.addActionListener(this);
 
@@ -172,6 +173,18 @@ public class cashierGUI implements ActionListener {
         checkoutBtn = new JButton("CHECKOUT");
         checkoutBtn.setBackground(Color.LIGHT_GRAY);
         checkoutBtn.addActionListener(this);
+
+        // Button 13
+        inventoryBtn = new JButton("INVENTORY");
+        inventoryBtn.setBounds((int) (width * 0.27), (int) (height * 0.8), 100, 80);
+        inventoryBtn.setBackground(Color.LIGHT_GRAY);
+        inventoryBtn.addActionListener(this);
+
+        // Button 14
+        editBtn = new JButton("EDIT MENU");
+        editBtn.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
+        editBtn.setBackground(Color.LIGHT_GRAY);
+        editBtn.addActionListener(this);
 
         ////////// Welcome Area //////////
         //FIX ME: GET THIS TO WORK BASED OFF THE EMPLOYEE ID BASED ON THE LOGIN
@@ -184,13 +197,15 @@ public class cashierGUI implements ActionListener {
         f.add(weclomeTitle);
 
         ////////// Logout Area //////////
-        JPanel logoutPanel = new JPanel();
+        JPanel logoutPanel = new JPanel(new GridLayout(1,3));
         logoutPanel.setBackground(Color.pink);
         logoutPanel.setBounds((int) (width * 0.06), (int) ((height * 0.82)), (int) (width * 0.6), (int) (height * 0.1));
-        logoutPanel.setLayout(new BorderLayout());
-        logoutBtn.setVerticalAlignment(JButton.CENTER);
-        logoutBtn.setHorizontalAlignment(JButton.CENTER);
+        // logoutPanel.setLayout(new BorderLayout());
+        // logoutBtn.setVerticalAlignment(JButton.CENTER);
+        // logoutBtn.setHorizontalAlignment(JButton.CENTER);
         logoutPanel.add(logoutBtn);
+        logoutPanel.add(inventoryBtn);
+        logoutPanel.add(editBtn);
         f.add(logoutPanel);
 
         ////////// Receipt Area //////////
