@@ -351,6 +351,7 @@ public class inventoryGUI_hexin implements ActionListener {
             add_input_Display(false);
             btnDisplay(false);
             ask_Name.setVisible(false);
+            clearBtn.setVisible(false);
 
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
