@@ -28,7 +28,6 @@ public class openWindow {
 
         set_employeeid(passCode);
         cashierGUI cashier = new cashierGUI(manager);
-        //new checkoutGUI(12, 2.34, passCode);
         cashier.set_employeeid(employeeid);
 
         
@@ -41,6 +40,6 @@ public class openWindow {
     }
 
     public static void main(String args[]){
-        new openWindow(0);
+        new openWindow(0, false);
     }
 }
