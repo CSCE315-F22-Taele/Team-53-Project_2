@@ -2,6 +2,9 @@ package db;
 
 import java.sql.*;
 import java.util.List;
+
+import gui.dbSetup;
+
 import java.nio.file.*;
 
 public class employeesPopulate {
