@@ -30,23 +30,12 @@ public class menuItemGUI implements ActionListener {
     String inventory_names[];
 
     // View
-    JLabel idInfo = new JLabel("Item ID: ");
-    JLabel itemId = new JLabel("");
 
     JLabel nameInfo = new JLabel("Item Name: ");
     JLabel itemName = new JLabel("");
 
-    JLabel quantityInfo = new JLabel("Quantity: ");
-    JLabel itemQuantity = new JLabel("");
-
     JLabel costInfo = new JLabel("Cost: ");
     JLabel itemCost = new JLabel("");
-
-    JLabel expirationInfo = new JLabel("Expiration Date: ");
-    JLabel itemExpirationDate = new JLabel("");
-
-    JLabel vendorInfo = new JLabel("Vendor: ");
-    JLabel itemVendor = new JLabel("");
 
     JButton clearBtn = new JButton("Clear");
 
@@ -54,22 +43,16 @@ public class menuItemGUI implements ActionListener {
     JButton backToCashier = new JButton("Back To Cashier");
 
     // Store data
-    ArrayList<Integer> idList = new ArrayList<Integer>();
     ArrayList<String> nameList = new ArrayList<String>();
-    ArrayList<Integer> quantityList = new ArrayList<Integer>();
-    ArrayList<Date> expirationDateList = new ArrayList<Date>();
     ArrayList<Double> costList = new ArrayList<Double>();
-    ArrayList<String> vendorList = new ArrayList<String>();
 
     DateFormat dateFormat;
 
     // Add
     JButton addBtn = new JButton("Add");
     JTextField inputName = new JTextField("");
-    JTextField inputQuantity = new JTextField("");
     JTextField inputCost = new JTextField("");
-    JTextField inputDate = new JTextField("");
-    JTextField inputVendor = new JTextField("");
+
     ArrayList<JTextField> inputList = new ArrayList<JTextField>();
     JMenuItem addItem = new JMenuItem("Add");
 
@@ -96,12 +79,8 @@ public class menuItemGUI implements ActionListener {
         try {
             conn = connectionSet();
             // int size = get_inventory_size(conn);
-            nameList = get_inventory_name(conn);
-            idList = get_id(conn);
-            quantityList = get_quantity(conn);
+            nameList = get_menu_item(conn);
             costList = get_cost(conn);
-            expirationDateList = get_expiration_date(conn);
-            vendorList = get_vendor(conn);
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -142,23 +121,11 @@ public class menuItemGUI implements ActionListener {
 
         ////////// Data Output Area for each inventory item //////////
 
-        idInfo.setBounds(620, 180, 80, 20);
-        itemId.setBounds(730, 180, 160, 20);
-
         nameInfo.setBounds(620, 210, 80, 20);
         itemName.setBounds(730, 210, 160, 20);
 
-        quantityInfo.setBounds(620, 240, 80, 20);
-        itemQuantity.setBounds(730, 240, 80, 20);
-
         costInfo.setBounds(620, 270, 80, 20);
         itemCost.setBounds(730, 270, 80, 20);
-
-        expirationInfo.setBounds(620, 300, 160, 20);
-        itemExpirationDate.setBounds(730, 300, 160, 20);
-
-        vendorInfo.setBounds(620, 330, 80, 20);
-        itemVendor.setBounds(730, 330, 160, 20);
 
         // Hide before user clicks view
         info_display(false);
@@ -170,18 +137,12 @@ public class menuItemGUI implements ActionListener {
         clearBtn.addActionListener(this);
         clearBtn.setVisible(false);
 
-        f.add(idInfo);
-        f.add(itemId);
         f.add(itemName);
         f.add(nameInfo);
-        f.add(quantityInfo);
-        f.add(itemQuantity);
+
         f.add(costInfo);
         f.add(itemCost);
-        f.add(itemExpirationDate);
-        f.add(expirationInfo);
-        f.add(vendorInfo);
-        f.add(itemVendor);
+
         f.add(clearBtn);
 
         ////////// Logout //////////
@@ -192,25 +153,16 @@ public class menuItemGUI implements ActionListener {
 
         // ADD Items
         inputName.setBounds(730, 210, 160, 20);
-        inputQuantity.setBounds(730, 240, 160, 20);
         inputCost.setBounds(730, 270, 160, 20);
-        inputDate.setBounds(730, 300, 160, 20);
-        inputVendor.setBounds(730, 330, 160, 20);
 
         inputName.setVisible(false);
-        inputQuantity.setVisible(false);
         inputCost.setVisible(false);
-        inputDate.setVisible(false);
-        inputVendor.setVisible(false);
 
         addBtn.addActionListener(this);
         addBtn.setVisible(false);
         f.add(addBtn);
         f.add(inputName);
-        f.add(inputQuantity);
         f.add(inputCost);
-        f.add(inputDate);
-        f.add(inputVendor);
 
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -242,12 +194,8 @@ public class menuItemGUI implements ActionListener {
     }
 
     public void action(int k) {
-        itemId.setText(String.valueOf(idList.get(k)));
         itemName.setText(nameList.get(k));
-        itemQuantity.setText(Integer.toString(quantityList.get(k)));
         itemCost.setText(String.valueOf(costList.get(k)));
-        itemVendor.setText(vendorList.get(k));
-        itemExpirationDate.setText(dateFormat.format(expirationDateList.get(k)));
         i = k;
 
         info_display(true);
@@ -255,37 +203,23 @@ public class menuItemGUI implements ActionListener {
     }
 
     public void info_display(Boolean b) {
-        idInfo.setVisible(b);
         nameInfo.setVisible(b);
-        quantityInfo.setVisible(b);
         costInfo.setVisible(b);
-        expirationInfo.setVisible(b);
-        vendorInfo.setVisible(b);
     }
 
     public void add_input_Display(Boolean b) {
         inputName.setVisible(b);
-        inputQuantity.setVisible(b);
         inputCost.setVisible(b);
-        inputDate.setVisible(b);
-        inputVendor.setVisible(b);
     }
 
     public void clearItemLabel() {
-        itemId.setText("");
         itemName.setText("");
-        itemQuantity.setText("");
         itemCost.setText("");
-        itemExpirationDate.setText("");
-        itemVendor.setText("");
     }
 
     public void clearInputText() {
         inputName.setText("");
-        inputQuantity.setText("");
         inputCost.setText("");
-        inputDate.setText("");
-        inputVendor.setText("");
     }
 
     public void btnDisplay(boolean b) {
@@ -303,23 +237,6 @@ public class menuItemGUI implements ActionListener {
             }
         }
         return false;
-    }
-
-    public int generateId() {
-        if (idList.isEmpty()) {
-            idList.add(0);
-            return 0;
-        } else {
-            int id = 0;
-            for (int i = 0; i < idList.size(); ++i) {
-                if (idList.get(i) > id) {
-                    id = idList.get(i);
-                }
-            }
-            id += 1;
-            idList.add(id);
-            return id;
-        }
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -343,7 +260,6 @@ public class menuItemGUI implements ActionListener {
             clearItemLabel();
             add_input_Display(true);
             info_display(true);
-            idInfo.setVisible(false);
 
         } else if (e.getSource() == clearBtn) {
             clearInputText();
@@ -364,30 +280,15 @@ public class menuItemGUI implements ActionListener {
             addBtn.setVisible(true);
 
             String name = inputName.getText();
-            int quantity = Integer.parseInt(inputQuantity.getText());
             Double cost = Double.parseDouble(inputCost.getText());
-            Date expirationDate = null;
-            String vendor = inputVendor.getText();
-            try {
-                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
-            } catch (ParseException error) {
-                // TODO Auto-generated catch block
-                // error.printStackTrace();
-            }
 
             if (checkItemExit(name)) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
-                int id = generateId();
-                idList.add(id);
                 nameList.add(name);
-                quantityList.add(quantity);
                 costList.add(cost);
-                expirationDateList.add(expirationDate);
-                vendorList.add(vendor);
-
                 try {
-                    add_item(conn, id, name, quantity, cost, expirationDate, vendor);
+                    add_item(conn,name, cost);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
                 } catch (SQLException addException) {
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
@@ -440,13 +341,8 @@ public class menuItemGUI implements ActionListener {
                 add_input_Display(true);
                 ask_Name.setVisible(false);
 
-                itemId.setText(String.valueOf(idList.get(i)));
                 inputName.setText(nameList.get(i));
-                inputQuantity.setText(String.valueOf(quantityList.get(i)));
                 inputCost.setText(String.valueOf(costList.get(i)));
-
-                inputDate.setText(dateFormat.format(expirationDateList.get(i)));
-                inputVendor.setText(vendorList.get(i));
             }
 
         } else if (e.getSource() == searchBtn_Delete) {
@@ -481,41 +377,27 @@ public class menuItemGUI implements ActionListener {
                 add_input_Display(false);
                 ask_Name.setVisible(false);
 
-                itemId.setText(String.valueOf(idList.get(i)));
                 itemName.setText(nameList.get(i));
-                itemQuantity.setText(String.valueOf(quantityList.get(i)));
                 itemCost.setText(String.valueOf(costList.get(i)));
-
-                itemExpirationDate.setText(dateFormat.format(expirationDateList.get(i)));
-                itemVendor.setText(vendorList.get(i));
             }
 
         } else if (e.getSource() == updateBtn) {
             // NOTE: MUST BE REMOVED: WE ARE NOT UPDATING PRIMARY KEY
             btnDisplay(false);
             nameList.set(i, inputName.getText());
-            quantityList.set(i, Integer.parseInt(inputQuantity.getText()));
             costList.set(i, Double.parseDouble(inputCost.getText()));
-            Date expirationDate = null;
-            try {
-                expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
-            } catch (ParseException error) {
-                // TODO Auto-generated catch block
-                error.printStackTrace();
-            }
 
-            expirationDateList.set(i, expirationDate);
-
-            vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
 
-            try {
-                update_item(conn, i);
-                JOptionPane.showMessageDialog(null, "Updated item.");
-            } catch (SQLException errorUpdate) {
-                // PRINT OUT. UPDATE UNSUCCESSFUL.
-                JOptionPane.showMessageDialog(null, "Update unsuccessful.");
-            }
+            //FIX ME AFTER BACKEND DONE
+            // try {
+            //     update_item(conn, i);
+            //     JOptionPane.showMessageDialog(null, "Updated item.");
+            // } catch (SQLException errorUpdate) {
+            //     // PRINT OUT. UPDATE UNSUCCESSFUL.
+            //     JOptionPane.showMessageDialog(null, "Update unsuccessful.");
+            // }
+
             clearInputText();
 
             btnDisplay(false);
@@ -542,18 +424,16 @@ public class menuItemGUI implements ActionListener {
 
         } else if (e.getSource() == deleteBtn) {
             btnDisplay(false);
-            try {
-                delete_item(conn, idList.get(i));
-                JOptionPane.showMessageDialog(null, "Delete successful.");
-            } catch (SQLException deleteException) {
-                JOptionPane.showMessageDialog(null, "Delete unsuccessful.");
-            }
-            idList.remove(i);
+
+            // FIX ME AFTER BACKEDN DONE
+            // try {
+            //     delete_item(conn, idList.get(i));
+            //     JOptionPane.showMessageDialog(null, "Delete successful.");
+            // } catch (SQLException deleteException) {
+            //     JOptionPane.showMessageDialog(null, "Delete unsuccessful.");
+            // }
             nameList.remove(i);
-            quantityList.remove(i);
             costList.remove(i);
-            expirationDateList.remove(i);
-            vendorList.remove(i);
             itemList.remove(i);
             viewMenu.remove(i);
             add_input_Display(false);
@@ -582,6 +462,7 @@ public class menuItemGUI implements ActionListener {
     }
 
     // FIXME: NOT DONE. DON'T RUN WILL FAIL
+    /* 
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
                 "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
@@ -602,7 +483,7 @@ public class menuItemGUI implements ActionListener {
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
-
+*/
     // WILL GET MENU ITEM NAMES
     public ArrayList<String> get_menu_item(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
