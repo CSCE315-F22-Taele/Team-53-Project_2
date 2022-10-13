@@ -273,7 +273,7 @@ public class menuItemGUI implements ActionListener {
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
             // new cashierGUI();
-            // f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);

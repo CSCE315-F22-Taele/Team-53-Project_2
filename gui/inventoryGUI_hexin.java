@@ -186,7 +186,8 @@ public class inventoryGUI_hexin implements ActionListener {
 
         ////////// Logout //////////
         backToCashier.addActionListener(this);
-        backToCashier.setBounds((int)(screenWidth * 0.06), (int)(screenHeight* 0.8), (int)(screenWidth * 0.1), (int)(screenHeight * 0.05));
+        backToCashier.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
+                (int) (screenHeight * 0.05));
         f.add(backToCashier);
 
         // ADD Items
@@ -287,7 +288,7 @@ public class inventoryGUI_hexin implements ActionListener {
         inputVendor.setText("");
     }
 
-    public void btnDisplay(boolean b){
+    public void btnDisplay(boolean b) {
         addBtn.setVisible(b);
         updateBtn.setVisible(b);
         searchBtn_Update.setVisible(b);
@@ -295,23 +296,23 @@ public class inventoryGUI_hexin implements ActionListener {
         deleteBtn.setVisible(b);
     }
 
-    public boolean checkItemExit(String name){
-        for(int i = 0; i < nameList.size(); ++i){
-            if(name.equals(nameList.get(i))){
+    public boolean checkItemExit(String name) {
+        for (int i = 0; i < nameList.size(); ++i) {
+            if (name.equals(nameList.get(i))) {
                 return true;
             }
         }
         return false;
     }
 
-    public int generateId(){
-        if(idList.isEmpty()){
+    public int generateId() {
+        if (idList.isEmpty()) {
             idList.add(0);
             return 0;
         } else {
             int id = 0;
-            for(int i = 0; i < idList.size(); ++i){
-                if(idList.get(i) > id){
+            for (int i = 0; i < idList.size(); ++i) {
+                if (idList.get(i) > id) {
                     id = idList.get(i);
                 }
             }
@@ -337,7 +338,7 @@ public class inventoryGUI_hexin implements ActionListener {
             clearBtn.setVisible(true);
 
             ask_Name.setVisible(false);
-            
+
             clearInputText();
             clearItemLabel();
             add_input_Display(true);
@@ -356,13 +357,12 @@ public class inventoryGUI_hexin implements ActionListener {
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
             // new cashierGUI();
-            // f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-            
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);
             addBtn.setVisible(true);
-            
+
             String name = inputName.getText();
             int quantity = Integer.parseInt(inputQuantity.getText());
             Double cost = Double.parseDouble(inputCost.getText());
@@ -372,10 +372,10 @@ public class inventoryGUI_hexin implements ActionListener {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
-                //error.printStackTrace();
+                // error.printStackTrace();
             }
 
-            if(checkItemExit(name)){
+            if (checkItemExit(name)) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
                 int id = generateId();
@@ -385,7 +385,7 @@ public class inventoryGUI_hexin implements ActionListener {
                 costList.add(cost);
                 expirationDateList.add(expirationDate);
                 vendorList.add(vendor);
-            
+
                 try {
                     add_item(conn, id, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -413,7 +413,7 @@ public class inventoryGUI_hexin implements ActionListener {
         } else if (e.getSource() == searchBtn_Update) {
             btnDisplay(false);
             updateBtn.setVisible(true);
-            
+
             String name = inputName.getText();
             i = -1;
             for (int h = 0; h < nameList.size(); ++h) {
@@ -424,7 +424,7 @@ public class inventoryGUI_hexin implements ActionListener {
             }
 
             clearInputText();
-            if(i == -1){
+            if (i == -1) {
                 btnDisplay(false);
                 ask_Name.setVisible(true);
                 clearBtn.setVisible(true);
@@ -439,12 +439,12 @@ public class inventoryGUI_hexin implements ActionListener {
                 info_display(true);
                 add_input_Display(true);
                 ask_Name.setVisible(false);
-    
+
                 itemId.setText(String.valueOf(idList.get(i)));
                 inputName.setText(nameList.get(i));
                 inputQuantity.setText(String.valueOf(quantityList.get(i)));
                 inputCost.setText(String.valueOf(costList.get(i)));
-    
+
                 inputDate.setText(dateFormat.format(expirationDateList.get(i)));
                 inputVendor.setText(vendorList.get(i));
             }
@@ -454,7 +454,7 @@ public class inventoryGUI_hexin implements ActionListener {
             deleteBtn.setVisible(true);
             searchBtn_Delete.setVisible(false);
             String name = inputName.getText();
-            
+
             i = -1;
             for (int h = 0; h < nameList.size(); ++h) {
                 if (nameList.get(h).equals(name)) {
@@ -464,7 +464,7 @@ public class inventoryGUI_hexin implements ActionListener {
             }
             clearInputText();
 
-            if(i == -1){
+            if (i == -1) {
                 btnDisplay(false);
                 ask_Name.setVisible(true);
                 clearBtn.setVisible(true);
@@ -480,12 +480,12 @@ public class inventoryGUI_hexin implements ActionListener {
                 info_display(true);
                 add_input_Display(false);
                 ask_Name.setVisible(false);
-    
+
                 itemId.setText(String.valueOf(idList.get(i)));
                 itemName.setText(nameList.get(i));
                 itemQuantity.setText(String.valueOf(quantityList.get(i)));
                 itemCost.setText(String.valueOf(costList.get(i)));
-    
+
                 itemExpirationDate.setText(dateFormat.format(expirationDateList.get(i)));
                 itemVendor.setText(vendorList.get(i));
             }
