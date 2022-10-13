@@ -11,7 +11,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
 
-
 /* Array Index 
  * 0 - GYRO
  * 1 - BOWL
@@ -108,7 +107,8 @@ public class cashierGUI implements ActionListener {
 
     // Global Var --> Unused, hardcoded can change later
     int height_items;
-    int employeeid; 
+    int employeeid;
+    boolean is_manager;
     // Store quantity of each menu item
     int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
@@ -146,13 +146,14 @@ public class cashierGUI implements ActionListener {
     JPanel receiptPanel_Down = new JPanel();
 
     
-    public cashierGUI() {
+    public cashierGUI(boolean manager) {
         
         try{
             Connection conn = connectionSet();
             // priceArr = priceArr();
             menuArr = get_menu(conn);
-
+            is_manager = manager;
+            
         } catch (SQLException e) {
             e.printStackTrace();
         } 
