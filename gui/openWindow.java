@@ -27,9 +27,9 @@ public class openWindow {
         frame.setVisible(true);
 
         set_employeeid(passCode);
-        cashierGUI cashier = new cashierGUI();
-
-        cashier.set_employeeid(employeeid);
+        //cashierGUI cashier = new cashierGUI();
+        new checkoutGUI(12, 2.34, passCode);
+        //cashier.set_employeeid(employeeid);
 
         
         // cashier.setVisible(true);

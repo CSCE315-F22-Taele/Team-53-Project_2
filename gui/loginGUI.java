@@ -131,9 +131,9 @@ public class loginGUI implements ActionListener {
                 // FIX ME: ADD A WAY TO GET THE EMPLOYEE ID TO THE CASHIER PAGE
                 
                 JOptionPane.showMessageDialog(null, "Pincode is correct.");
-                // System.out.println(" true");
+                
             } else {
-                System.out.println("not true");
+                
                 JOptionPane.showMessageDialog(null, "Pincode is incorrect. Please retry.");
                 tempCode = "";
                 
@@ -169,9 +169,7 @@ public class loginGUI implements ActionListener {
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
                     my.user, my.pswd);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, "Error accessing Database.");
         } // end try catch
           // JOptionPane.showMessageDialog(null, "Opened database successfully");
         return conn;
