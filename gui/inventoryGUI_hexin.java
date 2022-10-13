@@ -65,7 +65,6 @@ public class inventoryGUI_hexin implements ActionListener {
 
     // Add
     JButton addBtn = new JButton("Add");
-    JTextField inputId = new JTextField("");
     JTextField inputName = new JTextField("");
     JTextField inputQuantity = new JTextField("");
     JTextField inputCost = new JTextField("");
@@ -127,6 +126,9 @@ public class inventoryGUI_hexin implements ActionListener {
         f.setJMenuBar(menuBar);
         f.setVisible(true);
 
+        int screenHeight = screenSize.height;
+        int screenWidth = screenSize.width;
+
         ////////// Menu Setup //////////
         menuBar.add(viewMenu);
         menuBar.add(editMenu);
@@ -184,18 +186,16 @@ public class inventoryGUI_hexin implements ActionListener {
 
         ////////// Logout //////////
         backToCashier.addActionListener(this);
-        backToCashier.setBounds(300, 780, 200, 100);
+        backToCashier.setBounds((int)(screenWidth * 0.06), (int)(screenHeight* 0.8), (int)(screenWidth * 0.1), (int)(screenHeight * 0.05));
         f.add(backToCashier);
 
         // ADD Items
-        inputId.setBounds(730, 180, 160, 20);
         inputName.setBounds(730, 210, 160, 20);
         inputQuantity.setBounds(730, 240, 160, 20);
         inputCost.setBounds(730, 270, 160, 20);
         inputDate.setBounds(730, 300, 160, 20);
         inputVendor.setBounds(730, 330, 160, 20);
 
-        inputId.setVisible(false);
         inputName.setVisible(false);
         inputQuantity.setVisible(false);
         inputCost.setVisible(false);
@@ -205,7 +205,6 @@ public class inventoryGUI_hexin implements ActionListener {
         addBtn.addActionListener(this);
         addBtn.setVisible(false);
         f.add(addBtn);
-        f.add(inputId);
         f.add(inputName);
         f.add(inputQuantity);
         f.add(inputCost);
@@ -264,7 +263,6 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public void add_input_Display(Boolean b) {
-        inputId.setVisible(b);
         inputName.setVisible(b);
         inputQuantity.setVisible(b);
         inputCost.setVisible(b);
@@ -282,7 +280,6 @@ public class inventoryGUI_hexin implements ActionListener {
     }
 
     public void clearInputText() {
-        inputId.setText("");
         inputName.setText("");
         inputQuantity.setText("");
         inputCost.setText("");
