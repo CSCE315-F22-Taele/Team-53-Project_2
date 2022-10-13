@@ -21,50 +21,43 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-
 public class inventoryPerOrderGUI implements ActionListener {
     private void makeFrameFullSize(JFrame aFrame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         aFrame.setSize(screenSize.width, screenSize.height);
     }
 
-
-
     ////////// Frame Declaraiton //////////
     JFrame f = new JFrame("Inventory per Order GUI");
 
-
-
     ////////// Store value //////////
     /* Use these two arraylists to connect db */
-    ArrayList <String> nameList = new ArrayList<String>();         
-    ArrayList <Integer> quantityList = new ArrayList<Integer>();    
+    ArrayList<String> nameList = new ArrayList<String>();
+    ArrayList<Integer> quantityList = new ArrayList<Integer>();
 
-    /*  The rest of these arraylists are using for the front-end */
-    // Store btns 
-    ArrayList <JButton> btnList = new ArrayList<JButton>();   
+    /* The rest of these arraylists are using for the front-end */
+    // Store btns
+    ArrayList<JButton> btnList = new ArrayList<JButton>();
     JButton submitBtn = new JButton("Submit");
     JButton backToCashier = new JButton("Back to Cashier");
-    
-    // Store the names which have already clicked by user to prevent show up repeatly 
-    ArrayList <String> nameOccursList = new ArrayList<String>();
+
+    // Store the names which have already clicked by user to prevent show up
+    // repeatly
+    ArrayList<String> nameOccursList = new ArrayList<String>();
 
     // Store the item's index number of the nameList and quantityList
-    ArrayList <Integer> indexList = new ArrayList<Integer>();
+    ArrayList<Integer> indexList = new ArrayList<Integer>();
 
-    //Store the amount of each selected items
-    ArrayList <JLabel> amountLabelList = new ArrayList<JLabel>();
+    // Store the amount of each selected items
+    ArrayList<JLabel> amountLabelList = new ArrayList<JLabel>();
 
     // Store the click numbers to update the amount of each selected items
-    ArrayList <Integer> clickList = new ArrayList<Integer>();
+    ArrayList<Integer> clickList = new ArrayList<Integer>();
 
-
-    
     ////////// Global Vars //////////
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
     Connection conn;
-
 
     // Item's index in buttonList
     int btnIndex = -1;
@@ -79,16 +72,12 @@ public class inventoryPerOrderGUI implements ActionListener {
     JPanel receiptPanel_Right = new JPanel();
     JPanel receiptPanel_Down = new JPanel();
 
-
-
     ////////// Size //////////
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = screenSize.height;
     int width = screenSize.width;
 
-
-
-    inventoryPerOrderGUI(){
+    inventoryPerOrderGUI() {
 
         try {
             conn = connectionSet();
@@ -111,13 +100,13 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         ////////// Items Area //////////
         itemsPanel.setBackground(Color.yellow);
-        itemsPanel.setBounds((int)(width * 0.06), (int)(height * 0.09), (int)(width * 0.6),(int)(height * 0.7));
+        itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         itemsPanel.setLayout(new FlowLayout());
 
         f.add(itemsPanel);
 
         ////////// generate btns //////////
-        for(int i = 0; i < nameList.size(); ++i){
+        for (int i = 0; i < nameList.size(); ++i) {
             JButton newBtn = new JButton(nameList.get(i));
             newBtn.setPreferredSize(new Dimension(200, 60));
             newBtn.addActionListener(this);
@@ -130,7 +119,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         // Title
         receiptPanel_Top.setBackground(Color.green);
-        receiptPanel_Top.setBounds((int)(width * 0.7),0 , (int)(width * 0.3),(int)(height*0.1));
+        receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.1));
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("Bowl/Gyro");
@@ -139,7 +128,8 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Top.add(title);
 
         receiptPanel_Left.setBackground(Color.CYAN);
-        receiptPanel_Left.setBounds((int)(width * 0.7),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
+        receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.1), (int) (width * 0.15),
+                (int) (height * 0.7));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel itemNameTitle = new JLabel("Item");
         itemNameTitle.setVerticalAlignment(JLabel.TOP);
@@ -147,7 +137,8 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Left.add(itemNameTitle);
 
         receiptPanel_Right.setBackground(Color.CYAN);
-        receiptPanel_Right.setBounds((int)(width * 0.85),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
+        receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.1), (int) (width * 0.15),
+                (int) (height * 0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel quantityTitle = new JLabel("Quantity");
         quantityTitle.setVerticalAlignment(JLabel.TOP);
@@ -155,7 +146,8 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Right.add(quantityTitle);
 
         receiptPanel_Down.setBackground(Color.MAGENTA);
-        receiptPanel_Down.setBounds((int)(width * 0.7),(int)(height*0.8) , (int)(width * 0.3),(int)(height*0.3));
+        receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.8), (int) (width * 0.3),
+                (int) (height * 0.3));
         receiptPanel_Down.add(submitBtn);
         submitBtn.addActionListener(this);
 
@@ -166,14 +158,14 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         ///// Back to Cashier /////
         backToCashier.addActionListener(this);
-        backToCashier.setBounds((int)(width * 0.06), (int)(height* 0.8), (int)(width * 0.1), (int)(height * 0.05));
+        backToCashier.setBounds((int) (width * 0.06), (int) (height * 0.8), (int) (width * 0.1), (int) (height * 0.05));
         f.add(backToCashier);
 
     }
 
-    public int checkNameList(String name){
-        for(int j = 0; j < nameOccursList.size(); ++j){
-            if(name.equals(nameOccursList.get(j))){
+    public int checkNameList(String name) {
+        for (int j = 0; j < nameOccursList.size(); ++j) {
+            if (name.equals(nameOccursList.get(j))) {
                 return j;
             }
         }
@@ -181,13 +173,13 @@ public class inventoryPerOrderGUI implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
-        for(int i = 0; i < btnList.size(); ++i){
-            if(e.getSource() == btnList.get(i)){
+        for (int i = 0; i < btnList.size(); ++i) {
+            if (e.getSource() == btnList.get(i)) {
                 String name = btnList.get(i).getText();
                 btnIndex = i;
                 nameOccursIndex = checkNameList(name);
-                
-                if(nameOccursIndex == -1){
+
+                if (nameOccursIndex == -1) {
                     indexList.add(btnIndex);
                     clickList.add(1);
 
@@ -200,7 +192,7 @@ public class inventoryPerOrderGUI implements ActionListener {
                     receiptPanel_Left.validate();
 
                     // Shows the item's amount
-                    JLabel amountLabel = new JLabel("1");    
+                    JLabel amountLabel = new JLabel("1");
                     amountLabel.setVerticalAlignment(JLabel.TOP);
                     amountLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Right.add(amountLabel);
@@ -222,8 +214,8 @@ public class inventoryPerOrderGUI implements ActionListener {
             }
         }
 
-        if(e.getSource() == submitBtn){
-            for(int k = 0; k < clickList.size(); ++k){
+        if (e.getSource() == submitBtn) {
+            for (int k = 0; k < clickList.size(); ++k) {
                 int outItem = clickList.get(k);
                 int item_amount = quantityList.get(indexList.get(k)) - outItem;
                 quantityList.set(indexList.get(k), item_amount);
@@ -234,8 +226,11 @@ public class inventoryPerOrderGUI implements ActionListener {
                     e1.printStackTrace();
                 }
             }
-        } else if(e.getSource() == backToCashier){
+
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+        } else if (e.getSource() == backToCashier) {
             // FIX ME: Implement
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
         }
     }
 
@@ -299,8 +294,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         return conn;
     }
 
-
-    public static void main(String[] args){
+    public static void main(String[] args) {
         new inventoryPerOrderGUI();
     }
 }
