@@ -609,83 +609,30 @@ public class menuItemGUI implements ActionListener {
         delStatement.executeUpdate();
     }
 
-    public ArrayList<Integer> get_id(Connection conn) throws SQLException {
+    // WILL GET MENU ITEM NAMES
+    public ArrayList<String> get_menu_item(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory");
-
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-
-        while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
-            temp.add(findInventory.getInt("itemid"));
-
-        }
-
-        return temp;
-    }
-
-    public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory");
-        // int count = 0; // Increments inventory array
-
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-
-        while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
-            temp.add(findInventory.getInt("amount"));
-
-        }
-
-        return temp;
-    }
-
-    public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT menuitem FROM menucost");
 
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
-            temp.add(findInventory.getString("itemname"));
+            temp.add(findInventory.getString("menuitem"));
 
         }
 
         return temp;
     }
 
+    // WILL GET COST OF MENU ITEM
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM menucost");
 
         ArrayList<Double> temp = new ArrayList<Double>();
 
         while (findInventory.next()) {
             temp.add(findInventory.getDouble("cost"));
-        }
-        return temp;
-    }
-
-    public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory");
-
-        ArrayList<Date> temp = new ArrayList<Date>();
-
-        while (findInventory.next()) {
-            temp.add(findInventory.getDate("expirationdate"));
-        }
-        return temp;
-    }
-
-    public ArrayList<String> get_vendor(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory");
-        ArrayList<String> temp = new ArrayList<String>();
-
-        while (findInventory.next()) {
-            temp.add(findInventory.getString("vendor"));
         }
         return temp;
     }
