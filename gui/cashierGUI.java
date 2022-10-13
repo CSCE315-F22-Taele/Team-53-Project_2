@@ -128,7 +128,7 @@ public class cashierGUI implements ActionListener {
         try{
             Connection conn = connectionSet();
             // priceArr = priceArr();
-            ArrayList <String> menuArr = get_menu(conn);
+            menuArr = get_menu(conn);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,9 +161,7 @@ public class cashierGUI implements ActionListener {
             itemsPanel.add(newBtn);
             itemsPanel.validate();
         }
-
-        JButton testbtn = new JButton("LOGOUT");
-        itemsPanel.add(testbtn);
+        
         // Button 11
         logoutBtn = new JButton("LOGOUT");
         logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 300, 80);
