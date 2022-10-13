@@ -571,23 +571,17 @@ public class menuItemGUI implements ActionListener {
         }
     }
 
-    public void add_item(Connection conn, int id, String name, int quantity, double cost, Date expirationDate,
-            String vendor) throws SQLException {
+    public void add_item(Connection conn, String name, double cost) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
-                "INSERT INTO inventory(itemid, itemname, amount, cost, expirationdate,vendor) VALUES(?,?,?,?,?,?)");
+                "INSERT INTO menucost(menuitem, cost) VALUES(?,?)");
 
-        addStatement.setInt(1, id);
-        addStatement.setString(2, name);
-        addStatement.setInt(3, quantity);
-        addStatement.setDouble(4, cost);
-        // FIXME: No matter what date we type in, the month Jan is sent to db??
-        java.sql.Date sqlDate = new java.sql.Date(expirationDate.getTime());
-        addStatement.setDate(5, sqlDate);
-        addStatement.setString(6, vendor);
+        addStatement.setString(1, name);
+        addStatement.setDouble(2, cost);
 
         addStatement.executeUpdate();
     }
 
+    // FIXME: NOT DONE. DON'T RUN WILL FAIL
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
                 "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
@@ -604,7 +598,7 @@ public class menuItemGUI implements ActionListener {
     }
 
     public void delete_item(Connection conn, int id) throws SQLException {
-        PreparedStatement delStatement = conn.prepareStatement("DELETE FROM inventory WHERE itemid=(?)");
+        PreparedStatement delStatement = conn.prepareStatement("DELETE FROM menucost WHERE menuitem=(?)");
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
