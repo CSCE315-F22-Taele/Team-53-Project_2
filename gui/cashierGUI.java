@@ -58,6 +58,23 @@ public class cashierGUI implements ActionListener {
     JButton editBtn;
     JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
+    ArrayList <String> nameOccursList = new ArrayList<String>();
+
+    // Item's index in buttonList
+    int btnIndex = -1;
+
+    // Item's index in the nameOccursList
+    int nameOccursIndex = -1;
+
+    // Store the item's index number of the nameList and quantityList
+    ArrayList <Integer> indexList = new ArrayList<Integer>();
+
+    //Store the amount of each selected items
+    ArrayList <JLabel> amountLabelList = new ArrayList<JLabel>();
+
+    // Store the click numbers to update the amount of each selected items
+    ArrayList <Integer> clickList = new ArrayList<Integer>();
+
     private JLabel labelEmployee; 
     // Label Declaration
     JLabel l1 = new JLabel("GYRO");
@@ -122,6 +139,11 @@ public class cashierGUI implements ActionListener {
     int width_item = 0;
     int item_width = (int) (width * 0.092);
     int quantity_width = (int) (width * 0.19);
+
+    JPanel receiptPanel_Top = new JPanel();
+    JPanel receiptPanel_Left = new JPanel();
+    JPanel receiptPanel_Right = new JPanel();
+    JPanel receiptPanel_Down = new JPanel();
 
     
     public cashierGUI() {
@@ -208,54 +230,59 @@ public class cashierGUI implements ActionListener {
         logoutPanel.add(editBtn);
         f.add(logoutPanel);
 
-        ////////// Receipt Area //////////
-        JPanel receiptPanel = new JPanel();
-        JLabel receiptTitle = new JLabel("RECEIPT");
-        JLabel itemTitle = new JLabel("ITEM");
-        JLabel quantityTitle = new JLabel("QUANTITY");
-        JLabel totalSale = new JLabel("Total Sale: ");
+    
+   ////////// Receipt Area //////////
 
-        // Panel Setup
-        receiptPanel.setBackground(Color.green);
-        receiptPanel.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) height);
-        receiptPanel.setLayout(null);
+        // Title
+        receiptPanel_Top.setBackground(Color.green);
+        receiptPanel_Top.setBounds((int)(width * 0.7),0 , (int)(width * 0.3),(int)(height*0.1));
+        receiptPanel_Top.setLayout(null);
+        receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
+        JLabel title = new JLabel("Total Items");
+        title.setVerticalAlignment(JLabel.CENTER);
+        title.setHorizontalAlignment(JLabel.CENTER);
+        receiptPanel_Top.add(title);
 
-        // Position
-        receiptTitle.setBounds((int) (width * 0.3 / 2 - 50), 0, 200, 100);
-        itemTitle.setBounds((int) (width * 0.092), 70, 100, 100);
-        quantityTitle.setBounds((int) (width * 0.19), 70, 100, 100);
-        totalSale.setBounds((int) (width * 0.11), (int) (height * 0.6), 200, (int) (height * 0.08));
-        sale.setBounds((int) (width * 0.2), (int) (height * 0.6), 200, (int) (height * 0.08));
-        checkoutBtn.setBounds((int) (width * 0.09), (int) (height * 0.8), (int) (width * 0.15), (int) (height * 0.1));
+        receiptPanel_Left.setBackground(Color.CYAN);
+        receiptPanel_Left.setBounds((int)(width * 0.7),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
+        receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
+        JLabel itemNameTitle = new JLabel("Item");
+        itemNameTitle.setVerticalAlignment(JLabel.TOP);
+        itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
+        receiptPanel_Left.add(itemNameTitle);
 
-        // Font
-        receiptTitle.setFont(new Font("Arial", Font.PLAIN, 28));
-        itemTitle.setFont(new Font("Arial", Font.PLAIN, 20));
-        quantityTitle.setFont(new Font("Arial", Font.PLAIN, 20));
-        totalSale.setFont(new Font("Arial", Font.PLAIN, 20));
-        sale.setFont(new Font("Arial", Font.PLAIN, 20));
+        receiptPanel_Right.setBackground(Color.CYAN);
+        receiptPanel_Right.setBounds((int)(width * 0.85),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
+        receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
+        JLabel quantityTitle = new JLabel("Quantity");
+        quantityTitle.setVerticalAlignment(JLabel.TOP);
+        quantityTitle.setHorizontalAlignment(JLabel.CENTER);
+        receiptPanel_Right.add(quantityTitle);
 
-        // Add to panel
-        receiptPanel.add(receiptTitle);
-        receiptPanel.add(itemTitle);
-        receiptPanel.add(quantityTitle);
-        receiptPanel.add(totalSale);
-        receiptPanel.add(sale);
-        receiptPanel.add(checkoutBtn);
+        receiptPanel_Down.setBackground(Color.MAGENTA);
+        receiptPanel_Down.setBounds((int)(width * 0.7),(int)(height*0.8) , (int)(width * 0.3),(int)(height*0.3));
+        receiptPanel_Down.add(checkoutBtn);
+        checkoutBtn.addActionListener(this);
 
-        for (int i = 0; i < 10; ++i) {
-            receiptPanel.add(labelArr[i]);
-            receiptPanel.add(inputArr[i]);
-        }
+        f.add(receiptPanel_Top);
+        f.add(receiptPanel_Left);
+        f.add(receiptPanel_Right);
+        f.add(receiptPanel_Down);
 
-        ////////// Frame //////////
-        f.add(receiptPanel);
 
         f.setSize(400, 400);
         f.setLayout(null);
         f.setVisible(true);
     }
 
+    public int checkNameList(String name){
+        for(int j = 0; j < nameOccursList.size(); ++j){
+            if(name.equals(nameOccursList.get(j))){
+                return j;
+            }
+        }
+        return -1;
+    }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btn1) {
@@ -352,6 +379,48 @@ public class cashierGUI implements ActionListener {
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
         // height += 70; --> Hardcoded height, can fix later
+
+        // update receipt
+        for(int i = 0; i < menu_buttons.size(); ++i){
+            if(e.getSource() == menu_buttons.get(i)){
+                String name = menu_buttons.get(i).getText();
+                btnIndex = i;
+                nameOccursIndex = checkNameList(name);
+                
+                if(nameOccursIndex == -1){
+                    indexList.add(btnIndex);
+                    clickList.add(1);
+
+                    // Shows the item's name
+                    JLabel ItemNameLabel = new JLabel(name);
+                    ItemNameLabel.setVerticalAlignment(JLabel.TOP);
+                    ItemNameLabel.setHorizontalAlignment(JLabel.CENTER);
+                    receiptPanel_Left.add(ItemNameLabel);
+                    nameOccursList.add(name);
+                    receiptPanel_Left.validate();
+
+                    // Shows the item's amount
+                    JLabel amountLabel = new JLabel("1");    
+                    amountLabel.setVerticalAlignment(JLabel.TOP);
+                    amountLabel.setHorizontalAlignment(JLabel.CENTER);
+                    receiptPanel_Right.add(amountLabel);
+                    amountLabelList.add(amountLabel);
+                    receiptPanel_Right.validate();
+
+                } else {
+                    // Update Item's amount by using click
+                    clickList.set(nameOccursIndex, clickList.get(nameOccursIndex) + 1);
+                    String newAmount = String.valueOf(clickList.get(nameOccursIndex));
+
+                    // find the corresponding label of the item
+                    JLabel l = amountLabelList.get(nameOccursIndex);
+                    l.setText(newAmount);
+
+                    // update the amountLabelList
+                    amountLabelList.set(nameOccursIndex, l);
+                }
+            }
+        }
 
     }
 
