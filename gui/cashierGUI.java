@@ -98,9 +98,11 @@ public class cashierGUI implements ActionListener {
     JLabel sale = new JLabel("0");
     double totalPrice = 0;
 
-    Integer inventory[] = new Integer[24];
+    double priceArr[]; // THIS AT THE END SHOULDN'T BE USED 
+    Integer inventory[] = new Integer[24]; // THIS AT THE END SHOULDN'T BE USED
 
-
+    ArrayList <String> menuArr = new ArrayList<String>();
+    ArrayList <JButton> menu_buttons = new ArrayList<JButton>();
 
     // Increments
     int gyroClick = 0;
@@ -122,12 +124,15 @@ public class cashierGUI implements ActionListener {
 
     
     public cashierGUI() {
+        
+        try{
+            Connection conn = connectionSet();
+            // priceArr = priceArr();
+            ArrayList <String> menuArr = get_menu(conn);
 
-        Connection conn = connectionSet();
-
-        // getting menu and prices from db
-        ArrayList <Double> priceArr = get_price(conn);
-        ArrayList <String> menuArr = get_menu(conn);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } 
 
         ////////// Background //////////
         for( int i=0; i< 24; i++){
@@ -137,16 +142,28 @@ public class cashierGUI implements ActionListener {
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
 
+        ////////// Menu-items Area //////////
+        JPanel itemsPanel = new JPanel();
+        itemsPanel.setBackground(Color.yellow);
+        itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
+        // itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
 
+        f.add(itemsPanel);
+        
         ////////// Buttons //////////
-        ArrayList <JButton> menu_buttons = new ArrayList<JButton>();
 
         for (int i = 0; i < menuArr.size(); i++){
-                menu_buttons.add(new JButton(menuArr.get(i)));
-                menu_buttons.get(i).setBackground(Color.RED);
-                menu_buttons.get(i).addActionListener(this);
+            JButton newBtn = new JButton(menuArr.get(i));
+            newBtn.setPreferredSize(new Dimension(200, 60));
+            newBtn.addActionListener(this);
+            menu_buttons.add(newBtn);
+            menu_buttons.get(i).setBackground(Color.RED);
+            itemsPanel.add(newBtn);
+            itemsPanel.validate();
         }
 
+        JButton testbtn = new JButton("LOGOUT");
+        itemsPanel.add(testbtn);
         // Button 11
         logoutBtn = new JButton("LOGOUT");
         logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 300, 80);
@@ -167,18 +184,6 @@ public class cashierGUI implements ActionListener {
         weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 300, 50);
         weclomeTitle.setFont(new Font("Arial", Font.PLAIN, 30));
         f.add(weclomeTitle);
-
-        ////////// Menu-items Area //////////
-        JPanel itemsPanel = new JPanel();
-        itemsPanel.setBackground(Color.yellow);
-        itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
-        itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
-
-        for (int i = 0; i < menu_buttons.size(); i++){
-                itemsPanel.add(menu_buttons.get(i));
-        }
-
-        f.add(itemsPanel);
 
         ////////// Logout Area //////////
         JPanel logoutPanel = new JPanel();
@@ -321,14 +326,15 @@ public class cashierGUI implements ActionListener {
                 }
             }
             
-            insertOrder();
+            // insertOrder();
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             //FIX ME: ADD CONNECTION TO CHECKOUT
             //FIX ME: PUSH THE VALUES OF AMOUNT AND CHECKOUT INFO TO CHECKOUT. 
 
         } else if (e.getSource() == logoutBtn) {
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-            new loginGUI();
+            // TEMP COMMENT
+            // new loginGUI(); 
         }
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
@@ -354,7 +360,7 @@ public class cashierGUI implements ActionListener {
         return value*1000;
     }
 
-    public int getOrderId(Connection conn){
+    public int getOrderId(Connection conn) throws SQLException{
 
         int lastRecord = 0;
         int date = getDateforId();
@@ -382,7 +388,7 @@ public class cashierGUI implements ActionListener {
         return date + 1; 
         
     }
-
+/* 
     public void insertOrder(){
 
         Connection conn = connectionSet();
@@ -430,7 +436,7 @@ public class cashierGUI implements ActionListener {
 
           
     }
-    
+   */ 
     public double getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
       int orderedprotein, int ordereddressing, int ordereddrink) {
         
@@ -446,27 +452,74 @@ public class cashierGUI implements ActionListener {
         return (double) ordertotal;
     }
 
-    public ArrayList<Double> get_price(Connection conn) throws SQLException {
 
-        Statement stmt = conn.createStatement();
-        ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost");
-        ArrayList <Double> items = new ArrayList <Double>();
-
-        while (findCost.next()) {
-            items.add(findCost.getDouble("cost"));
+    // hardcoded price, I added this back to test
+    public double[] priceArr() throws SQLException{
+        Connection conn = connectionSet();
+        double items[] = new double[10];
+        double cost;
+        int i =0;
+        try{
+            PreparedStatement itemsStat = conn.prepareStatement(
+                "SELECT cost FROM menucost");
+            ResultSet itemInfo = itemsStat.executeQuery();
+            
+            while (itemInfo.next()) {
+                cost = itemInfo.getDouble("cost");
+                items[i] = cost; 
+                i++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
         }
-
         return items;
-    }   
+    }
+
+    // dynamically get price
+    // public ArrayList<Double> get_price(Connection conn) throws SQLException {
+
+    //     Statement stmt = conn.createStatement();
+    //     ArrayList <Double> items = new ArrayList <Double>();
+
+    //     try{
+
+    //         ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost");
+
+    //         while (findCost.next()) {
+    //             items.add(findCost.getDouble("cost"));
+    //         }
+    //     }
+
+    //     catch (Exception e) {
+    //         e.printStackTrace();
+    //         System.err.println(e.getClass().getName() + ": " + e.getMessage());
+    //         System.exit(0);
+    //     }
+
+    //     return items;
+    // }   
 
     public ArrayList<String> get_menu(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost");
         ArrayList<String> temp = new ArrayList<String>();
 
-        while (findMenu.next()) {
-            temp.add(findMenu.getString("menuitem"));
+        try{
+
+            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost");
+
+            while (findMenu.next()) {
+                temp.add(findMenu.getString("menuitem"));
+            }
         }
+
+        catch (Exception e) {
+            e.printStackTrace();
+            System.err.println(e.getClass().getName() + ": " + e.getMessage());
+            System.exit(0);
+        }
+
         return temp;
     }
 
