@@ -25,7 +25,7 @@ public class checkoutGUI implements ActionListener{
     JButton mealswipeButton = new JButton("MEAL SWIPES");
     JButton logoutButton = new JButton("LOGOUT");
     JButton cancelButton = new JButton("CANCEL ORDER");
-    JButton editButton = new JButton("EDIT ORDER");
+    
     JLabel total_price = new JLabel();
 
     double amount;
@@ -61,7 +61,7 @@ public class checkoutGUI implements ActionListener{
         cancelButton.setBounds(200,600,50, 40);
 
         
-        editButton.setBounds(270,600,50, 40);
+        
 
 
         ////////// Payment Area //////////
@@ -84,7 +84,7 @@ public class checkoutGUI implements ActionListener{
 
         optionsPanel.add(logoutButton);
         optionsPanel.add(cancelButton);
-        optionsPanel.add(editButton);
+        
 
         f.add(optionsPanel);
 
@@ -137,7 +137,7 @@ public class checkoutGUI implements ActionListener{
         mealswipeButton.addActionListener(this);
         logoutButton.addActionListener(this);
         cancelButton.addActionListener(this);
-        editButton.addActionListener(this);
+        
 
         f.add(receiptPanel);
             
@@ -162,6 +162,7 @@ public class checkoutGUI implements ActionListener{
             
             new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            f.setVisible(false);
             
         } else if (e.getSource() == cardButton) {
             Random rd = new Random();
@@ -209,6 +210,12 @@ public class checkoutGUI implements ActionListener{
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
     
         }
+        else if (e.getSource() == cancelButton){
+            new cashierGUI(employeeid); 
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+        }
+        
+
     }
     
     public static int getRandomValue(int Min, int Max) {
