@@ -55,6 +55,7 @@ public class cashierGUI implements ActionListener {
     JButton checkoutBtn;
     JButton inventoryBtn;
     JButton editBtn;
+    JButton RestartOrder;
     //JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
     ArrayList <String> nameOccursList = new ArrayList<String>();
@@ -206,6 +207,11 @@ public class cashierGUI implements ActionListener {
         editBtn.setBackground(Color.LIGHT_GRAY);
         editBtn.addActionListener(this);
 
+        RestartOrder = new JButton("RESTART ORDER");
+        RestartOrder.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
+        RestartOrder.setBackground(Color.LIGHT_GRAY);
+        RestartOrder.addActionListener(this);
+
         ////////// Welcome Area //////////
         
         
@@ -224,6 +230,7 @@ public class cashierGUI implements ActionListener {
         // logoutBtn.setHorizontalAlignment(JButton.CENTER);
         logoutPanel.add(logoutBtn);
 
+        logoutPanel.add(RestartOrder);
         if( is_manager){
             logoutPanel.add(inventoryBtn);
             logoutPanel.add(editBtn);
@@ -302,6 +309,10 @@ public class cashierGUI implements ActionListener {
         }
         else if(e.getSource() == editBtn){
             new menuItemGUI(employeeid);
+            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+        }
+        else if(e.getSource() == RestartOrder){
+            new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
         }
 
