@@ -91,6 +91,8 @@ public class inventoryPerOrderGUI implements ActionListener {
             JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
+        Color pink = new Color(244, 220, 245);
+        Color blueCute = new Color(194, 194, 252);
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -101,7 +103,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         title.setBounds(30, 5, 200, 60);
 
         ////////// Items Area //////////
-        itemsPanel.setBackground(Color.yellow);
+        itemsPanel.setBackground(pink);
         itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         itemsPanel.setLayout(new FlowLayout());
 
@@ -120,7 +122,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         ////////// Receipt Area //////////
 
         // Title
-        receiptPanel_Top.setBackground(Color.green);
+        receiptPanel_Top.setBackground(blueCute);
         receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.1));
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
@@ -129,7 +131,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         title.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Top.add(title);
 
-        receiptPanel_Left.setBackground(Color.CYAN);
+        receiptPanel_Left.setBackground(blueCute);
         receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.1), (int) (width * 0.15),
                 (int) (height * 0.7));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
@@ -138,7 +140,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Left.add(itemNameTitle);
 
-        receiptPanel_Right.setBackground(Color.CYAN);
+        receiptPanel_Right.setBackground(blueCute);
         receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.1), (int) (width * 0.15),
                 (int) (height * 0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
@@ -147,7 +149,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
 
-        receiptPanel_Down.setBackground(Color.MAGENTA);
+        receiptPanel_Down.setBackground(blueCute);
         receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.8), (int) (width * 0.3),
                 (int) (height * 0.3));
         receiptPanel_Down.add(submitBtn);

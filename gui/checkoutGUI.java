@@ -62,11 +62,11 @@ public class checkoutGUI implements ActionListener{
 
         
         
-
+        Color blueCute = new Color(194, 194, 252);
 
         ////////// Payment Area //////////
         JPanel itemsPanel = new JPanel();
-        itemsPanel.setBackground(Color.green);
+        itemsPanel.setBackground(blueCute);
         itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         itemsPanel.setLayout(new GridLayout(5, 2, 10, 10)); 
 
@@ -99,7 +99,7 @@ public class checkoutGUI implements ActionListener{
         JLabel totalSale = new JLabel(str_amt);
 
         // Panel Setup
-        receiptPanel.setBackground(Color.green);
+        receiptPanel.setBackground(blueCute);
         receiptPanel.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) height);
         receiptPanel.setLayout(null);
 

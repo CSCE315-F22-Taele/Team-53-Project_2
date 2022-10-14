@@ -166,7 +166,8 @@ public class cashierGUI implements ActionListener {
 
         ////////// Menu-items Area //////////
         JPanel itemsPanel = new JPanel();
-        itemsPanel.setBackground(Color.yellow);
+        Color pink = new Color(244, 220, 245);
+        itemsPanel.setBackground(pink);
         itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         // itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
 
@@ -179,7 +180,7 @@ public class cashierGUI implements ActionListener {
             newBtn.setPreferredSize(new Dimension(200, 60));
             newBtn.addActionListener(this);
             menu_buttons.add(newBtn);
-            menu_buttons.get(i).setBackground(Color.RED);
+            
             itemsPanel.add(newBtn);
             itemsPanel.validate();
         }
@@ -223,7 +224,7 @@ public class cashierGUI implements ActionListener {
 
         ////////// Logout Area //////////
         JPanel logoutPanel = new JPanel(new GridLayout(1,3));
-        logoutPanel.setBackground(Color.pink);
+        logoutPanel.setBackground(pink);
         logoutPanel.setBounds((int) (width * 0.06), (int) ((height * 0.82)), (int) (width * 0.6), (int) (height * 0.1));
         // logoutPanel.setLayout(new BorderLayout());
         // logoutBtn.setVerticalAlignment(JButton.CENTER);
@@ -239,9 +240,9 @@ public class cashierGUI implements ActionListener {
 
     
    ////////// Receipt Area //////////
-
+        Color blueCute = new Color(194, 194, 252);
         // Title
-        receiptPanel_Top.setBackground(Color.green);
+        receiptPanel_Top.setBackground(blueCute);
         receiptPanel_Top.setBounds((int)(width * 0.7),0 , (int)(width * 0.3),(int)(height*0.1));
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
@@ -250,7 +251,8 @@ public class cashierGUI implements ActionListener {
         title.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Top.add(title);
 
-        receiptPanel_Left.setBackground(Color.CYAN);
+        
+        receiptPanel_Left.setBackground(blueCute);
         receiptPanel_Left.setBounds((int)(width * 0.7),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel itemNameTitle = new JLabel("Item");
@@ -258,7 +260,7 @@ public class cashierGUI implements ActionListener {
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Left.add(itemNameTitle);
 
-        receiptPanel_Right.setBackground(Color.CYAN);
+        receiptPanel_Right.setBackground(blueCute);
         receiptPanel_Right.setBounds((int)(width * 0.85),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel quantityTitle = new JLabel("Quantity and Price");
@@ -266,7 +268,7 @@ public class cashierGUI implements ActionListener {
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
 
-        receiptPanel_Down.setBackground(Color.MAGENTA);
+        receiptPanel_Down.setBackground(blueCute);
         receiptPanel_Down.setBounds((int)(width * 0.7),(int)(height*0.8) , (int)(width * 0.3),(int)(height*0.3));
         receiptPanel_Down.add(checkoutBtn);
         checkoutBtn.addActionListener(this);
