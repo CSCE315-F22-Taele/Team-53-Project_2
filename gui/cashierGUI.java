@@ -111,15 +111,13 @@ public class cashierGUI implements ActionListener {
     boolean is_manager;
     int orderid;
     Connection conn;
-    // Store quantity of each menu item
-    int quantityArray[] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+    
 
     // Price of each menu item
     JLabel sale = new JLabel("0");
     double totalPrice = 0;
 
-    double priceArr[]; // THIS AT THE END SHOULDN'T BE USED 
-    Integer inventory[] = new Integer[24]; // THIS AT THE END SHOULDN'T BE USED
+    ArrayList <Double> priceArr = new ArrayList<Double>();
 
     ArrayList <String> menuArr = new ArrayList<String>();
     ArrayList <JButton> menu_buttons = new ArrayList<JButton>();
@@ -155,17 +153,13 @@ public class cashierGUI implements ActionListener {
             menuArr = get_menu(conn);
             employeeid = id; 
             is_manager = is_manager( conn, employeeid);
-
+            priceArr = get_price(conn);
             
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database operations failed.");
         } 
 
-        ////////// Background //////////
-        for( int i=0; i< 24; i++){
-            inventory[i] = 0;
-        }
-
+        
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
 
@@ -260,7 +254,7 @@ public class cashierGUI implements ActionListener {
         receiptPanel_Right.setBackground(Color.CYAN);
         receiptPanel_Right.setBounds((int)(width * 0.85),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
-        JLabel quantityTitle = new JLabel("Quantity");
+        JLabel quantityTitle = new JLabel("Quantity and Price");
         quantityTitle.setVerticalAlignment(JLabel.TOP);
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
@@ -293,12 +287,6 @@ public class cashierGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
  
         if (e.getSource() == checkoutBtn) {
-            for (int i = 0; i < 10; ++i) {
-                if (inputArr[i].getText() != "") {
-                    quantityArray[i] = Integer.parseInt(inputArr[i].getText());
-                }
-            }
-            
             insertOrder(); 
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
@@ -326,9 +314,11 @@ public class cashierGUI implements ActionListener {
             if(e.getSource() == menu_buttons.get(i)){
                 new inventoryPerOrderGUI(orderid);
                 String name = menu_buttons.get(i).getText();
+                String priceItem = String.valueOf(priceArr.get(i));
                 btnIndex = i;
                 nameOccursIndex = checkNameList(name);
-                
+                totalPrice += priceArr.get(i);
+
                 if(nameOccursIndex == -1){
                     indexList.add(btnIndex);
                     clickList.add(1);
@@ -342,21 +332,22 @@ public class cashierGUI implements ActionListener {
                     receiptPanel_Left.validate();
 
                     // Shows the item's amount
-                    JLabel amountLabel = new JLabel("1");    
+                    JLabel amountLabel = new JLabel("1" + "  :  " + priceItem);    
                     amountLabel.setVerticalAlignment(JLabel.TOP);
                     amountLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Right.add(amountLabel);
                     amountLabelList.add(amountLabel);
                     receiptPanel_Right.validate();
+                   
 
                 } else {
                     // Update Item's amount by using click
                     clickList.set(nameOccursIndex, clickList.get(nameOccursIndex) + 1);
-                    String newAmount = String.valueOf(clickList.get(nameOccursIndex));
-
+                    String newAmount = String.valueOf( clickList.get(nameOccursIndex) * priceArr.get(i));
+                    String count = String.valueOf(clickList.get(nameOccursIndex) );
                     // find the corresponding label of the item
                     JLabel l = amountLabelList.get(nameOccursIndex);
-                    l.setText(newAmount);
+                    l.setText(count + "  :  " + newAmount);
 
                     // update the amountLabelList
                     amountLabelList.set(nameOccursIndex, l);
@@ -438,23 +429,21 @@ public class cashierGUI implements ActionListener {
         
 
         PreparedStatement statement = conn.prepareStatement(
-              "INSERT INTO ordering(orderid , timeoforder , amount , orderedgyro , orderedbowl , orderedpitahummus , orderedfalafel , orderedprotein , ordereddressing , ordereddrink  ) VALUES (?,?,?, ?, ?, ?,?,?, ?, ?)");
+              "INSERT INTO ordering(orderid , timeoforder , amount ) VALUES (?,?,?)");
 
           
-          int protein = extraChickenClick + extraMeatballClick;
-          int dressing = extraHarissaClick + extraTzatzikiSauceClick + extraVinegarClick;
-          double amount = getAmount( gyroClick, bowlClick, pitaAndHumusClick, falafelClick, protein, dressing, drinkClick );
+          double amount = totalPrice; 
 
           statement.setInt(1, orderid);
           statement.setTime(2, time);
           statement.setDouble(3, amount);
-          statement.setInt(4, gyroClick);
-          statement.setInt(5, bowlClick);
-          statement.setInt(6, pitaAndHumusClick);
-          statement.setInt(7, falafelClick);
-          statement.setInt(8, protein);
-          statement.setInt(9, dressing);
-          statement.setInt(10, drinkClick);
+        //   statement.setInt(4, gyroClick);
+        //   statement.setInt(5, bowlClick);
+        //   statement.setInt(6, pitaAndHumusClick);
+        //   statement.setInt(7, falafelClick);
+        //   statement.setInt(8, protein);
+        //   statement.setInt(9, dressing);
+        //   statement.setInt(10, drinkClick);
 
         
           statement.executeUpdate();

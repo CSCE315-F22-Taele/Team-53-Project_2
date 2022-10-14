@@ -149,6 +149,7 @@ public class checkoutGUI implements ActionListener{
         if (e.getSource() == cashButton) {
             try{
                 get_checkout(conn, 3, null);
+                JOptionPane.showMessageDialog(null, "Cash payment accepted");
             }
             catch(Exception cash){
                 JOptionPane.showMessageDialog(null, "Cash payment not accepted");
@@ -163,6 +164,7 @@ public class checkoutGUI implements ActionListener{
 
             try{
                 get_checkout(conn, 2, cardnumber);
+                JOptionPane.showMessageDialog(null, "Card payment accepted");
             }
             catch(Exception card){
                 JOptionPane.showMessageDialog(null, "Card payment not accepted");
@@ -176,6 +178,7 @@ public class checkoutGUI implements ActionListener{
             cardnumber = String.format("%d", uin);
             try{
                 get_checkout(conn, 1, cardnumber);
+                JOptionPane.showMessageDialog(null, "Dining Dollars payment accepted");
             }
             catch(Exception dd){
                 JOptionPane.showMessageDialog(null, "Dining Dollars payment not accepted");
@@ -188,6 +191,7 @@ public class checkoutGUI implements ActionListener{
             cardnumber = String.format("%d", uin);
             try{
                 get_checkout(conn, 0, cardnumber);
+                JOptionPane.showMessageDialog(null, "Meal Swipes payment accepted");
             }
             catch(Exception dd){
                 JOptionPane.showMessageDialog(null, "Meal Swipes payment not accepted");
