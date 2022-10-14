@@ -26,6 +26,7 @@ public class checkoutGUI implements ActionListener{
     JButton logoutButton = new JButton("LOGOUT");
     JButton cancelButton = new JButton("CANCEL ORDER");
     JButton editButton = new JButton("EDIT ORDER");
+    JLabel total_price = new JLabel();
 
     double amount;
     Connection conn; 
@@ -37,6 +38,7 @@ public class checkoutGUI implements ActionListener{
         orderid= order;
         amount = price;
         employeeid = id;
+
 
         f.setLayout(new BorderLayout());
 
@@ -60,6 +62,7 @@ public class checkoutGUI implements ActionListener{
 
         
         editButton.setBounds(270,600,50, 40);
+
 
         ////////// Payment Area //////////
         JPanel itemsPanel = new JPanel();
@@ -92,7 +95,8 @@ public class checkoutGUI implements ActionListener{
         JLabel receiptTitle = new JLabel("RECEIPT");
         JLabel itemTitle = new JLabel("ITEM");
         JLabel quantityTitle = new JLabel("QUANTITY");
-        JLabel totalSale = new JLabel("Total Sale: ");
+        String str_amt = "Total Sale: " +String.valueOf(amount);
+        JLabel totalSale = new JLabel(str_amt);
 
         // Panel Setup
         receiptPanel.setBackground(Color.green);
@@ -119,6 +123,7 @@ public class checkoutGUI implements ActionListener{
         receiptPanel.add(itemTitle);
         receiptPanel.add(quantityTitle);
         receiptPanel.add(totalSale);
+        receiptPanel.add(total_price);
         // receiptPanel.add(sale);
         // receiptPanel.add(checkoutBtn);
 
