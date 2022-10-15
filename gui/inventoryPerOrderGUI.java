@@ -124,7 +124,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         // Title
         receiptPanel_Top.setBackground(blueCute);
-        receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.1));
+        receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.05));
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("Inventory Used:");
@@ -135,22 +135,22 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Top.add(title);
         
         receiptPanel_Left.setBackground(blueCute);
-        receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.1), (int) (width * 0.15),
-                (int) (height * 0.7));
+        receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.05), (int) (width * 0.15),
+                (int) (height * 0.75));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel itemNameTitle = new JLabel("Item");
-        itemNameTitle.setFont(new Font("Serif", Font.BOLD, 12));
+        itemNameTitle.setFont(new Font("Serif", Font.BOLD, 18));
         itemNameTitle.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20)); 
         itemNameTitle.setVerticalAlignment(JLabel.TOP);
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Left.add(itemNameTitle);
 
         receiptPanel_Right.setBackground(blueCute);
-        receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.1), (int) (width * 0.15),
-                (int) (height * 0.7));
+        receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.05), (int) (width * 0.15),
+                (int) (height * 0.75));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel quantityTitle = new JLabel("Quantity");
-        quantityTitle.setFont(new Font("Serif", Font.BOLD, 12));
+        quantityTitle.setFont(new Font("Serif", Font.BOLD, 18));
         quantityTitle.setVerticalAlignment(JLabel.TOP);
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
@@ -199,7 +199,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
                     // Shows the item's name
                     JLabel ItemNameLabel = new JLabel(name);
-                    ItemNameLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+                    ItemNameLabel.setFont(new Font("Serif", Font.PLAIN, 15));
                     ItemNameLabel.setVerticalAlignment(JLabel.TOP);
                     ItemNameLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Left.add(ItemNameLabel);
@@ -208,7 +208,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
                     // Shows the item's amount
                     JLabel amountLabel = new JLabel("1");
-                    amountLabel.setFont(new Font("Serif", Font.PLAIN, 13));
+                    amountLabel.setFont(new Font("Serif", Font.PLAIN, 15));
                     amountLabel.setVerticalAlignment(JLabel.TOP);
                     amountLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Right.add(amountLabel);
