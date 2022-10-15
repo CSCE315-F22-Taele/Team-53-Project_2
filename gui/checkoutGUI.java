@@ -112,10 +112,14 @@ public class checkoutGUI implements ActionListener{
         // checkoutBtn.setBounds((int) (width * 0.09), (int) (height * 0.8), (int) (width * 0.15), (int) (height * 0.1));
 
         // Font
-        receiptTitle.setFont(new Font("Arial", Font.PLAIN, 28));
-        itemTitle.setFont(new Font("Arial", Font.PLAIN, 20));
-        quantityTitle.setFont(new Font("Arial", Font.PLAIN, 20));
-        totalSale.setFont(new Font("Arial", Font.PLAIN, 20));
+        receiptTitle.setFont(new Font("Serif", Font.PLAIN, 28));
+        itemTitle.setFont(new Font("Serif", Font.PLAIN, 20));
+        quantityTitle.setFont(new Font("Serif", Font.PLAIN, 20));
+        totalSale.setFont(new Font("Serif", Font.PLAIN, 20));
+        cardButton.setFont(new Font("Serif", Font.PLAIN, 20));
+        ddButton.setFont(new Font("Serif", Font.PLAIN, 20));
+        cardButton.setFont(new Font("Serif", Font.PLAIN, 20));
+        mealswipeButton.setFont(new Font("Serif", Font.PLAIN, 20));
         // sale.setFont(new Font("Arial", Font.PLAIN, 20));
 
         // Add to panel

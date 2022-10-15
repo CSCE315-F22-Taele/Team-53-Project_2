@@ -77,9 +77,9 @@ public class inventoryPerOrderGUI implements ActionListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = screenSize.height;
     int width = screenSize.width;
-
+    
     inventoryPerOrderGUI(int id) {
-
+        
         orderid = id; 
         try {
             conn = connectionSet();
@@ -95,9 +95,9 @@ public class inventoryPerOrderGUI implements ActionListener {
         Color blueCute = new Color(194, 194, 252);
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(screenSize.width, screenSize.height);
+        
         f.setBackground(Color.gray);
-        f.setSize(1800, 1600);
+        f.setSize(width, height);
         f.setLayout(null);
         f.setVisible(true);
         title.setBounds(30, 5, 200, 60);
@@ -112,7 +112,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         ////////// generate btns //////////
         for (int i = 0; i < nameList.size(); ++i) {
             JButton newBtn = new JButton(nameList.get(i));
-            newBtn.setPreferredSize(new Dimension(200, 100));
+            newBtn.setPreferredSize(new Dimension((int)width/10, (int) height/11));
             newBtn.setFont(new Font("Serif", Font.PLAIN, 20));
             newBtn.addActionListener(this);
             btnList.add(newBtn);
@@ -128,7 +128,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("Inventory Used:");
-        title.setFont(new Font("Serif", Font.PLAIN, 20));
+        title.setFont(new Font("Serif", Font.BOLD, 32));
         title.setVerticalAlignment(JLabel.CENTER);
         title.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Top.add(title);
@@ -138,7 +138,7 @@ public class inventoryPerOrderGUI implements ActionListener {
                 (int) (height * 0.7));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel itemNameTitle = new JLabel("Item");
-        itemNameTitle.setFont(new Font("Serif", Font.PLAIN, 20));
+        itemNameTitle.setFont(new Font("Serif", Font.BOLD, 20));
         itemNameTitle.setVerticalAlignment(JLabel.TOP);
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Left.add(itemNameTitle);
@@ -148,7 +148,7 @@ public class inventoryPerOrderGUI implements ActionListener {
                 (int) (height * 0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel quantityTitle = new JLabel("Quantity");
-        quantityTitle.setFont(new Font("Serif", Font.PLAIN, 20));
+        quantityTitle.setFont(new Font("Serif", Font.BOLD, 20));
         quantityTitle.setVerticalAlignment(JLabel.TOP);
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
@@ -196,6 +196,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
                     // Shows the item's name
                     JLabel ItemNameLabel = new JLabel(name);
+                    ItemNameLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                     ItemNameLabel.setVerticalAlignment(JLabel.TOP);
                     ItemNameLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Left.add(ItemNameLabel);
@@ -204,6 +205,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
                     // Shows the item's amount
                     JLabel amountLabel = new JLabel("1");
+                    amountLabel.setFont(new Font("Serif", Font.PLAIN, 20));
                     amountLabel.setVerticalAlignment(JLabel.TOP);
                     amountLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Right.add(amountLabel);
