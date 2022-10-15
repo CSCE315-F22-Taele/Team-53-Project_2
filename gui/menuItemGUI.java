@@ -73,9 +73,9 @@ public class menuItemGUI implements ActionListener {
     // Const Vars
     int i = 0;
     Connection conn;
-
-    menuItemGUI() {
-
+    int employeeid;
+    menuItemGUI(int id) {
+        employeeid =id;
         try {
             conn = connectionSet();
             // int size = get_inventory_size(conn);
@@ -84,7 +84,7 @@ public class menuItemGUI implements ActionListener {
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Connection Failed.");
         }
 
         // Add the inventory items to menu bar
@@ -99,7 +99,7 @@ public class menuItemGUI implements ActionListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
-        f.setSize(400, 400);
+        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
         f.setJMenuBar(menuBar);
@@ -272,7 +272,7 @@ public class menuItemGUI implements ActionListener {
 
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
-            // new cashierGUI();
+            new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == addBtn) {
@@ -513,16 +513,15 @@ public class menuItemGUI implements ActionListener {
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
                     my.user, my.pswd);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            
+            JOptionPane.showMessageDialog(null, "Database connection failed");
         }
 
         return conn;
     }
 
     public static void main(String[] args) {
-        new menuItemGUI();
+        new menuItemGUI(0);
     }
 
 }

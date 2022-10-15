@@ -58,6 +58,7 @@ public class inventoryPerOrderGUI implements ActionListener {
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
     Connection conn;
+    int orderid; 
 
     // Item's index in buttonList
     int btnIndex = -1;
@@ -77,8 +78,9 @@ public class inventoryPerOrderGUI implements ActionListener {
     int height = screenSize.height;
     int width = screenSize.width;
 
-    inventoryPerOrderGUI() {
+    inventoryPerOrderGUI(int id) {
 
+        orderid = id; 
         try {
             conn = connectionSet();
             nameList = get_inventory_name(conn);
@@ -86,20 +88,22 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
+        Color pink = new Color(244, 220, 245);
+        Color blueCute = new Color(194, 194, 252);
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
-        f.setSize(400, 400);
+        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
         title.setBounds(30, 5, 200, 60);
 
         ////////// Items Area //////////
-        itemsPanel.setBackground(Color.yellow);
+        itemsPanel.setBackground(pink);
         itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
         itemsPanel.setLayout(new FlowLayout());
 
@@ -118,7 +122,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         ////////// Receipt Area //////////
 
         // Title
-        receiptPanel_Top.setBackground(Color.green);
+        receiptPanel_Top.setBackground(blueCute);
         receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.1));
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
@@ -127,7 +131,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         title.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Top.add(title);
 
-        receiptPanel_Left.setBackground(Color.CYAN);
+        receiptPanel_Left.setBackground(blueCute);
         receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.1), (int) (width * 0.15),
                 (int) (height * 0.7));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
@@ -136,7 +140,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Left.add(itemNameTitle);
 
-        receiptPanel_Right.setBackground(Color.CYAN);
+        receiptPanel_Right.setBackground(blueCute);
         receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.1), (int) (width * 0.15),
                 (int) (height * 0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
@@ -145,7 +149,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
 
-        receiptPanel_Down.setBackground(Color.MAGENTA);
+        receiptPanel_Down.setBackground(blueCute);
         receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.8), (int) (width * 0.3),
                 (int) (height * 0.3));
         receiptPanel_Down.add(submitBtn);
@@ -223,7 +227,7 @@ public class inventoryPerOrderGUI implements ActionListener {
                     update_item(conn, indexList.get(k));
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
-                    e1.printStackTrace();
+                    JOptionPane.showMessageDialog(null, "Update of item inventory failed. ");
                 }
             }
 
@@ -286,15 +290,13 @@ public class inventoryPerOrderGUI implements ActionListener {
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
                     my.user, my.pswd);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, "Database connection failed.");
         }
 
         return conn;
     }
 
     public static void main(String[] args) {
-        new inventoryPerOrderGUI();
+        new inventoryPerOrderGUI(220905001);
     }
 }

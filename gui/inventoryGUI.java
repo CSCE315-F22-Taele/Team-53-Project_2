@@ -16,7 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 
-public class inventoryGUI_hexin implements ActionListener {
+public class inventoryGUI implements ActionListener {
 
     ////////// Declaration //////////
 
@@ -90,9 +90,11 @@ public class inventoryGUI_hexin implements ActionListener {
     // Const Vars
     int i = 0;
     Connection conn;
+    int employeeid;
 
-    inventoryGUI_hexin() {
+    inventoryGUI(int id) {
 
+        employeeid = id;
         try {
             conn = connectionSet();
             // int size = get_inventory_size(conn);
@@ -105,7 +107,7 @@ public class inventoryGUI_hexin implements ActionListener {
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "Failed database connection.");
         }
 
         // Add the inventory items to menu bar
@@ -356,7 +358,7 @@ public class inventoryGUI_hexin implements ActionListener {
 
         } else if (e.getSource() == backToCashier) {
             // FIX ME: TODO: Implement
-            // new cashierGUI();
+            new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == addBtn) {
@@ -371,8 +373,7 @@ public class inventoryGUI_hexin implements ActionListener {
             try {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
-                // TODO Auto-generated catch block
-                // error.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Error. Date entered wrong. Use YYYY-MM-dd.");
             }
 
             if (checkItemExit(name)) {
@@ -501,7 +502,7 @@ public class inventoryGUI_hexin implements ActionListener {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
                 // TODO Auto-generated catch block
-                error.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Date wrong. Use format YYYY-MM-dd");
             }
 
             expirationDateList.set(i, expirationDate);
@@ -700,16 +701,14 @@ public class inventoryGUI_hexin implements ActionListener {
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
                     my.user, my.pswd);
         } catch (Exception e) {
-            e.printStackTrace();
-            System.err.println(e.getClass().getName() + ": " + e.getMessage());
-            System.exit(0);
+            JOptionPane.showMessageDialog(null, "Connection Failed");
         }
 
         return conn;
     }
 
     public static void main(String[] args) {
-        new inventoryGUI_hexin();
+        new inventoryGUI(0);
     }
 
 }
