@@ -41,22 +41,11 @@ public class cashierGUI implements ActionListener {
     }
 
     // Button declaration
-    // JButton btn1;
-    // JButton btn2;
-    // JButton btn3;
-    // JButton btn4;
-    // JButton btn5;
-    // JButton btn6;
-    // JButton btn7;
-    // JButton btn8;
-    // JButton btn9;
-    // JButton btn10;
     JButton logoutBtn;
     JButton checkoutBtn;
     JButton inventoryBtn;
     JButton editBtn;
     JButton RestartOrder;
-    //JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
     ArrayList <String> nameOccursList = new ArrayList<String>();
 
