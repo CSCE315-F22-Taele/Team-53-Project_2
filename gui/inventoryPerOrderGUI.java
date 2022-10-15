@@ -136,7 +136,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         receiptPanel_Left.setBackground(blueCute);
         receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.05), (int) (width * 0.15),
-                (int) (height * 0.85));
+                (int) (height * 0.8));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 2));
         JLabel itemNameTitle = new JLabel("Item");
         itemNameTitle.setFont(new Font("Serif", Font.BOLD, 18));
@@ -147,7 +147,7 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         receiptPanel_Right.setBackground(blueCute);
         receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.05), (int) (width * 0.15),
-                (int) (height * 0.85));
+                (int) (height * 0.8));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 2));
         JLabel quantityTitle = new JLabel("Quantity");
         quantityTitle.setFont(new Font("Serif", Font.BOLD, 18));
@@ -156,8 +156,8 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Right.add(quantityTitle);
 
         receiptPanel_Down.setBackground(pink);
-        receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.9), (int) (width * 0.3),
-                (int) (height * 0.1));
+        receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.85), (int) (width * 0.3),
+                (int) (height * 0.15));
         receiptPanel_Down.add(submitBtn);
         submitBtn.setPreferredSize(new Dimension(300, (int) (height * 0.05)));
         submitBtn.setFont(new Font("Serif", Font.PLAIN, 20));
