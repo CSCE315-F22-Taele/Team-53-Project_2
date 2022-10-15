@@ -141,7 +141,7 @@ public class checkoutGUI implements ActionListener{
 
         f.add(receiptPanel);
             
-        f.setSize(1400, 1600);
+        f.setSize(1800, 1600);
         
         f.setLayout(null);
         f.setVisible(true);
