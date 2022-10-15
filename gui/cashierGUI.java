@@ -43,8 +43,7 @@ public class cashierGUI implements ActionListener {
     // Button declaration
     JButton logoutBtn;
     JButton checkoutBtn;
-    JButton inventoryBtn;
-    JButton editBtn;
+    JButton managerBtn;
     JButton RestartOrder;
 
     ArrayList <String> nameOccursList = new ArrayList<String>();
@@ -186,16 +185,10 @@ public class cashierGUI implements ActionListener {
         checkoutBtn.addActionListener(this);
 
         // Button 13
-        inventoryBtn = new JButton("INVENTORY");
-        inventoryBtn.setBounds((int) (width * 0.27), (int) (height * 0.8), 100, 80);
-        inventoryBtn.setBackground(Color.LIGHT_GRAY);
-        inventoryBtn.addActionListener(this);
-
-        // Button 14
-        editBtn = new JButton("EDIT MENU");
-        editBtn.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
-        editBtn.setBackground(Color.LIGHT_GRAY);
-        editBtn.addActionListener(this);
+        managerBtn = new JButton("MANAGER OPTIONS");
+        managerBtn.setBounds((int) (width * 0.27), (int) (height * 0.8), 100, 80);
+        managerBtn.setBackground(Color.LIGHT_GRAY);
+        managerBtn.addActionListener(this);
 
         RestartOrder = new JButton("RESTART ORDER");
         RestartOrder.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
@@ -221,9 +214,8 @@ public class cashierGUI implements ActionListener {
         logoutPanel.add(logoutBtn);
 
         logoutPanel.add(RestartOrder);
-        if( is_manager){
-            logoutPanel.add(inventoryBtn);
-            logoutPanel.add(editBtn);
+        if(is_manager){
+            logoutPanel.add(managerBtn);
         }
         f.add(logoutPanel);
 
@@ -298,12 +290,8 @@ public class cashierGUI implements ActionListener {
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
             
         }
-        else if(e.getSource() == inventoryBtn){
-            new inventoryGUI(employeeid); 
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-        }
-        else if(e.getSource() == editBtn){
-            new menuItemGUI(employeeid);
+        else if(e.getSource() == managerBtn){
+            new managerGUI(employeeid); 
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
         }
         else if(e.getSource() == RestartOrder){

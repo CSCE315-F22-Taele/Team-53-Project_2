@@ -46,9 +46,7 @@ public class managerGUI implements ActionListener{
     int employeeid;
 
     managerGUI(int id){
-
-        employeeid = 5; // hardcode to test, remove later
-
+        
         // Buttons
         inventoryBtn.addActionListener(this);
         menuBtn.addActionListener(this);
@@ -68,7 +66,7 @@ public class managerGUI implements ActionListener{
         panel.add(excessBtn);
         panel.add(restockBtn);
         panel.add(backToCashier);
-        
+
         f.add(panel);
 
         // frame
