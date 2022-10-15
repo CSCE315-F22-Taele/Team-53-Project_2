@@ -24,9 +24,7 @@ public class managerGUI implements ActionListener{
     // Buttons
     JButton inventoryBtn = new JButton("INVENTORY");
     JButton menuBtn = new JButton("MENU");
-    JButton salesBtn = new JButton("SALES REPORT");
-    JButton excessBtn = new JButton("EXCESS REPORT");
-    JButton restockBtn = new JButton("RESTOCK REPORT");
+    JButton salesBtn = new JButton("SALES REPORTS");
     JButton backToCashier = new JButton("BACK TO CASHIER");
 
     // Dimensions
@@ -57,16 +55,12 @@ public class managerGUI implements ActionListener{
         inventoryBtn.setPreferredSize(new Dimension(300, 40));
         menuBtn.setPreferredSize(new Dimension(300, 40));
         salesBtn.setPreferredSize(new Dimension(300, 40));
-        excessBtn.setPreferredSize(new Dimension(300, 40));
-        restockBtn.setPreferredSize(new Dimension(300, 40));
         backToCashier.setPreferredSize(new Dimension(300, 40));
 
 
         inventoryBtn.addActionListener(this);
         menuBtn.addActionListener(this);
         salesBtn.addActionListener(this);
-        excessBtn.addActionListener(this);
-        restockBtn.addActionListener(this);
         backToCashier.addActionListener(this);
 
         // Panel Format
@@ -77,8 +71,6 @@ public class managerGUI implements ActionListener{
         panel.add(inventoryBtn);
         panel.add(menuBtn);
         panel.add(salesBtn);
-        panel.add(excessBtn);
-        panel.add(restockBtn);
         panel.add(backToCashier);
 
         f.add(panel);
