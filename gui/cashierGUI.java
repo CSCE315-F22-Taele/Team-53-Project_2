@@ -146,7 +146,7 @@ public class cashierGUI implements ActionListener {
     JPanel receiptPanel_Right = new JPanel();
     JPanel receiptPanel_Down = new JPanel();
 
-    
+    boolean checkoutTrue = false;
     public cashierGUI(int id) {
         
         try{
@@ -296,7 +296,11 @@ public class cashierGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
  
         if (e.getSource() == checkoutBtn) {
-            insertOrder(); 
+            if (checkoutTrue== false){
+                insertOrder();
+                checkoutTrue = true;
+            }
+            
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
            
@@ -432,6 +436,7 @@ public class cashierGUI implements ActionListener {
         Connection conn = connectionSet();
 
         try{
+        
         orderid = getOrderId(conn); 
         
 
@@ -491,21 +496,6 @@ public class cashierGUI implements ActionListener {
 
         return name;
     }
-    public double getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
-      int orderedprotein, int ordereddressing, int ordereddrink) {
-        
-        //FIX ME: MUST GET THE AMOUNTS FROM THE AMOUNTS TABLE 
-        double ordertotal = (8.09 * orderedgyro) +
-        (8.09 * orderedbowl) +
-        (3.49 * orderedpitahummus) +
-        (3.49 * orderedfalafel) +
-        (1.99 * orderedprotein) +
-        (0.39 * ordereddressing) +
-        (2.45 * ordereddrink);
-
-        return (double) ordertotal;
-    }
-
 
     // dynamically get price
     public ArrayList<Double> get_price(Connection conn) throws SQLException {
