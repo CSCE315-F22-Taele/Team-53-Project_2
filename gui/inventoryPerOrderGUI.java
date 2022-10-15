@@ -58,7 +58,7 @@ public class inventoryPerOrderGUI implements ActionListener {
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
     Connection conn;
-    int orderid; 
+    int orderid;
 
     // Item's index in buttonList
     int btnIndex = -1;
@@ -77,10 +77,10 @@ public class inventoryPerOrderGUI implements ActionListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = screenSize.height;
     int width = screenSize.width;
-    
+
     inventoryPerOrderGUI(int id) {
-        
-        orderid = id; 
+
+        orderid = id;
         try {
             conn = connectionSet();
             nameList = get_inventory_name(conn);
@@ -95,7 +95,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         Color blueCute = new Color(194, 194, 252);
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        
+
         f.setBackground(Color.gray);
         f.setSize(width, height);
         f.setLayout(null);
@@ -112,7 +112,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         ////////// generate btns //////////
         for (int i = 0; i < nameList.size(); ++i) {
             JButton newBtn = new JButton(nameList.get(i));
-            newBtn.setPreferredSize(new Dimension((int)width/10, (int) height/12));
+            newBtn.setPreferredSize(new Dimension((int) width / 10, (int) height / 12));
             newBtn.setFont(new Font("Serif", Font.PLAIN, 20));
             newBtn.addActionListener(this);
             btnList.add(newBtn);
@@ -129,39 +129,39 @@ public class inventoryPerOrderGUI implements ActionListener {
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("Inventory Used:");
         title.setFont(new Font("Serif", Font.BOLD, 32));
-        
+
         title.setVerticalAlignment(JLabel.CENTER);
         title.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Top.add(title);
-        
+
         receiptPanel_Left.setBackground(blueCute);
         receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.05), (int) (width * 0.15),
-                (int) (height * 0.75));
-        receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
+                (int) (height * 0.85));
+        receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 2));
         JLabel itemNameTitle = new JLabel("Item");
         itemNameTitle.setFont(new Font("Serif", Font.BOLD, 18));
-        itemNameTitle.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20)); 
+        itemNameTitle.setBorder(BorderFactory.createEmptyBorder(0, 20, 20, 20));
         itemNameTitle.setVerticalAlignment(JLabel.TOP);
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Left.add(itemNameTitle);
 
         receiptPanel_Right.setBackground(blueCute);
         receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.05), (int) (width * 0.15),
-                (int) (height * 0.75));
-        receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
+                (int) (height * 0.85));
+        receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 2));
         JLabel quantityTitle = new JLabel("Quantity");
         quantityTitle.setFont(new Font("Serif", Font.BOLD, 18));
         quantityTitle.setVerticalAlignment(JLabel.TOP);
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Right.add(quantityTitle);
 
-        receiptPanel_Down.setBackground(blueCute);
-        receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.8), (int) (width * 0.3),
-                (int) (height * 0.3));
+        receiptPanel_Down.setBackground(pink);
+        receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.9), (int) (width * 0.3),
+                (int) (height * 0.1));
         receiptPanel_Down.add(submitBtn);
-        submitBtn.setPreferredSize(new Dimension(300, 70));
+        submitBtn.setPreferredSize(new Dimension(300, (int) (height * 0.05)));
         submitBtn.setFont(new Font("Serif", Font.PLAIN, 20));
-       
+
         submitBtn.addActionListener(this);
 
         f.add(receiptPanel_Top);
