@@ -46,8 +46,22 @@ public class managerGUI implements ActionListener{
     int employeeid;
 
     managerGUI(int id){
-        
+
         // Buttons
+        // inventoryBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
+        // menuBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
+        // salesBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
+        // excessBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
+        // restockBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
+        // backToCashier.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
+        inventoryBtn.setPreferredSize(new Dimension(300, 40));
+        menuBtn.setPreferredSize(new Dimension(300, 40));
+        salesBtn.setPreferredSize(new Dimension(300, 40));
+        excessBtn.setPreferredSize(new Dimension(300, 40));
+        restockBtn.setPreferredSize(new Dimension(300, 40));
+        backToCashier.setPreferredSize(new Dimension(300, 40));
+
+
         inventoryBtn.addActionListener(this);
         menuBtn.addActionListener(this);
         salesBtn.addActionListener(this);
@@ -73,6 +87,7 @@ public class managerGUI implements ActionListener{
         f.setSize(screenSize);
         f.setLayout(null);
         f.setVisible(true);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     public void actionPerformed(ActionEvent e) {
