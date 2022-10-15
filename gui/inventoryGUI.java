@@ -691,6 +691,34 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    public ArrayList<String> get_inventory_name_restock(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getString("itemname"));
+
+        }
+
+        return temp;
+    }
+
+    public ArrayList<Integer> get_inventory_amount_restock(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500");
+
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getInt("itemname"));
+
+        }
+
+        return temp;
+    }
+
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
