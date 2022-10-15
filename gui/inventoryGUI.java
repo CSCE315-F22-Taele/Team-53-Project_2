@@ -60,6 +60,10 @@ public class inventoryGUI implements ActionListener {
     ArrayList<Date> expirationDateList = new ArrayList<Date>();
     ArrayList<Double> costList = new ArrayList<Double>();
     ArrayList<String> vendorList = new ArrayList<String>();
+    ArrayList<String> restock_name_list = new ArrayList<String>();
+    ArrayList<JButton> restock_name_btn = new ArrayList<JButton>();
+    ArrayList<Integer> restock_quantity_list = new ArrayList<Integer>();
+    ArrayList<JLabel> restock_quantity_label = new ArrayList<JLabel>();
 
     DateFormat dateFormat;
 
@@ -87,10 +91,19 @@ public class inventoryGUI implements ActionListener {
     // Frame
     JFrame f = new JFrame();
 
+    //////////// Restock Panel //////////
+    JPanel itemsPanel = new JPanel();
+    JPanel restockPanel_Top = new JPanel();
+    JPanel restockPanel_Left = new JPanel();
+    JPanel restockPanel_Right = new JPanel();
+    JPanel restockPanel_Down = new JPanel();
+
     // Const Vars
     int i = 0;
+    int restockIndex = -1;
     Connection conn;
     int employeeid;
+    boolean isRestock = false;
 
     inventoryGUI(int id) {
 
@@ -127,6 +140,7 @@ public class inventoryGUI implements ActionListener {
         f.setVisible(true);
         f.setJMenuBar(menuBar);
         f.setVisible(true);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         int screenHeight = screenSize.height;
         int screenWidth = screenSize.width;
@@ -143,7 +157,6 @@ public class inventoryGUI implements ActionListener {
         deleteItem.addActionListener(this);
 
         ////////// Data Output Area for each inventory item //////////
-
         idInfo.setBounds(620, 180, 80, 20);
         itemId.setBounds(730, 180, 160, 20);
 
@@ -241,6 +254,73 @@ public class inventoryGUI implements ActionListener {
         deleteBtn.setBounds(910, 300, 100, 20);
         deleteBtn.setVisible(false);
 
+        ////////// Receipt Area //////////
+        Color pink = new Color(244, 220, 245);
+        Color blueCute = new Color(194, 194, 252);
+        // Title
+        restockPanel_Top.setBackground(blueCute);
+        restockPanel_Top.setBounds((int) (screenWidth * 0.7), 0, (int) (screenWidth * 0.3), (int) (screenHeight * 0.1));
+        restockPanel_Top.setLayout(null);
+        restockPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
+        JLabel title = new JLabel("REORDER NOW");
+        // title.setFont(new Font("Serif", Font.PLAIN, 20));
+        title.setVerticalAlignment(JLabel.CENTER);
+        title.setHorizontalAlignment(JLabel.CENTER);
+        restockPanel_Top.add(title);
+
+        restockPanel_Left.setBackground(blueCute);
+        restockPanel_Left.setBounds((int) (screenWidth * 0.7), (int) (screenHeight * 0.1), (int) (screenWidth * 0.15),
+                (int) (screenHeight * 0.7));
+        restockPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
+        JLabel itemNameTitle = new JLabel("Item");
+        itemNameTitle.setVerticalAlignment(JLabel.TOP);
+        itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
+        restockPanel_Left.add(itemNameTitle);
+
+        restockPanel_Right.setBackground(blueCute);
+        restockPanel_Right.setBounds((int) (screenWidth * 0.85), (int) (screenHeight * 0.1), (int) (screenWidth * 0.15),
+                (int) (screenHeight * 0.7));
+        restockPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
+        JLabel quantityTitle = new JLabel("Quantity");
+        quantityTitle.setVerticalAlignment(JLabel.TOP);
+        quantityTitle.setHorizontalAlignment(JLabel.CENTER);
+        restockPanel_Right.add(quantityTitle);
+
+        restockPanel_Down.setBackground(blueCute);
+        restockPanel_Down.setBounds((int) (screenWidth * 0.7), (int) (screenHeight * 0.8), (int) (screenWidth * 0.3),
+                (int) (screenHeight * 0.3));
+
+        f.add(restockPanel_Top);
+        f.add(restockPanel_Left);
+        f.add(restockPanel_Right);
+        f.add(restockPanel_Down);
+
+        // Add the restock items to the arraylist
+        try {
+            restock_name_list = get_inventory_name_restock(conn);
+            restock_quantity_list = get_inventory_amount_restock(conn);
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            // e.printStackTrace();
+        }
+
+        // generate the items as buttons and add action
+        for (int i = 0; i < restock_name_list.size(); i++) {
+            JButton newBtn = new JButton(restock_name_list.get(i));
+            newBtn.addActionListener(this);
+            // newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
+
+            restockPanel_Left.add(newBtn);
+            restock_name_btn.add(newBtn);
+
+            JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
+            restockPanel_Right.add(newLabel);
+            restock_quantity_label.add(newLabel);
+            newLabel.setVerticalAlignment(JLabel.TOP);
+            newLabel.setHorizontalAlignment(JLabel.CENTER);
+        }
+
     }
 
     public void action(int k) {
@@ -324,6 +404,45 @@ public class inventoryGUI implements ActionListener {
         }
     }
 
+    public void getUpdate(String name) {
+        btnDisplay(false);
+        updateBtn.setVisible(true);
+
+        i = -1;
+        for (int h = 0; h < nameList.size(); ++h) {
+            if (nameList.get(h).equals(name)) {
+                i = h;
+                break;
+            }
+        }
+        clearInputText();
+        if (i == -1) {
+            btnDisplay(false);
+            ask_Name.setVisible(true);
+            clearBtn.setVisible(true);
+            clearInputText();
+            clearItemLabel();
+            info_display(false);
+            add_input_Display(false);
+            inputName.setVisible(true);
+            searchBtn_Update.setVisible(true);
+            JOptionPane.showMessageDialog(null, "Item doesn't exist!");
+        } else {
+            info_display(true);
+            add_input_Display(true);
+            ask_Name.setVisible(false);
+
+            itemId.setText(String.valueOf(idList.get(i)));
+            inputName.setText(nameList.get(i));
+            inputQuantity.setText(String.valueOf(quantityList.get(i)));
+            inputCost.setText(String.valueOf(costList.get(i)));
+
+            inputDate.setText(dateFormat.format(expirationDateList.get(i)));
+            inputVendor.setText(vendorList.get(i));
+
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         for (int h = 0; h < itemList.size(); ++h) {
             if (e.getSource() == itemList.get(h)) {
@@ -332,6 +451,17 @@ public class inventoryGUI implements ActionListener {
             }
             btnDisplay(false);
             ask_Name.setVisible(false);
+        }
+        for (int l = 0; l < restock_name_btn.size(); ++l) {
+            if (e.getSource() == restock_name_btn.get(l)) {
+                clearInputText();
+                clearItemLabel();
+
+                isRestock = true;
+                restockIndex = l;
+                getUpdate(restock_name_btn.get(l).getText());
+
+            }
         }
 
         if (e.getSource() == addItem) {
@@ -412,43 +542,7 @@ public class inventoryGUI implements ActionListener {
             searchBtn_Update.setVisible(true);
 
         } else if (e.getSource() == searchBtn_Update) {
-            btnDisplay(false);
-            updateBtn.setVisible(true);
-
-            String name = inputName.getText();
-            i = -1;
-            for (int h = 0; h < nameList.size(); ++h) {
-                if (nameList.get(h).equals(name)) {
-                    i = h;
-                    break;
-                }
-            }
-
-            clearInputText();
-            if (i == -1) {
-                btnDisplay(false);
-                ask_Name.setVisible(true);
-                clearBtn.setVisible(true);
-                clearInputText();
-                clearItemLabel();
-                info_display(false);
-                add_input_Display(false);
-                inputName.setVisible(true);
-                searchBtn_Update.setVisible(true);
-                JOptionPane.showMessageDialog(null, "Item doesn't exist!");
-            } else {
-                info_display(true);
-                add_input_Display(true);
-                ask_Name.setVisible(false);
-
-                itemId.setText(String.valueOf(idList.get(i)));
-                inputName.setText(nameList.get(i));
-                inputQuantity.setText(String.valueOf(quantityList.get(i)));
-                inputCost.setText(String.valueOf(costList.get(i)));
-
-                inputDate.setText(dateFormat.format(expirationDateList.get(i)));
-                inputVendor.setText(vendorList.get(i));
-            }
+            getUpdate(inputName.getText());
 
         } else if (e.getSource() == searchBtn_Delete) {
             btnDisplay(false);
@@ -492,7 +586,6 @@ public class inventoryGUI implements ActionListener {
             }
 
         } else if (e.getSource() == updateBtn) {
-            // NOTE: MUST BE REMOVED: WE ARE NOT UPDATING PRIMARY KEY
             btnDisplay(false);
             nameList.set(i, inputName.getText());
             quantityList.set(i, Integer.parseInt(inputQuantity.getText()));
@@ -509,6 +602,30 @@ public class inventoryGUI implements ActionListener {
 
             vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
+
+            if (isRestock) {
+                restock_quantity_list.set(restockIndex, Integer.parseInt(inputQuantity.getText()));
+
+                if (restock_quantity_list.get(restockIndex) >= 500) {
+                    System.out.println("restock index: " + restockIndex);
+                    System.out.println(restock_name_btn.get(restockIndex).getText());
+                    System.out.println(restock_quantity_label.get(restockIndex).getText());
+
+                    restockPanel_Left.remove(restock_name_btn.get(restockIndex));
+                    restockPanel_Right.remove(restock_quantity_label.get(restockIndex));
+                    restockPanel_Left.revalidate();
+                    restockPanel_Left.repaint();
+
+                    restockPanel_Right.revalidate();
+                    restockPanel_Right.repaint();
+
+                    restock_name_list.remove(restockIndex);
+                    restock_name_btn.remove(restockIndex);
+                    restock_quantity_label.remove(restockIndex);
+                    restock_quantity_list.remove(restockIndex);
+                }
+                isRestock = false;
+            }
 
             try {
                 update_item(conn, i);
@@ -691,6 +808,34 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    public ArrayList<String> get_inventory_name_restock(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getString("itemname"));
+
+        }
+
+        return temp;
+    }
+
+    public ArrayList<Integer> get_inventory_amount_restock(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500");
+
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getInt("amount"));
+
+        }
+
+        return temp;
+    }
+
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -709,6 +854,7 @@ public class inventoryGUI implements ActionListener {
 
     public static void main(String[] args) {
         new inventoryGUI(0);
+
     }
 
 }
