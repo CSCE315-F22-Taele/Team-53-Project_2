@@ -54,16 +54,16 @@ public class inventoryGUI implements ActionListener {
     JButton backToCashier = new JButton("Back To Cashier");
 
     // Store data
-    ArrayList <Integer> idList = new ArrayList<Integer>();
-    ArrayList <String> nameList = new ArrayList<String>();
-    ArrayList <Integer> quantityList = new ArrayList<Integer>();
-    ArrayList <Date> expirationDateList = new ArrayList<Date>();
-    ArrayList <Double> costList = new ArrayList<Double>();
-    ArrayList <String> vendorList = new ArrayList<String>();
-    ArrayList <String> restock_name_list = new ArrayList<String>();
-    ArrayList <JButton> restock_name_btn = new ArrayList<JButton>();
-    ArrayList <Integer> restock_quantity_list = new ArrayList<Integer>();
-    ArrayList <JLabel> restock_quantity_label = new ArrayList<JLabel>();
+    ArrayList<Integer> idList = new ArrayList<Integer>();
+    ArrayList<String> nameList = new ArrayList<String>();
+    ArrayList<Integer> quantityList = new ArrayList<Integer>();
+    ArrayList<Date> expirationDateList = new ArrayList<Date>();
+    ArrayList<Double> costList = new ArrayList<Double>();
+    ArrayList<String> vendorList = new ArrayList<String>();
+    ArrayList<String> restock_name_list = new ArrayList<String>();
+    ArrayList<JButton> restock_name_btn = new ArrayList<JButton>();
+    ArrayList<Integer> restock_quantity_list = new ArrayList<Integer>();
+    ArrayList<JLabel> restock_quantity_label = new ArrayList<JLabel>();
 
     DateFormat dateFormat;
 
@@ -97,8 +97,6 @@ public class inventoryGUI implements ActionListener {
     JPanel restockPanel_Left = new JPanel();
     JPanel restockPanel_Right = new JPanel();
     JPanel restockPanel_Down = new JPanel();
-
-
 
     // Const Vars
     int i = 0;
@@ -264,7 +262,8 @@ public class inventoryGUI implements ActionListener {
         restockPanel_Top.setBounds((int) (screenWidth * 0.7), 0, (int) (screenWidth * 0.3), (int) (screenHeight * 0.1));
         restockPanel_Top.setLayout(null);
         restockPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
-        JLabel title = new JLabel("Action Items");
+        JLabel title = new JLabel("REORDER NOW");
+        title.setFont(new Font("Serif", Font.PLAIN, 20));
         title.setVerticalAlignment(JLabel.CENTER);
         title.setHorizontalAlignment(JLabel.CENTER);
         restockPanel_Top.add(title);
@@ -296,7 +295,7 @@ public class inventoryGUI implements ActionListener {
         f.add(restockPanel_Right);
         f.add(restockPanel_Down);
 
-        //Add the restock items to the arraylist   
+        // Add the restock items to the arraylist
         try {
             restock_name_list = get_inventory_name_restock(conn);
             restock_quantity_list = get_inventory_amount_restock(conn);
@@ -305,12 +304,13 @@ public class inventoryGUI implements ActionListener {
             // TODO Auto-generated catch block
             // e.printStackTrace();
         }
-        
 
         // generate the items as buttons and add action
-        for (int i = 0; i < restock_name_list.size(); i++){
+        for (int i = 0; i < restock_name_list.size(); i++) {
             JButton newBtn = new JButton(restock_name_list.get(i));
             newBtn.addActionListener(this);
+            newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
+
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
 
@@ -404,7 +404,7 @@ public class inventoryGUI implements ActionListener {
         }
     }
 
-    public void getUpdate(String name){
+    public void getUpdate(String name) {
         btnDisplay(false);
         updateBtn.setVisible(true);
 
@@ -452,16 +452,15 @@ public class inventoryGUI implements ActionListener {
             btnDisplay(false);
             ask_Name.setVisible(false);
         }
-        for(int l = 0; l < restock_name_btn.size(); ++l){
-            
-            if(e.getSource() == restock_name_btn.get(l)){
+        for (int l = 0; l < restock_name_btn.size(); ++l) {
+            if (e.getSource() == restock_name_btn.get(l)) {
                 clearInputText();
                 clearItemLabel();
-                
+
                 isRestock = true;
                 restockIndex = l;
                 getUpdate(restock_name_btn.get(l).getText());
-                
+
             }
         }
 
@@ -604,16 +603,14 @@ public class inventoryGUI implements ActionListener {
             vendorList.set(i, inputVendor.getText());
             itemList.get(i).setText(inputName.getText());
 
-            if(isRestock){
+            if (isRestock) {
                 restock_quantity_list.set(restockIndex, Integer.parseInt(inputQuantity.getText()));
 
-
-                if(restock_quantity_list.get(restockIndex) >= 500){
+                if (restock_quantity_list.get(restockIndex) >= 500) {
                     System.out.println("restock index: " + restockIndex);
                     System.out.println(restock_name_btn.get(restockIndex).getText());
                     System.out.println(restock_quantity_label.get(restockIndex).getText());
 
-                    
                     restockPanel_Left.remove(restock_name_btn.get(restockIndex));
                     restockPanel_Right.remove(restock_quantity_label.get(restockIndex));
                     restockPanel_Left.revalidate();
@@ -625,12 +622,10 @@ public class inventoryGUI implements ActionListener {
                     restock_name_list.remove(restockIndex);
                     restock_name_btn.remove(restockIndex);
                     restock_quantity_label.remove(restockIndex);
-                    restock_quantity_list.remove(restockIndex); 
+                    restock_quantity_list.remove(restockIndex);
                 }
                 isRestock = false;
             }
-
-
 
             try {
                 update_item(conn, i);
@@ -650,8 +645,6 @@ public class inventoryGUI implements ActionListener {
             add_input_Display(false);
             inputName.setVisible(true);
             searchBtn_Update.setVisible(true);
-
-
 
         } else if (e.getSource() == deleteItem) {
             btnDisplay(false);
