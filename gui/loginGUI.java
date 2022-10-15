@@ -7,7 +7,6 @@ import java.awt.event.*;
 import java.sql.*;
 import java.sql.DriverManager;
 
-
 public class loginGUI implements ActionListener {
     private void makeFrameFullSize(JFrame aFrame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -36,26 +35,29 @@ public class loginGUI implements ActionListener {
 
     // Frame Declaration
     JFrame f = new JFrame("Login GUI");
+    Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+    int width = screenSize.width;
+    int height = screenSize.height;
 
     loginGUI() {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(screenSize.width, screenSize.height);
+        f.setSize(width, height);
         f.setBackground(Color.gray);
 
         // Position for each button and label
-        title.setBounds(720, 40, 200, 100);
-        btn1.setBounds(500, 150, 130, 130);
-        btn2.setBounds(670, 150, 130, 130);
-        btn3.setBounds(840, 150, 130, 130);
-        btn4.setBounds(500, 300, 130, 130);
-        btn5.setBounds(670, 300, 130, 130);
-        btn6.setBounds(840, 300, 130, 130);
-        btn7.setBounds(500, 460, 130, 130);
-        btn8.setBounds(670, 460, 130, 130);
-        btn9.setBounds(840, 460, 130, 130);
-        btn0.setBounds(670, 620, 130, 130);
-        btn10.setBounds(620, 770, 250, 130);
+        title.setBounds(720, 30, 200, 100);
+        btn1.setBounds(500, 110, 130, 130);
+        btn2.setBounds(670, 110, 130, 130);
+        btn3.setBounds(840, 110, 130, 130);
+        btn4.setBounds(500, 260, 130, 130);
+        btn5.setBounds(670, 260, 130, 130);
+        btn6.setBounds(840, 260, 130, 130);
+        btn7.setBounds(500, 410, 130, 130);
+        btn8.setBounds(670, 410, 130, 130);
+        btn9.setBounds(840, 410, 130, 130);
+        btn0.setBounds(670, 560, 130, 130);
+        btn10.setBounds(610, 710, 250, 80);
 
         // Add ActionListener to each button
         btn1.addActionListener(this);
@@ -69,6 +71,20 @@ public class loginGUI implements ActionListener {
         btn9.addActionListener(this);
         btn0.addActionListener(this);
         btn10.addActionListener(this);
+
+        // Pretty button
+        title.setFont(new Font("Serif", Font.BOLD, 30));
+        btn0.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn1.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn2.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn3.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn4.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn5.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn6.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn7.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn8.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn9.setFont(new Font("Serif", Font.PLAIN, 30));
+        btn10.setFont(new Font("Serif", Font.PLAIN, 30));
 
         // Frame
         f.add(btn1);
@@ -85,10 +101,9 @@ public class loginGUI implements ActionListener {
         f.add(btn10);
         f.add(title);
 
-        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
-        
+
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -116,32 +131,29 @@ public class loginGUI implements ActionListener {
         } else if (e.getSource() == btn10) {
             passCode = Integer.parseInt(tempCode);
 
-            
             if (checkPassword(passCode)) {
                 // If yes, go directly to cashierGUI
-                
-                //openWindow openPOS= new openWindow(passCode, manager); 
-                //openPOS.set_employeeid();
-                
+
+                // openWindow openPOS= new openWindow(passCode, manager);
+                // openPOS.set_employeeid();
+
                 new cashierGUI(passCode);
-                //newGui.get_employee(passCode);
-                
-                
+                // newGui.get_employee(passCode);
+
                 f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
                 // FIX ME: ADD A WAY TO GET THE EMPLOYEE ID TO THE CASHIER PAGE
-                
+
                 JOptionPane.showMessageDialog(null, "Pincode is correct.");
-                
+
             } else {
-                
+
                 JOptionPane.showMessageDialog(null, "Pincode is incorrect. Please retry.");
                 tempCode = "";
-                
+
             }
         }
     }
 
-    
     public boolean checkPassword(int password) {
         Connection conn = connectionSet();
         boolean value = false;

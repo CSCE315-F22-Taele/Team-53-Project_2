@@ -177,7 +177,7 @@ public class cashierGUI implements ActionListener {
 
         for (int i = 0; i < menuArr.size(); i++){
             JButton newBtn = new JButton(menuArr.get(i));
-            newBtn.setPreferredSize(new Dimension(200, 60));
+            newBtn.setPreferredSize(new Dimension(300, 150));
             newBtn.addActionListener(this);
             menu_buttons.add(newBtn);
             
@@ -279,7 +279,7 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Down);
 
 
-        f.setSize(1400, 1600);
+        f.setSize(1800, 1600);
         f.setLayout(null);
         f.setVisible(true);
     }
