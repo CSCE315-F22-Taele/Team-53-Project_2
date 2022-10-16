@@ -523,7 +523,7 @@ public class inventoryGUI implements ActionListener {
                     vendorList.add(vendor);
 
                 } catch (SQLException addException) {
-                    addException.printStackTrace();
+                    //addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -610,9 +610,9 @@ public class inventoryGUI implements ActionListener {
                 restock_quantity_list.set(restockIndex, Integer.parseInt(inputQuantity.getText()));
 
                 if (restock_quantity_list.get(restockIndex) >= 500) {
-                    System.out.println("restock index: " + restockIndex);
-                    System.out.println(restock_name_btn.get(restockIndex).getText());
-                    System.out.println(restock_quantity_label.get(restockIndex).getText());
+                    // System.out.println("restock index: " + restockIndex);
+                    // System.out.println(restock_name_btn.get(restockIndex).getText());
+                    // System.out.println(restock_quantity_label.get(restockIndex).getText());
 
                     restockPanel_Left.remove(restock_name_btn.get(restockIndex));
                     restockPanel_Right.remove(restock_quantity_label.get(restockIndex));

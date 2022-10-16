@@ -81,7 +81,7 @@ public class inventoryPerOrderGUI implements ActionListener {
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = screenSize.height;
     int width = screenSize.width;
-    Array currInventory;
+    Integer [] currInventory;
     inventoryPerOrderGUI(int id) {
 
         orderid = id; 
@@ -94,7 +94,7 @@ public class inventoryPerOrderGUI implements ActionListener {
             }
         } catch (SQLException e) {
             // TODO Auto-generated catch block
-            e.printStackTrace();
+           
             JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
@@ -235,8 +235,8 @@ public class inventoryPerOrderGUI implements ActionListener {
                     update_item(conn, inventoryCounts);
                 } catch (SQLException e1) {
                     // TODO Auto-generated catch block
-                    e1.printStackTrace();
-                    JOptionPane.showMessageDialog(null, "Update of item inventory failed. ");
+                    
+                    JOptionPane.showMessageDialog(null, "Update of item inventory used failed. ");
                 }
             
 
@@ -293,20 +293,21 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         
         while (inventoryInfo.next()) {
-            currInventory = inventoryInfo.getArray("inventory");
+            Array temp = inventoryInfo.getArray("inventory");
+            currInventory = (Integer[])temp.getArray();
         }
         
         //FIX ME: make this work
-        List vals = Arrays.asList(currInventory);
+        //List vals = Arrays.asList(currInventory);
         
         for( int i=0; i<inventory.size(); i++){
-            inventory.set(i, inventory.get(i) + (int) vals.get(i) );
+            inventory.set(i, inventory.get(i) + (int) currInventory[i] );
         }
 
         Object[] inventoryArray = inventory.toArray();
         Array inventoryArr = conn.createArrayOf("INT",inventoryArray );
 
-        System.out.println(inventoryArr);
+        
 
         PreparedStatement updateStat = conn.prepareStatement("UPDATE ordering SET inventory =(?) WHERE orderid=(?)");
        

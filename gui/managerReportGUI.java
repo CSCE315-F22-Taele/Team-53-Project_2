@@ -62,16 +62,16 @@ public class managerReportGUI implements ActionListener {
         ///// Connect with db /////
         Connection conn;
         // TODO: Connect with database and get values for each arraylist
-        try {
-            conn = ;
-            itemNameList = ;
-            saleList = ;
-            excessItemList = ;
+        // try {
+        //     conn = ;
+        //     itemNameList = ;
+        //     saleList = ;
+        //     excessItemList = ;
 
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            JOptionPane.showMessageDialog(null, "Failed database connection.");
-        }
+        // } catch (SQLException e) {
+        //     // TODO Auto-generated catch block
+        //     JOptionPane.showMessageDialog(null, "Failed database connection.");
+        // }
 
         ////////// Frame Setting //////////
         f.setSize(screenSize.width, screenSize.height);
@@ -190,9 +190,9 @@ public class managerReportGUI implements ActionListener {
                 date_end = new SimpleDateFormat("yyyy-MM-dd").parse(endDateInput.getText());
             } catch (ParseException e1) {
                 // TODO Auto-generated catch block
-                e1.printStackTrace();
+                //e1.printStackTrace();
             }
-            System.out.println(date_from);
+            //System.out.println(date_from);
         }
         
     }
