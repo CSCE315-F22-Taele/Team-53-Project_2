@@ -22,7 +22,7 @@ public class inventoryGUI implements ActionListener {
 
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
-    JMenu viewMenu = new JMenu("View");
+    JMenu viewMenu = new JMenu("Items");
     JMenu editMenu = new JMenu("Edit");
 
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
@@ -85,8 +85,8 @@ public class inventoryGUI implements ActionListener {
     JButton searchBtn_Delete = new JButton("Search");
 
     // Delete
-    JMenuItem deleteItem = new JMenuItem("Delete");
-    JButton deleteBtn = new JButton("Delete");
+    JMenuItem deleteItem = new JMenuItem("Deactivate");
+    JButton deleteBtn = new JButton("Deactivate");
 
     // Frame
     JFrame f = new JFrame();
