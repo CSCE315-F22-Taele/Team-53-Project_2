@@ -219,7 +219,7 @@ public class cashierGUI implements ActionListener {
         String userName = get_employee_name(employeeid);
         JLabel weclomeTitle = new JLabel("Welcome " + userName);
         weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 400, 50);
-        weclomeTitle.setFont(new Font("Arial", Font.PLAIN, 30));
+        weclomeTitle.setFont(new Font("Serif", Font.PLAIN, 30));
         f.add(weclomeTitle);
 
         ////////// Logout Area //////////
@@ -297,12 +297,12 @@ public class cashierGUI implements ActionListener {
  
         if (e.getSource() == checkoutBtn) {
 
-            if (checkoutTrue== false){
+            if (checkoutTrue == false){
                 insertOrder();
-                checkoutTrue = true;
+    
+                new checkoutGUI(orderid, totalPrice, employeeid);
             }
-
-            new checkoutGUI(orderid, totalPrice, employeeid);
+            
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
            
         } else if (e.getSource() == logoutBtn) {
@@ -437,9 +437,8 @@ public class cashierGUI implements ActionListener {
 
         Connection conn = connectionSet();
 
-        try{
+        try{    
 
-        orderid = getOrderId(conn); 
 
 
         Calendar calendar = Calendar.getInstance();
@@ -504,7 +503,7 @@ public class cashierGUI implements ActionListener {
 
         try{
 
-            ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost ORDER BY id ASC");
+            ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost WHERE is_selling = true ORDER BY id ASC");
 
             while (findCost.next()) {
                 items.add(findCost.getDouble("cost"));
