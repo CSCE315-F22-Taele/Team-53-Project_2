@@ -138,7 +138,7 @@ public class cashierGUI implements ActionListener {
     JPanel receiptPanel_Right = new JPanel();
     JPanel receiptPanel_Down = new JPanel();
 
-    
+    boolean checkoutTrue = false;
     public cashierGUI(int id) {
         
         try{
@@ -296,8 +296,12 @@ public class cashierGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
  
         if (e.getSource() == checkoutBtn) {
-            insertOrder(); 
-            System.out.println(ordereditems);
+
+            if (checkoutTrue== false){
+                insertOrder();
+                checkoutTrue = true;
+            }
+
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
            
@@ -434,6 +438,9 @@ public class cashierGUI implements ActionListener {
         Connection conn = connectionSet();
 
         try{
+
+        orderid = getOrderId(conn); 
+
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
