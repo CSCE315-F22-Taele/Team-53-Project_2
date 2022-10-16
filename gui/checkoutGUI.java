@@ -166,7 +166,7 @@ public class checkoutGUI implements ActionListener{
             
         } else if (e.getSource() == cardButton) {
             Random rd = new Random();
-            cardnumber = Long.toString(rd.nextLong() / 1000);
+            cardnumber = Long.toString( Math.abs( rd.nextLong() / 1000) );
 
             try{
                 get_checkout(conn, 2, cardnumber);

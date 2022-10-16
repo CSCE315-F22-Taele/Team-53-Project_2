@@ -22,7 +22,7 @@ public class inventoryGUI implements ActionListener {
 
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
-    JMenu viewMenu = new JMenu("View");
+    JMenu viewMenu = new JMenu("Items");
     JMenu editMenu = new JMenu("Edit");
 
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
@@ -85,8 +85,8 @@ public class inventoryGUI implements ActionListener {
     JButton searchBtn_Delete = new JButton("Search");
 
     // Delete
-    JMenuItem deleteItem = new JMenuItem("Delete");
-    JButton deleteBtn = new JButton("Delete");
+    JMenuItem deleteItem = new JMenuItem("Deactivate");
+    JButton deleteBtn = new JButton("Deactivate");
 
     // Frame
     JFrame f = new JFrame();
@@ -313,6 +313,7 @@ public class inventoryGUI implements ActionListener {
 
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
+           
 
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
             restockPanel_Right.add(newLabel);
@@ -509,18 +510,20 @@ public class inventoryGUI implements ActionListener {
             if (checkItemExit(name)) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
-                int id = generateId();
-                idList.add(id);
-                nameList.add(name);
-                quantityList.add(quantity);
-                costList.add(cost);
-                expirationDateList.add(expirationDate);
-                vendorList.add(vendor);
-
+            
+                
+                
                 try {
-                    add_item(conn, id, name, quantity, cost, expirationDate, vendor);
+                    add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
+                    nameList.add(name);
+                    quantityList.add(quantity);
+                    costList.add(cost);
+                    expirationDateList.add(expirationDate);
+                    vendorList.add(vendor);
+
                 } catch (SQLException addException) {
+                    //addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -607,9 +610,9 @@ public class inventoryGUI implements ActionListener {
                 restock_quantity_list.set(restockIndex, Integer.parseInt(inputQuantity.getText()));
 
                 if (restock_quantity_list.get(restockIndex) >= 500) {
-                    System.out.println("restock index: " + restockIndex);
-                    System.out.println(restock_name_btn.get(restockIndex).getText());
-                    System.out.println(restock_quantity_label.get(restockIndex).getText());
+                    // System.out.println("restock index: " + restockIndex);
+                    // System.out.println(restock_name_btn.get(restockIndex).getText());
+                    // System.out.println(restock_quantity_label.get(restockIndex).getText());
 
                     restockPanel_Left.remove(restock_name_btn.get(restockIndex));
                     restockPanel_Right.remove(restock_quantity_label.get(restockIndex));
@@ -689,26 +692,26 @@ public class inventoryGUI implements ActionListener {
         }
     }
 
-    public void add_item(Connection conn, int id, String name, int quantity, double cost, Date expirationDate,
+    public void add_item(Connection conn,  String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
-                "INSERT INTO inventory(itemid, itemname, amount, cost, expirationdate,vendor) VALUES(?,?,?,?,?,?)");
+                "INSERT INTO inventory( itemname, amount, cost, expirationdate,vendor, is_using ) VALUES(?,?,?,?,?, ?)");
 
-        addStatement.setInt(1, id);
-        addStatement.setString(2, name);
-        addStatement.setInt(3, quantity);
-        addStatement.setDouble(4, cost);
-        // FIXME: No matter what date we type in, the month Jan is sent to db??
+        
+        addStatement.setString(1, name);
+        addStatement.setInt(2, quantity);
+        addStatement.setDouble(3, cost);
         java.sql.Date sqlDate = new java.sql.Date(expirationDate.getTime());
-        addStatement.setDate(5, sqlDate);
-        addStatement.setString(6, vendor);
+        addStatement.setDate(4, sqlDate);
+        addStatement.setString(5, vendor);
+        addStatement.setBoolean(6, true);
 
         addStatement.executeUpdate();
     }
 
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
-                "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?) WHERE itemid = (?)");
+                "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?), is_using=true  WHERE itemid = (?)");
 
         updateStat.setString(1, nameList.get(index));
         updateStat.setInt(2, quantityList.get(index));
@@ -718,18 +721,19 @@ public class inventoryGUI implements ActionListener {
         updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
+        
         updateStat.executeUpdate();
     }
 
     public void delete_item(Connection conn, int id) throws SQLException {
-        PreparedStatement delStatement = conn.prepareStatement("DELETE FROM inventory WHERE itemid=(?)");
+        PreparedStatement delStatement = conn.prepareStatement("UPDATE inventory SET is_using=false WHERE itemid=(?)");
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
 
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory ORDER BY itemid ASC");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -744,7 +748,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory ORDER BY itemid ASC");
         // int count = 0; // Increments inventory array
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -760,7 +764,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory ORDER BY itemid ASC");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -775,7 +779,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory ORDER BY itemid ASC");
 
         ArrayList<Double> temp = new ArrayList<Double>();
 
@@ -787,7 +791,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory ORDER BY itemid ASC");
 
         ArrayList<Date> temp = new ArrayList<Date>();
 
@@ -799,7 +803,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_vendor(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory");
+        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory ORDER BY itemid ASC");
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
