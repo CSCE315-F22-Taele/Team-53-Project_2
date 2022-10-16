@@ -251,7 +251,7 @@ public class inventoryPerOrderGUI implements ActionListener {
     ///// Backend /////
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE is_using = true ORDER BY itemid ASC");
         
         ArrayList<String> temp = new ArrayList<String>();
 

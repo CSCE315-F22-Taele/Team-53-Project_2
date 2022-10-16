@@ -517,7 +517,7 @@ public class cashierGUI implements ActionListener {
 
         try{
 
-            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost ORDER BY id ASC");
+            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost WHERE is_selling = true ORDER BY id ASC");
 
             while (findMenu.next()) {
                 temp.add(findMenu.getString("menuitem"));
