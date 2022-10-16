@@ -32,22 +32,22 @@ Whenever it is discontinued. It is not removed. Just don’t use that index.
 
 
 __CHECKOUT:__
-checkoutid INT
-auto increment
-paymentmethod INT
-Enum. one of the 4 options
-0: meal swipes
-1: dining dollars
-2: card
-3: cash
-amount DOUBLE 
-From the order
-cardnumber STRING
-Randomly generated (comes from payment system)
-employeeid INT
-Whoever is running the order
-orderid INT (foreign key)
-Comes from the order. 
+- checkoutid INT
+  - auto increment
+- paymentmethod INT
+  - Enum. one of the 4 options
+  - 0: meal swipes
+  - 1: dining dollars
+  - 2: card
+  - 3: cash
+- amount DOUBLE 
+  - From the order
+- cardnumber STRING
+  - Randomly generated (comes from payment system)
+- employeeid INT
+  - Whoever is running the order
+- orderid INT (foreign key)
+  - Comes from the order. 
 
 __MENUCOST:__
 menuitem STRING
