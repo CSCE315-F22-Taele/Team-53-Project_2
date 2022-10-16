@@ -547,7 +547,7 @@ public class menuItemGUI implements ActionListener {
 
     public void add_item(Connection conn, String name, double cost) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
-                "INSERT INTO menucost(menuitem, cost) VALUES(?,?)");
+                "INSERT INTO menucost(menuitem, cost, is_selling) VALUES(?,?, true)");
 
         addStatement.setString(1, name);
         addStatement.setDouble(2, cost);
