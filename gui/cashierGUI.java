@@ -122,18 +122,10 @@ public class cashierGUI implements ActionListener {
 
     ArrayList <String> menuArr = new ArrayList<String>();
     ArrayList <JButton> menu_buttons = new ArrayList<JButton>();
+    
+    ArrayList <Integer> ordereditems = new ArrayList<Integer>();
+   
 
-    // Increments
-    int gyroClick = 0;
-    int bowlClick = 0;
-    int falafelClick = 0;
-    int pitaAndHumusClick = 0;
-    int extraChickenClick = 0;
-    int extraMeatballClick = 0;
-    int extraHarissaClick = 0;
-    int extraTzatzikiSauceClick = 0;
-    int extraVinegarClick = 0;
-    int drinkClick = 0;
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = screenSize.height;
     int width = screenSize.width;
@@ -151,15 +143,21 @@ public class cashierGUI implements ActionListener {
         
         try{
             conn = connectionSet();
+            orderid = getOrderId(conn);
             menuArr = get_menu(conn);
             employeeid = id; 
             is_manager = is_manager( conn, employeeid);
             priceArr = get_price(conn);
+
+            for( int i=0; i<  menuArr.size(); i++){
+                ordereditems.add(0);
+            }
             
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database operations failed.");
         } 
 
+        
         
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
@@ -184,6 +182,8 @@ public class cashierGUI implements ActionListener {
             itemsPanel.add(newBtn);
             itemsPanel.validate();
         }
+
+
         
         // Button 11
         logoutBtn = new JButton("LOGOUT");
@@ -297,6 +297,7 @@ public class cashierGUI implements ActionListener {
  
         if (e.getSource() == checkoutBtn) {
             insertOrder(); 
+            System.out.println(ordereditems);
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
            
@@ -365,6 +366,7 @@ public class cashierGUI implements ActionListener {
                     // update the amountLabelList
                     amountLabelList.set(nameOccursIndex, l);
                 }
+                ordereditems.set(i, ordereditems.get(i)+1);
             }
         }
 
@@ -432,8 +434,6 @@ public class cashierGUI implements ActionListener {
         Connection conn = connectionSet();
 
         try{
-        orderid = getOrderId(conn); 
-        
 
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
@@ -442,21 +442,18 @@ public class cashierGUI implements ActionListener {
         
 
         PreparedStatement statement = conn.prepareStatement(
-              "INSERT INTO ordering(orderid , timeoforder , amount ) VALUES (?,?,?)");
+              "UPDATE ordering SET timeoforder=(?), amount=(?), ordereditems=(?) WHERE orderid=(?)");
 
           
           double amount = totalPrice; 
+          
+          Object[] orderedArr = ordereditems.toArray();
+          Array ordered = conn.createArrayOf("INT",orderedArr );
+          statement.setInt(4, orderid);
+          statement.setTime(1, time);
+          statement.setDouble(2, amount);
+          statement.setArray(3, ordered);
 
-          statement.setInt(1, orderid);
-          statement.setTime(2, time);
-          statement.setDouble(3, amount);
-        //   statement.setInt(4, gyroClick);
-        //   statement.setInt(5, bowlClick);
-        //   statement.setInt(6, pitaAndHumusClick);
-        //   statement.setInt(7, falafelClick);
-        //   statement.setInt(8, protein);
-        //   statement.setInt(9, dressing);
-        //   statement.setInt(10, drinkClick);
 
         
           statement.executeUpdate();
@@ -491,21 +488,6 @@ public class cashierGUI implements ActionListener {
 
         return name;
     }
-    public double getAmount(int orderedgyro, int orderedbowl, int orderedpitahummus, int orderedfalafel,
-      int orderedprotein, int ordereddressing, int ordereddrink) {
-        
-        //FIX ME: MUST GET THE AMOUNTS FROM THE AMOUNTS TABLE 
-        double ordertotal = (8.09 * orderedgyro) +
-        (8.09 * orderedbowl) +
-        (3.49 * orderedpitahummus) +
-        (3.49 * orderedfalafel) +
-        (1.99 * orderedprotein) +
-        (0.39 * ordereddressing) +
-        (2.45 * ordereddrink);
-
-        return (double) ordertotal;
-    }
-
 
     // dynamically get price
     public ArrayList<Double> get_price(Connection conn) throws SQLException {
@@ -515,7 +497,7 @@ public class cashierGUI implements ActionListener {
 
         try{
 
-            ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost");
+            ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost ORDER BY id ASC");
 
             while (findCost.next()) {
                 items.add(findCost.getDouble("cost"));
@@ -535,7 +517,7 @@ public class cashierGUI implements ActionListener {
 
         try{
 
-            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost");
+            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost ORDER BY id ASC");
 
             while (findMenu.next()) {
                 temp.add(findMenu.getString("menuitem"));

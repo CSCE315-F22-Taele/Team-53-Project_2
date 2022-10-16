@@ -470,7 +470,7 @@ public class menuItemGUI implements ActionListener {
     }
 
     public void delete_item(Connection conn, String menu_name) throws SQLException {
-        PreparedStatement delStatement = conn.prepareStatement("DELETE FROM menucost WHERE menuitem=(?)");
+        PreparedStatement delStatement = conn.prepareStatement("UPDATE menucost SET is_selling=false WHERE menuitem=(?)");
         delStatement.setString(1, menu_name);
         delStatement.executeUpdate();
     }
@@ -478,7 +478,7 @@ public class menuItemGUI implements ActionListener {
     // WILL GET MENU ITEM NAMES
     public ArrayList<String> get_menu_item(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT menuitem FROM menucost");
+        ResultSet findInventory = stmt.executeQuery("SELECT menuitem FROM menucost WHERE is_selling=true ORDER BY id ASC");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -493,7 +493,7 @@ public class menuItemGUI implements ActionListener {
     // WILL GET COST OF MENU ITEM
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM menucost");
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM menucost WHERE is_selling=true ORDER BY id ASC");
 
         ArrayList<Double> temp = new ArrayList<Double>();
 
