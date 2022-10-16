@@ -14,7 +14,7 @@ This code is a project for CSCE-331 (Introduction to Software Engineering). This
 - To run on Mac: `java -cp ".:postgresql-42.2.8.jar" loginGUI`
 
 
-##### __DATABASE DESIGN:__
+### __DATABASE DESIGN:__
 
 
 __ORDERING:__
