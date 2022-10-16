@@ -263,7 +263,7 @@ public class inventoryGUI implements ActionListener {
         restockPanel_Top.setLayout(null);
         restockPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("REORDER NOW");
-        title.setFont(new Font("Serif", Font.PLAIN, 20));
+        // title.setFont(new Font("Serif", Font.PLAIN, 20));
         title.setVerticalAlignment(JLabel.CENTER);
         title.setHorizontalAlignment(JLabel.CENTER);
         restockPanel_Top.add(title);
@@ -309,7 +309,7 @@ public class inventoryGUI implements ActionListener {
         for (int i = 0; i < restock_name_list.size(); i++) {
             JButton newBtn = new JButton(restock_name_list.get(i));
             newBtn.addActionListener(this);
-            newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
+            // newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
 
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
