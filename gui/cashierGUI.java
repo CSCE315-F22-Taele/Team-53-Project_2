@@ -160,7 +160,7 @@ public class cashierGUI implements ActionListener {
 
         for (int i = 0; i < menuArr.size(); i++) {
             JButton newBtn = new JButton(menuArr.get(i));
-            newBtn.setPreferredSize(new Dimension(200, 60));
+            newBtn.setPreferredSize(new Dimension(300, 150));
             newBtn.addActionListener(this);
             menu_buttons.add(newBtn);
 
@@ -195,7 +195,7 @@ public class cashierGUI implements ActionListener {
         String userName = get_employee_name(employeeid);
         JLabel weclomeTitle = new JLabel("Welcome " + userName);
         weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 400, 50);
-        weclomeTitle.setFont(new Font("Arial", Font.PLAIN, 30));
+        weclomeTitle.setFont(new Font("Serif", Font.PLAIN, 30));
         f.add(weclomeTitle);
 
         ////////// Logout Area //////////
@@ -254,7 +254,10 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Right);
         f.add(receiptPanel_Down);
 
-        f.setSize(1400, 1600);
+
+
+        f.setSize(1800, 1600);
+
         f.setLayout(null);
         f.setVisible(true);
     }
@@ -272,12 +275,14 @@ public class cashierGUI implements ActionListener {
 
         if (e.getSource() == checkoutBtn) {
 
-            if (checkoutTrue == false) {
-                insertOrder();
-                checkoutTrue = true;
-            }
 
-            new checkoutGUI(orderid, totalPrice, employeeid);
+            if (checkoutTrue == false){
+
+                insertOrder();
+    
+                new checkoutGUI(orderid, totalPrice, employeeid);
+            }
+            
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == logoutBtn) {
@@ -402,6 +407,7 @@ public class cashierGUI implements ActionListener {
 
         try {
 
+
             orderid = getOrderId(conn);
 
             Calendar calendar = Calendar.getInstance();
@@ -460,7 +466,7 @@ public class cashierGUI implements ActionListener {
 
         try {
 
-            ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost ORDER BY id ASC");
+            ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost WHERE is_selling = true ORDER BY id ASC");
 
             while (findCost.next()) {
                 items.add(findCost.getDouble("cost"));
