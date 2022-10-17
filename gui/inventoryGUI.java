@@ -119,7 +119,10 @@ public class inventoryGUI implements ActionListener {
             vendorList = get_vendor(conn);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 9c34340... working deactivation
             // TODO: get the data from db
             // deactivatedNameList = ;
             // deactivatedCostList = ;
@@ -739,7 +742,10 @@ public class inventoryGUI implements ActionListener {
     }
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> parent of 9c34340... working deactivation
     public ArrayList<String> get_deactivate_inventory(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt
@@ -755,7 +761,10 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+<<<<<<< HEAD
 >>>>>>> parent of 402aab6... Merge pull request #15 from CSCE315-F22-Taele/inventoryGUI
+=======
+>>>>>>> parent of 9c34340... working deactivation
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory ORDER BY itemid ASC");
