@@ -118,6 +118,13 @@ public class inventoryGUI implements ActionListener {
             expirationDateList = get_expiration_date(conn);
             vendorList = get_vendor(conn);
 
+<<<<<<< HEAD
+=======
+            // TODO: get the data from db
+            // deactivatedNameList = ;
+            // deactivatedCostList = ;
+
+>>>>>>> parent of 402aab6... Merge pull request #15 from CSCE315-F22-Taele/inventoryGUI
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             JOptionPane.showMessageDialog(null, "Failed database connection.");
@@ -731,6 +738,24 @@ public class inventoryGUI implements ActionListener {
         delStatement.executeUpdate();
     }
 
+<<<<<<< HEAD
+=======
+    public ArrayList<String> get_deactivate_inventory(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt
+                .executeQuery("SELECT itemname FROM inventory WHERE is_using=false ORDER BY id ASC");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getString("itemname"));
+
+        }
+
+        return temp;
+    }
+
+>>>>>>> parent of 402aab6... Merge pull request #15 from CSCE315-F22-Taele/inventoryGUI
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory ORDER BY itemid ASC");
