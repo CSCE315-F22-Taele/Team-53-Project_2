@@ -32,7 +32,7 @@ public class managerGUI implements ActionListener {
     int employeeid;
 
     managerGUI(int id) {
-
+        employeeid = id;
         // Buttons
         inventoryBtn.setPreferredSize(new Dimension(300, 40));
         menuBtn.setPreferredSize(new Dimension(300, 40));
@@ -71,6 +71,7 @@ public class managerGUI implements ActionListener {
         } else if (e.getSource() == salesBtn) {
             new managerReportGUI();
         } else if (e.getSource() == backToCashier) {
+            new cashierGUI(employeeid);
             f.dispose();
         }
     }
