@@ -5,8 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
-
-public class managerGUI implements ActionListener{
+public class managerGUI implements ActionListener {
 
     ////////// Declaration //////////
 
@@ -32,7 +31,7 @@ public class managerGUI implements ActionListener{
     Connection conn;
     int employeeid;
 
-    managerGUI(int id){
+    managerGUI(int id) {
 
         // Buttons
         inventoryBtn.setPreferredSize(new Dimension(300, 40));
@@ -40,14 +39,13 @@ public class managerGUI implements ActionListener{
         salesBtn.setPreferredSize(new Dimension(300, 40));
         backToCashier.setPreferredSize(new Dimension(300, 40));
 
-
         inventoryBtn.addActionListener(this);
         menuBtn.addActionListener(this);
         salesBtn.addActionListener(this);
         backToCashier.addActionListener(this);
 
         // Panel Format
-        panel.setBounds((int)(width * 0.025),(int)(height*0.04) , (int)(width*0.95), (int)(height*0.9));
+        panel.setBounds((int) (width * 0.025), (int) (height * 0.04), (int) (width * 0.95), (int) (height * 0.9));
         Color pink = new Color(244, 220, 245);
         panel.setBackground(pink);
 
@@ -66,13 +64,14 @@ public class managerGUI implements ActionListener{
     }
 
     public void actionPerformed(ActionEvent e) {
-        if(e.getSource() == inventoryBtn){
-            new inventoryGUI(employeeid); 
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-        }
-        else if(e.getSource() == menuBtn){
-            new menuItemGUI(employeeid); 
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+        if (e.getSource() == inventoryBtn) {
+            new inventoryGUI(employeeid);
+        } else if (e.getSource() == menuBtn) {
+            new menuItemGUI(employeeid);
+        } else if (e.getSource() == salesBtn) {
+            new managerReportGUI();
+        } else if (e.getSource() == backToCashier) {
+            f.dispose();
         }
     }
 
