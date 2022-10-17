@@ -604,6 +604,19 @@ public class menuItemGUI implements ActionListener {
         return temp;
     }
 
+    // WILL GET DEACTIVIATED ITEM COSTS
+    public ArrayList<Double> get_deactivate_menu_cost(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM menucost WHERE is_selling=false ORDER BY id ASC");
+
+        ArrayList<Double> temp = new ArrayList<Double>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getDouble("cost"));
+        }
+        return temp;
+    }
+
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
