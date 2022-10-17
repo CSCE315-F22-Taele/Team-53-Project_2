@@ -388,7 +388,7 @@ public class managerReportGUI implements ActionListener {
     }
 
     // USE TO GET EXCESS REPORT
-    public ArrayList<String> get_excess_report(Connection conn) throws SQLException {
+    public ArrayList<String> get_excess_report(Connection conn, Date start, Date end) throws SQLException {
         String prep_statement = "SELECT itemname FROM inventory ORDER BY itemid ASC";
 
         Statement stmt = conn.createStatement();
@@ -400,7 +400,7 @@ public class managerReportGUI implements ActionListener {
         }
 
         // Helper functions used
-        ArrayList<Integer> no_sale = calculate_inventory_use(get_inventory_use(conn, date_from, date_end),
+        ArrayList<Integer> no_sale = calculate_inventory_use(get_inventory_use(conn, start, end),
                 get_inventory(conn));
 
         ArrayList<String> no_sale_name = new ArrayList<String>();
