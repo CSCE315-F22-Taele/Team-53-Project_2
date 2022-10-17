@@ -81,9 +81,8 @@ public class menuItemGUI implements ActionListener {
     ArrayList<JMenuItem> deactivatedItemList = new ArrayList<JMenuItem>();
     JButton activateBtn = new JButton("Activate");
 
-
     menuItemGUI(int id) {
-        employeeid =id;
+        employeeid = id;
         try {
             conn = connectionSet();
             // int size = get_inventory_size(conn);
@@ -227,7 +226,7 @@ public class menuItemGUI implements ActionListener {
         itemName.setText(nameList.get(k));
         itemCost.setText(String.valueOf(costList.get(k)));
         i = k;
-        
+
         itemName.setVisible(true);
         itemCost.setVisible(true);
         info_display(true);
@@ -300,7 +299,7 @@ public class menuItemGUI implements ActionListener {
                 btnDisplay(false);
                 activateBtn.setVisible(true);
             }
-            ask_Name.setVisible(false);    
+            ask_Name.setVisible(false);
         }
 
         if (e.getSource() == addItem) {
@@ -497,8 +496,6 @@ public class menuItemGUI implements ActionListener {
             viewMenu.remove(i);
             add_input_Display(false);
 
-
-
             btnDisplay(false);
             ask_Name.setVisible(true);
             clearBtn.setVisible(true);
@@ -509,8 +506,8 @@ public class menuItemGUI implements ActionListener {
             add_input_Display(false);
             inputName.setVisible(true);
             searchBtn_Deactivate.setVisible(true);
-            
-        } else if(e.getSource() == activateBtn){
+
+        } else if (e.getSource() == activateBtn) {
             nameList.add(deactivatedNameList.get(i));
             costList.add(deactivatedCostList.get(i));
 
@@ -529,7 +526,7 @@ public class menuItemGUI implements ActionListener {
             // clear the screen
             activateBtn.setVisible(false);
             itemName.setVisible(false);
-            itemCost.setVisible(false);    
+            itemCost.setVisible(false);
             info_display(false);
             clearBtn.setVisible(false);
         }
@@ -556,7 +553,8 @@ public class menuItemGUI implements ActionListener {
     }
 
     public void delete_item(Connection conn, String menu_name) throws SQLException {
-        PreparedStatement delStatement = conn.prepareStatement("UPDATE menucost SET is_selling=false WHERE menuitem=(?)");
+        PreparedStatement delStatement = conn
+                .prepareStatement("UPDATE menucost SET is_selling=false WHERE menuitem=(?)");
         delStatement.setString(1, menu_name);
         delStatement.executeUpdate();
     }
@@ -564,7 +562,8 @@ public class menuItemGUI implements ActionListener {
     // WILL GET MENU ITEM NAMES
     public ArrayList<String> get_menu_item(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT menuitem FROM menucost WHERE is_selling=true ORDER BY id ASC");
+        ResultSet findInventory = stmt
+                .executeQuery("SELECT menuitem FROM menucost WHERE is_selling=true ORDER BY id ASC");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -589,6 +588,22 @@ public class menuItemGUI implements ActionListener {
         return temp;
     }
 
+    // WILL GET DEACTIVIATED ITEM NAMES
+    public ArrayList<String> get_deactivate_menu_item(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt
+                .executeQuery("SELECT menuitem FROM menucost WHERE is_selling=false ORDER BY id ASC");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getString("menuitem"));
+
+        }
+
+        return temp;
+    }
+
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -599,7 +614,7 @@ public class menuItemGUI implements ActionListener {
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
                     my.user, my.pswd);
         } catch (Exception e) {
-            
+
             JOptionPane.showMessageDialog(null, "Database connection failed");
         }
 

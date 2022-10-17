@@ -26,7 +26,6 @@ public class inventoryGUI implements ActionListener {
     JMenu editMenu = new JMenu("Edit");
     JMenu deactivatedMenu = new JMenu("Deactivated");
 
-
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
     Integer inventory_id[];
     String inventory_names[];
@@ -347,7 +346,6 @@ public class inventoryGUI implements ActionListener {
 
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
-           
 
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
             restockPanel_Right.add(newLabel);
@@ -373,7 +371,7 @@ public class inventoryGUI implements ActionListener {
     }
 
     public void deaction(int k) {
-        
+
         itemId.setText(String.valueOf(deactivated_IdList.get(k)));
         itemName.setText(deactivated_NameList.get(k));
         itemQuantity.setText(Integer.toString(deactivated_QuantityList.get(k)));
@@ -431,7 +429,7 @@ public class inventoryGUI implements ActionListener {
 
     public boolean checkItemExit(String name) {
         for (int i = 0; i < nameList.size(); ++i) {
-            //System.out.println(nameList.get(i));
+            // System.out.println(nameList.get(i));
             if (name.equals(nameList.get(i))) {
                 return true;
             }
@@ -524,7 +522,7 @@ public class inventoryGUI implements ActionListener {
                 btnDisplay(false);
                 activateBtn.setVisible(true);
             }
-            ask_Name.setVisible(false);    
+            ask_Name.setVisible(false);
         }
 
         if (e.getSource() == addItem) {
@@ -582,7 +580,7 @@ public class inventoryGUI implements ActionListener {
                     vendorList.add(vendor);
 
                 } catch (SQLException addException) {
-                    //addException.printStackTrace();
+                    // addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -616,7 +614,7 @@ public class inventoryGUI implements ActionListener {
             for (int h = 0; h < nameList.size(); ++h) {
                 System.out.println(nameList.get(h));
                 if (nameList.get(h).equals(name)) {
-                    
+
                     i = h;
                     break;
                 }
@@ -763,7 +761,7 @@ public class inventoryGUI implements ActionListener {
             add_input_Display(false);
             inputName.setVisible(true);
             searchBtn_deactivate.setVisible(true);
-        } else if(e.getSource() == activateBtn){
+        } else if (e.getSource() == activateBtn) {
             idList.add(deactivated_IdList.get(i));
             nameList.add(deactivated_NameList.get(i));
             quantityList.add(deactivated_QuantityList.get(i));
@@ -782,26 +780,25 @@ public class inventoryGUI implements ActionListener {
             deactivated_QuantityList.remove(i);
             deactivated_ExpirationList.remove(i);
             deactivated_VendorList.remove(i);
-            
+
             deactivated_ItemList.remove(i);
             deactivatedMenu.remove(i);
 
             JOptionPane.showMessageDialog(null, "Activate successful.");
 
             // clear the screen
-            clearItemLabel();  
+            clearItemLabel();
             info_display(false);
             activateBtn.setVisible(false);
             clearBtn.setVisible(false);
         }
     }
 
-    public void add_item(Connection conn,  String name, int quantity, double cost, Date expirationDate,
+    public void add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
                 "INSERT INTO inventory( itemname, amount, cost, expirationdate,vendor, is_using ) VALUES(?,?,?,?,?, ?)");
 
-        
         addStatement.setString(1, name);
         addStatement.setInt(2, quantity);
         addStatement.setDouble(3, cost);
@@ -825,7 +822,7 @@ public class inventoryGUI implements ActionListener {
         updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
-        
+
         updateStat.executeUpdate();
     }
 
@@ -833,6 +830,21 @@ public class inventoryGUI implements ActionListener {
         PreparedStatement delStatement = conn.prepareStatement("UPDATE inventory SET is_using=false WHERE itemid=(?)");
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
+    }
+
+    public ArrayList<String> get_deactivate_inventory(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt
+                .executeQuery("SELECT itemname FROM inventory WHERE is_using=false ORDER BY id ASC");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getString("itemname"));
+
+        }
+
+        return temp;
     }
 
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
