@@ -239,6 +239,8 @@ public class menuItemGUI implements ActionListener {
         itemCost.setText(String.valueOf(deactivatedCostList.get(k)));
         i = k;
 
+        itemName.setVisible(true);
+        itemCost.setVisible(true);
         info_display(true);
         clearBtn.setVisible(true);
     }
