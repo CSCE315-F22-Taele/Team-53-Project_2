@@ -515,12 +515,19 @@ public class menuItemGUI implements ActionListener {
             itemList.add(newItem);
             viewMenu.add(newItem);
 
+            try {
+                activate_item(conn, deactivatedNameList.get(i));
+                JOptionPane.showMessageDialog(null, "Activate successful.");
+            } catch (SQLException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+                JOptionPane.showMessageDialog(null, "Activate unsuccessful.");
+            }
+
             deactivatedNameList.remove(i);
             deactivatedCostList.remove(i);
             deactivatedItemList.remove(i);
             deactivatedMenu.remove(i);
-
-            JOptionPane.showMessageDialog(null, "Activate successful.");
 
             // clear the screen
             activateBtn.setVisible(false);
@@ -553,7 +560,14 @@ public class menuItemGUI implements ActionListener {
 
     public void delete_item(Connection conn, String menu_name) throws SQLException {
         PreparedStatement delStatement = conn
-                .prepareStatement("UPDATE menucost SET is_selling=false WHERE menuitem=(?)");
+                .prepareStatement("UPDATE menucost SET is_selling = false WHERE menuitem =(?)");
+        delStatement.setString(1, menu_name);
+        delStatement.executeUpdate();
+    }
+
+    public void activate_item(Connection conn, String menu_name) throws SQLException {
+        PreparedStatement delStatement = conn
+                .prepareStatement("UPDATE menucost SET is_selling = true WHERE menuitem =(?)");
         delStatement.setString(1, menu_name);
         delStatement.executeUpdate();
     }
