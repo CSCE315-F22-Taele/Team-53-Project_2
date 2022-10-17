@@ -24,13 +24,13 @@ public class menuItemGUI implements ActionListener {
     JMenuBar menuBar = new JMenuBar();
     JMenu viewMenu = new JMenu("View");
     JMenu editMenu = new JMenu("Edit");
+    JMenu deactivatedMenu = new JMenu("Deactivated");
 
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
     Integer inventory_id[];
     String inventory_names[];
 
     // View
-
     JLabel nameInfo = new JLabel("Item Name: ");
     JLabel itemName = new JLabel("");
 
@@ -61,19 +61,27 @@ public class menuItemGUI implements ActionListener {
     JMenuItem updateItem = new JMenuItem("Update");
     JButton updateBtn = new JButton("Update");
     JButton searchBtn_Update = new JButton("Search");
-    JButton searchBtn_Delete = new JButton("Search");
+    JButton searchBtn_Deactivate = new JButton("Search");
 
-    // Delete
-    JMenuItem deleteItem = new JMenuItem("Delete");
-    JButton deleteBtn = new JButton("Delete");
+    // Deactivate
+    JMenuItem deactivateItem = new JMenuItem("Deactivate");
+    JButton deactivateBtn = new JButton("Deactivate");
 
     // Frame
-    JFrame f = new JFrame();
+    JFrame f = new JFrame("Menu Item GUI");
 
     // Const Vars
     int i = 0;
     Connection conn;
     int employeeid;
+
+    // Deactivated
+    ArrayList<String> deactivatedNameList = new ArrayList<String>();
+    ArrayList<Double> deactivatedCostList = new ArrayList<Double>();
+    ArrayList<JMenuItem> deactivatedItemList = new ArrayList<JMenuItem>();
+    JButton activateBtn = new JButton("Activate");
+
+
     menuItemGUI(int id) {
         employeeid =id;
         try {
@@ -81,6 +89,10 @@ public class menuItemGUI implements ActionListener {
             // int size = get_inventory_size(conn);
             nameList = get_menu_item(conn);
             costList = get_cost(conn);
+
+            // TODO: get the data from db
+            // deactivatedNameList = ;
+            // deactivatedCostList = ;
 
         } catch (SQLException e) {
             // TODO Auto-generated catch block
@@ -95,6 +107,14 @@ public class menuItemGUI implements ActionListener {
             itemList.add(newItem);
         }
 
+        // Add the deactivated items to the menu bar
+        for (int i = 0; i < deactivatedNameList.size(); i++) {
+            JMenuItem newItem = new JMenuItem(deactivatedNameList.get(i));
+            newItem.addActionListener(this);
+            deactivatedMenu.add(newItem);
+            deactivatedItemList.add(newItem);
+        }
+
         ////////// Background //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -104,6 +124,7 @@ public class menuItemGUI implements ActionListener {
         f.setVisible(true);
         f.setJMenuBar(menuBar);
         f.setVisible(true);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         int screenHeight = screenSize.height;
         int screenWidth = screenSize.width;
@@ -111,13 +132,15 @@ public class menuItemGUI implements ActionListener {
         ////////// Menu Setup //////////
         menuBar.add(viewMenu);
         menuBar.add(editMenu);
+        menuBar.add(deactivatedMenu);
 
         editMenu.add(addItem);
         editMenu.add(updateItem);
-        editMenu.add(deleteItem);
+        editMenu.add(deactivateItem);
+
         addItem.addActionListener(this);
         updateItem.addActionListener(this);
-        deleteItem.addActionListener(this);
+        deactivateItem.addActionListener(this);
 
         ////////// Data Output Area for each inventory item //////////
 
@@ -171,7 +194,7 @@ public class menuItemGUI implements ActionListener {
         ask_Name.setBounds(510, 210, 200, 20);
         f.add(ask_Name);
         f.add(searchBtn_Update);
-        f.add(searchBtn_Delete);
+        f.add(searchBtn_Deactivate);
         f.add(updateBtn);
 
         ask_Name.setVisible(false);
@@ -182,20 +205,39 @@ public class menuItemGUI implements ActionListener {
         searchBtn_Update.setVisible(false);
         updateBtn.setVisible(false);
 
-        // Delete
-        f.add(deleteBtn);
-        searchBtn_Delete.addActionListener(this);
-        searchBtn_Delete.setBounds(910, 210, 100, 20);
-        searchBtn_Delete.setVisible(false);
-        deleteBtn.addActionListener(this);
-        deleteBtn.setBounds(910, 300, 100, 20);
-        deleteBtn.setVisible(false);
+        ///// Deactivate /////
+        searchBtn_Deactivate.addActionListener(this);
+        searchBtn_Deactivate.setBounds(910, 210, 100, 20);
+        searchBtn_Deactivate.setVisible(false);
+
+        deactivateBtn.addActionListener(this);
+        deactivateBtn.setBounds(910, 300, 100, 20);
+        deactivateBtn.setVisible(false);
+
+        activateBtn.addActionListener(this);
+        activateBtn.setBounds(910, 210, 100, 20);
+        f.add(deactivateBtn);
+        f.add(activateBtn);
+
+        activateBtn.setVisible(false);
 
     }
 
     public void action(int k) {
         itemName.setText(nameList.get(k));
         itemCost.setText(String.valueOf(costList.get(k)));
+        i = k;
+        
+        itemName.setVisible(true);
+        itemCost.setVisible(true);
+        info_display(true);
+        clearBtn.setVisible(true);
+        activateBtn.setVisible(false);
+    }
+
+    public void deaction(int k) {
+        itemName.setText(deactivatedNameList.get(k));
+        itemCost.setText(String.valueOf(deactivatedCostList.get(k)));
         i = k;
 
         info_display(true);
@@ -226,8 +268,9 @@ public class menuItemGUI implements ActionListener {
         addBtn.setVisible(b);
         updateBtn.setVisible(b);
         searchBtn_Update.setVisible(b);
-        searchBtn_Delete.setVisible(b);
-        deleteBtn.setVisible(b);
+        searchBtn_Deactivate.setVisible(b);
+        deactivateBtn.setVisible(b);
+        activateBtn.setVisible(b);
     }
 
     public boolean checkItemExit(String name) {
@@ -244,9 +287,20 @@ public class menuItemGUI implements ActionListener {
             if (e.getSource() == itemList.get(h)) {
                 add_input_Display(false);
                 action(h);
+                btnDisplay(false);
             }
-            btnDisplay(false);
             ask_Name.setVisible(false);
+        }
+
+        for (int h = 0; h < deactivatedItemList.size(); ++h) {
+            if (e.getSource() == deactivatedItemList.get(h)) {
+                add_input_Display(false);
+                deaction(h);
+                activateBtn.setVisible(true);
+                btnDisplay(false);
+                activateBtn.setVisible(true);
+            }
+            ask_Name.setVisible(false);    
         }
 
         if (e.getSource() == addItem) {
@@ -345,10 +399,10 @@ public class menuItemGUI implements ActionListener {
                 inputCost.setText(String.valueOf(costList.get(i)));
             }
 
-        } else if (e.getSource() == searchBtn_Delete) {
+        } else if (e.getSource() == searchBtn_Deactivate) {
             btnDisplay(false);
-            deleteBtn.setVisible(true);
-            searchBtn_Delete.setVisible(false);
+            deactivateBtn.setVisible(true);
+            searchBtn_Deactivate.setVisible(false);
             String name = inputName.getText();
 
             i = -1;
@@ -369,7 +423,7 @@ public class menuItemGUI implements ActionListener {
                 addBtn.setVisible(false);
                 add_input_Display(false);
                 inputName.setVisible(true);
-                searchBtn_Delete.setVisible(true);
+                searchBtn_Deactivate.setVisible(true);
                 JOptionPane.showMessageDialog(null, "Item doesn't exist!");
 
             } else {
@@ -408,7 +462,7 @@ public class menuItemGUI implements ActionListener {
             inputName.setVisible(true);
             searchBtn_Update.setVisible(true);
 
-        } else if (e.getSource() == deleteItem) {
+        } else if (e.getSource() == deactivateItem) {
             btnDisplay(false);
             ask_Name.setVisible(true);
             clearBtn.setVisible(true);
@@ -418,17 +472,24 @@ public class menuItemGUI implements ActionListener {
             addBtn.setVisible(false);
             add_input_Display(false);
             inputName.setVisible(true);
-            searchBtn_Delete.setVisible(true);
+            searchBtn_Deactivate.setVisible(true);
 
-        } else if (e.getSource() == deleteBtn) {
+        } else if (e.getSource() == deactivateBtn) {
             btnDisplay(false);
+
+            deactivatedNameList.add(nameList.get(i));
+            deactivatedCostList.add(costList.get(i));
+            JMenuItem newItem = new JMenuItem(nameList.get(i));
+            newItem.addActionListener(this);
+            deactivatedItemList.add(newItem);
+            deactivatedMenu.add(newItem);
 
             // FIX ME AFTER BACKEDN DONE
             try {
                 delete_item(conn, nameList.get(i));
-                JOptionPane.showMessageDialog(null, "Delete successful.");
-            } catch (SQLException deleteException) {
-                JOptionPane.showMessageDialog(null, "Delete unsuccessful.");
+                JOptionPane.showMessageDialog(null, "Deactivate successful.");
+            } catch (SQLException DeactivateException) {
+                JOptionPane.showMessageDialog(null, "Deactivate unsuccessful.");
             }
             nameList.remove(i);
             costList.remove(i);
@@ -436,6 +497,8 @@ public class menuItemGUI implements ActionListener {
             viewMenu.remove(i);
             add_input_Display(false);
 
+
+
             btnDisplay(false);
             ask_Name.setVisible(true);
             clearBtn.setVisible(true);
@@ -445,7 +508,30 @@ public class menuItemGUI implements ActionListener {
             addBtn.setVisible(false);
             add_input_Display(false);
             inputName.setVisible(true);
-            searchBtn_Delete.setVisible(true);
+            searchBtn_Deactivate.setVisible(true);
+            
+        } else if(e.getSource() == activateBtn){
+            nameList.add(deactivatedNameList.get(i));
+            costList.add(deactivatedCostList.get(i));
+
+            JMenuItem newItem = new JMenuItem(deactivatedNameList.get(i));
+            newItem.addActionListener(this);
+            itemList.add(newItem);
+            viewMenu.add(newItem);
+
+            deactivatedNameList.remove(i);
+            deactivatedCostList.remove(i);
+            deactivatedItemList.remove(i);
+            deactivatedMenu.remove(i);
+
+            JOptionPane.showMessageDialog(null, "Activate successful.");
+
+            // clear the screen
+            activateBtn.setVisible(false);
+            itemName.setVisible(false);
+            itemCost.setVisible(false);    
+            info_display(false);
+            clearBtn.setVisible(false);
         }
     }
 
