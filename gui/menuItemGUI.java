@@ -90,7 +90,7 @@ public class menuItemGUI implements ActionListener {
             costList = get_cost(conn);
 
             // TODO: get the data from db
-            // deactivatedNameList = ;
+            deactivatedNameList = get_deactivate_menu_item(conn);
             // deactivatedCostList = ;
 
         } catch (SQLException e) {
