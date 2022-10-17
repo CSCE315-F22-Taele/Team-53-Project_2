@@ -5,7 +5,7 @@ import java.sql.*;
 import java.sql.DriverManager;
 import java.awt.event.*;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;  
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
@@ -41,24 +41,12 @@ public class cashierGUI implements ActionListener {
     }
 
     // Button declaration
-    // JButton btn1;
-    // JButton btn2;
-    // JButton btn3;
-    // JButton btn4;
-    // JButton btn5;
-    // JButton btn6;
-    // JButton btn7;
-    // JButton btn8;
-    // JButton btn9;
-    // JButton btn10;
     JButton logoutBtn;
     JButton checkoutBtn;
-    JButton inventoryBtn;
-    JButton editBtn;
+    JButton managerBtn;
     JButton RestartOrder;
-    //JButton btnArr[] = { btn1, btn2, btn3, btn4, btn5, btn6, btn7, btn8, btn9, btn10, logoutBtn, checkoutBtn };
 
-    ArrayList <String> nameOccursList = new ArrayList<String>();
+    ArrayList<String> nameOccursList = new ArrayList<String>();
 
     // Item's index in buttonList
     int btnIndex = -1;
@@ -67,15 +55,15 @@ public class cashierGUI implements ActionListener {
     int nameOccursIndex = -1;
 
     // Store the item's index number of the nameList and quantityList
-    ArrayList <Integer> indexList = new ArrayList<Integer>();
+    ArrayList<Integer> indexList = new ArrayList<Integer>();
 
-    //Store the amount of each selected items
-    ArrayList <JLabel> amountLabelList = new ArrayList<JLabel>();
+    // Store the amount of each selected items
+    ArrayList<JLabel> amountLabelList = new ArrayList<JLabel>();
 
     // Store the click numbers to update the amount of each selected items
-    ArrayList <Integer> clickList = new ArrayList<Integer>();
+    ArrayList<Integer> clickList = new ArrayList<Integer>();
 
-    private JLabel labelEmployee; 
+    private JLabel labelEmployee;
     // Label Declaration
     JLabel l1 = new JLabel("GYRO");
     JLabel l2 = new JLabel("BOWL");
@@ -112,19 +100,17 @@ public class cashierGUI implements ActionListener {
     boolean is_manager;
     int orderid;
     Connection conn;
-    
 
     // Price of each menu item
     JLabel sale = new JLabel("0");
     double totalPrice = 0;
 
-    ArrayList <Double> priceArr = new ArrayList<Double>();
+    ArrayList<Double> priceArr = new ArrayList<Double>();
 
-    ArrayList <String> menuArr = new ArrayList<String>();
-    ArrayList <JButton> menu_buttons = new ArrayList<JButton>();
-    
-    ArrayList <Integer> ordereditems = new ArrayList<Integer>();
-   
+    ArrayList<String> menuArr = new ArrayList<String>();
+    ArrayList<JButton> menu_buttons = new ArrayList<JButton>();
+
+    ArrayList<Integer> ordereditems = new ArrayList<Integer>();
 
     Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
     int height = screenSize.height;
@@ -139,26 +125,25 @@ public class cashierGUI implements ActionListener {
     JPanel receiptPanel_Down = new JPanel();
 
     boolean checkoutTrue = false;
+
     public cashierGUI(int id) {
-        
-        try{
+
+        try {
             conn = connectionSet();
             orderid = getOrderId(conn);
             menuArr = get_menu(conn);
-            employeeid = id; 
-            is_manager = is_manager( conn, employeeid);
+            employeeid = id;
+            is_manager = is_manager(conn, employeeid);
             priceArr = get_price(conn);
 
-            for( int i=0; i<  menuArr.size(); i++){
+            for (int i = 0; i < menuArr.size(); i++) {
                 ordereditems.add(0);
             }
-            
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Database operations failed.");
-        } 
+        }
 
-        
-        
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray); // TODO: Fix background color
 
@@ -170,21 +155,19 @@ public class cashierGUI implements ActionListener {
         // itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
 
         f.add(itemsPanel);
-        
+
         ////////// Buttons //////////
 
-        for (int i = 0; i < menuArr.size(); i++){
+        for (int i = 0; i < menuArr.size(); i++) {
             JButton newBtn = new JButton(menuArr.get(i));
             newBtn.setPreferredSize(new Dimension(200, 60));
             newBtn.addActionListener(this);
             menu_buttons.add(newBtn);
-            
+
             itemsPanel.add(newBtn);
             itemsPanel.validate();
         }
 
-
-        
         // Button 11
         logoutBtn = new JButton("LOGOUT");
         logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
@@ -197,16 +180,10 @@ public class cashierGUI implements ActionListener {
         checkoutBtn.addActionListener(this);
 
         // Button 13
-        inventoryBtn = new JButton("INVENTORY");
-        inventoryBtn.setBounds((int) (width * 0.27), (int) (height * 0.8), 100, 80);
-        inventoryBtn.setBackground(Color.LIGHT_GRAY);
-        inventoryBtn.addActionListener(this);
-
-        // Button 14
-        editBtn = new JButton("EDIT MENU");
-        editBtn.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
-        editBtn.setBackground(Color.LIGHT_GRAY);
-        editBtn.addActionListener(this);
+        managerBtn = new JButton("MANAGER OPTIONS");
+        managerBtn.setBounds((int) (width * 0.27), (int) (height * 0.8), 100, 80);
+        managerBtn.setBackground(Color.LIGHT_GRAY);
+        managerBtn.addActionListener(this);
 
         RestartOrder = new JButton("RESTART ORDER");
         RestartOrder.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
@@ -214,8 +191,7 @@ public class cashierGUI implements ActionListener {
         RestartOrder.addActionListener(this);
 
         ////////// Welcome Area //////////
-        
-        
+
         String userName = get_employee_name(employeeid);
         JLabel weclomeTitle = new JLabel("Welcome " + userName);
         weclomeTitle.setBounds((int) (width * 0.29), (int) (height * 0.02), 400, 50);
@@ -223,7 +199,7 @@ public class cashierGUI implements ActionListener {
         f.add(weclomeTitle);
 
         ////////// Logout Area //////////
-        JPanel logoutPanel = new JPanel(new GridLayout(1,3));
+        JPanel logoutPanel = new JPanel(new GridLayout(1, 3));
         logoutPanel.setBackground(pink);
         logoutPanel.setBounds((int) (width * 0.06), (int) ((height * 0.82)), (int) (width * 0.6), (int) (height * 0.1));
         // logoutPanel.setLayout(new BorderLayout());
@@ -232,18 +208,16 @@ public class cashierGUI implements ActionListener {
         logoutPanel.add(logoutBtn);
 
         logoutPanel.add(RestartOrder);
-        if( is_manager){
-            logoutPanel.add(inventoryBtn);
-            logoutPanel.add(editBtn);
+        if (is_manager) {
+            logoutPanel.add(managerBtn);
         }
         f.add(logoutPanel);
 
-    
-   ////////// Receipt Area //////////
+        ////////// Receipt Area //////////
         Color blueCute = new Color(194, 194, 252);
         // Title
         receiptPanel_Top.setBackground(blueCute);
-        receiptPanel_Top.setBounds((int)(width * 0.7),0 , (int)(width * 0.3),(int)(height*0.1));
+        receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.1));
         receiptPanel_Top.setLayout(null);
         receiptPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("Total Items");
@@ -251,9 +225,9 @@ public class cashierGUI implements ActionListener {
         title.setHorizontalAlignment(JLabel.CENTER);
         receiptPanel_Top.add(title);
 
-        
         receiptPanel_Left.setBackground(blueCute);
-        receiptPanel_Left.setBounds((int)(width * 0.7),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
+        receiptPanel_Left.setBounds((int) (width * 0.7), (int) (height * 0.1), (int) (width * 0.15),
+                (int) (height * 0.7));
         receiptPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel itemNameTitle = new JLabel("Item");
         itemNameTitle.setVerticalAlignment(JLabel.TOP);
@@ -261,7 +235,8 @@ public class cashierGUI implements ActionListener {
         receiptPanel_Left.add(itemNameTitle);
 
         receiptPanel_Right.setBackground(blueCute);
-        receiptPanel_Right.setBounds((int)(width * 0.85),(int)(height*0.1) , (int)(width * 0.15),(int)(height*0.7));
+        receiptPanel_Right.setBounds((int) (width * 0.85), (int) (height * 0.1), (int) (width * 0.15),
+                (int) (height * 0.7));
         receiptPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
         JLabel quantityTitle = new JLabel("Quantity and Price");
         quantityTitle.setVerticalAlignment(JLabel.TOP);
@@ -269,7 +244,8 @@ public class cashierGUI implements ActionListener {
         receiptPanel_Right.add(quantityTitle);
 
         receiptPanel_Down.setBackground(blueCute);
-        receiptPanel_Down.setBounds((int)(width * 0.7),(int)(height*0.8) , (int)(width * 0.3),(int)(height*0.3));
+        receiptPanel_Down.setBounds((int) (width * 0.7), (int) (height * 0.8), (int) (width * 0.3),
+                (int) (height * 0.3));
         receiptPanel_Down.add(checkoutBtn);
         checkoutBtn.addActionListener(this);
 
@@ -278,15 +254,14 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Right);
         f.add(receiptPanel_Down);
 
-
         f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
     }
 
-    public int checkNameList(String name){
-        for(int j = 0; j < nameOccursList.size(); ++j){
-            if(name.equals(nameOccursList.get(j))){
+    public int checkNameList(String name) {
+        for (int j = 0; j < nameOccursList.size(); ++j) {
+            if (name.equals(nameOccursList.get(j))) {
                 return j;
             }
         }
@@ -294,42 +269,33 @@ public class cashierGUI implements ActionListener {
     }
 
     public void actionPerformed(ActionEvent e) {
- 
+
         if (e.getSource() == checkoutBtn) {
 
-            if (checkoutTrue== false){
+            if (checkoutTrue == false) {
                 insertOrder();
                 checkoutTrue = true;
             }
 
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-           
+
         } else if (e.getSource() == logoutBtn) {
-            new loginGUI(); 
+            new loginGUI();
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-            
-        }
-        else if(e.getSource() == inventoryBtn){
-            new inventoryGUI(employeeid); 
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-        }
-        else if(e.getSource() == editBtn){
-            new menuItemGUI(employeeid);
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-        }
-        else if(e.getSource() == RestartOrder){
+
+        } else if (e.getSource() == managerBtn) {
+            new managerGUI(employeeid);
+        } else if (e.getSource() == RestartOrder) {
             new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
         }
 
-
         sale.setText(String.valueOf(Math.round(totalPrice * 100.0) / 100.0));
 
-
         // update receipt
-        for(int i = 0; i < menu_buttons.size(); ++i){
-            if(e.getSource() == menu_buttons.get(i)){
+        for (int i = 0; i < menu_buttons.size(); ++i) {
+            if (e.getSource() == menu_buttons.get(i)) {
                 new inventoryPerOrderGUI(orderid);
                 String name = menu_buttons.get(i).getText();
                 String priceItem = String.valueOf(priceArr.get(i));
@@ -337,7 +303,7 @@ public class cashierGUI implements ActionListener {
                 nameOccursIndex = checkNameList(name);
                 totalPrice += priceArr.get(i);
 
-                if(nameOccursIndex == -1){
+                if (nameOccursIndex == -1) {
                     indexList.add(btnIndex);
                     clickList.add(1);
 
@@ -350,19 +316,18 @@ public class cashierGUI implements ActionListener {
                     receiptPanel_Left.validate();
 
                     // Shows the item's amount
-                    JLabel amountLabel = new JLabel("1" + "  :  " + priceItem);    
+                    JLabel amountLabel = new JLabel("1" + "  :  " + priceItem);
                     amountLabel.setVerticalAlignment(JLabel.TOP);
                     amountLabel.setHorizontalAlignment(JLabel.CENTER);
                     receiptPanel_Right.add(amountLabel);
                     amountLabelList.add(amountLabel);
                     receiptPanel_Right.validate();
-                   
 
                 } else {
                     // Update Item's amount by using click
                     clickList.set(nameOccursIndex, clickList.get(nameOccursIndex) + 1);
-                    String newAmount = String.valueOf( clickList.get(nameOccursIndex) * priceArr.get(i));
-                    String count = String.valueOf(clickList.get(nameOccursIndex) );
+                    String newAmount = String.valueOf(clickList.get(nameOccursIndex) * priceArr.get(i));
+                    String count = String.valueOf(clickList.get(nameOccursIndex));
                     // find the corresponding label of the item
                     JLabel l = amountLabelList.get(nameOccursIndex);
                     l.setText(count + "  :  " + newAmount);
@@ -370,35 +335,34 @@ public class cashierGUI implements ActionListener {
                     // update the amountLabelList
                     amountLabelList.set(nameOccursIndex, l);
                 }
-                ordereditems.set(i, ordereditems.get(i)+1);
+                ordereditems.set(i, ordereditems.get(i) + 1);
             }
         }
 
     }
 
-    public int getDateforId(){
+    public int getDateforId() {
         // transform java data into proper SQL variables
-        DateFormat formatDate= new SimpleDateFormat("yyMMdd");
+        DateFormat formatDate = new SimpleDateFormat("yyMMdd");
         Date date = Calendar.getInstance().getTime();
         String strDate = formatDate.format(date);
-        
 
-        int value = Integer.valueOf( strDate);
+        int value = Integer.valueOf(strDate);
 
-        return value*1000;
+        return value * 1000;
     }
 
-    public int getOrderId(Connection conn) throws SQLException{
+    public int getOrderId(Connection conn) throws SQLException {
 
         int lastRecord = 0;
         int date = getDateforId();
 
-        try{
+        try {
             PreparedStatement lastOrder = conn.prepareStatement(
-                "SELECT orderid FROM ordering ORDER BY orderid DESC LIMIT 1");
+                    "SELECT orderid FROM ordering ORDER BY orderid DESC LIMIT 1");
 
             ResultSet orderInfo = lastOrder.executeQuery();
-            
+
             while (orderInfo.next()) {
                 lastRecord = orderInfo.getInt("orderid");
             }
@@ -407,15 +371,15 @@ public class cashierGUI implements ActionListener {
             JOptionPane.showMessageDialog(null, "Order id not retrieved.");
         }
 
-        if( lastRecord / 1000 == date  / 1000){
-            return lastRecord +1; 
+        if (lastRecord / 1000 == date / 1000) {
+            return lastRecord + 1;
         }
-      
-        return date + 1; 
-        
+
+        return date + 1;
+
     }
 
-    public boolean is_manager(Connection conn, int passCode){
+    public boolean is_manager(Connection conn, int passCode) {
         boolean value = false;
         try {
             PreparedStatement employeeCheck = conn
@@ -429,57 +393,49 @@ public class cashierGUI implements ActionListener {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error accessing Database.");
         }
-        return value; 
+        return value;
     }
 
-
-    public void insertOrder(){
+    public void insertOrder() {
 
         Connection conn = connectionSet();
 
-        try{
+        try {
 
-        orderid = getOrderId(conn); 
+            orderid = getOrderId(conn);
 
+            Calendar calendar = Calendar.getInstance();
+            SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
+            String stringVal = formatTime.format(calendar.getTime());
+            Time time = java.sql.Time.valueOf(stringVal);
 
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
-        String stringVal = formatTime.format(calendar.getTime());
-        Time time = java.sql.Time.valueOf( stringVal ); 
-        
+            PreparedStatement statement = conn.prepareStatement(
+                    "UPDATE ordering SET timeoforder=(?), amount=(?), ordereditems=(?) WHERE orderid=(?)");
 
-        PreparedStatement statement = conn.prepareStatement(
-              "UPDATE ordering SET timeoforder=(?), amount=(?), ordereditems=(?) WHERE orderid=(?)");
+            double amount = totalPrice;
 
-          
-          double amount = totalPrice; 
-          
-          Object[] orderedArr = ordereditems.toArray();
-          Array ordered = conn.createArrayOf("INT",orderedArr );
-          statement.setInt(4, orderid);
-          statement.setTime(1, time);
-          statement.setDouble(2, amount);
-          statement.setArray(3, ordered);
+            Object[] orderedArr = ordereditems.toArray();
+            Array ordered = conn.createArrayOf("INT", orderedArr);
+            statement.setInt(4, orderid);
+            statement.setTime(1, time);
+            statement.setDouble(2, amount);
+            statement.setArray(3, ordered);
 
-
-        
-          statement.executeUpdate();
-        }
-        catch (Exception e) {
+            statement.executeUpdate();
+        } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Order insertion not done. ");
-        } 
+        }
 
-          
     }
-    
-    public String get_employee_name( int employeeid){
-        
+
+    public String get_employee_name(int employeeid) {
+
         String name = "Name not fetched.";
 
-        try{
-            
+        try {
+
             PreparedStatement nameStat = conn
-                .prepareStatement("SELECT employeename FROM employee WHERE employeeid=(?)");
+                    .prepareStatement("SELECT employeename FROM employee WHERE employeeid=(?)");
             nameStat.setInt(1, employeeid);
 
             ResultSet findName = nameStat.executeQuery();
@@ -500,9 +456,9 @@ public class cashierGUI implements ActionListener {
     public ArrayList<Double> get_price(Connection conn) throws SQLException {
 
         Statement stmt = conn.createStatement();
-        ArrayList <Double> items = new ArrayList <Double>();
+        ArrayList<Double> items = new ArrayList<Double>();
 
-        try{
+        try {
 
             ResultSet findCost = stmt.executeQuery("SELECT cost FROM menucost ORDER BY id ASC");
 
@@ -516,15 +472,16 @@ public class cashierGUI implements ActionListener {
         }
 
         return items;
-    }   
+    }
 
     public ArrayList<String> get_menu(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ArrayList<String> temp = new ArrayList<String>();
 
-        try{
+        try {
 
-            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost WHERE is_selling = true ORDER BY id ASC");
+            ResultSet findMenu = stmt
+                    .executeQuery("SELECT menuitem FROM menucost WHERE is_selling = true ORDER BY id ASC");
 
             while (findMenu.next()) {
                 temp.add(findMenu.getString("menuitem"));
@@ -538,7 +495,7 @@ public class cashierGUI implements ActionListener {
         return temp;
     }
 
-    public Connection connectionSet(){
+    public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
         Connection conn = null;
@@ -546,10 +503,10 @@ public class cashierGUI implements ActionListener {
         try {
             Class.forName("org.postgresql.Driver");
             conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                my.user, my.pswd);
+                    my.user, my.pswd);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Database connection failed");
-        } 
+        }
 
         return conn;
     }
