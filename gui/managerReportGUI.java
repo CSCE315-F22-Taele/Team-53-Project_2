@@ -36,6 +36,7 @@ public class managerReportGUI implements ActionListener {
     JButton excessBtn = new JButton("Excess Report");
     JButton saleBtn = new JButton("Sale Report");
     JButton submitBtn = new JButton("Submit");
+    JButton backToManager = new JButton("Back To Manager");
 
     ///// Store values /////
     // We will use these variable to store the data from database
@@ -86,6 +87,12 @@ public class managerReportGUI implements ActionListener {
 
         title_sale_Label.setVerticalAlignment(JLabel.TOP);
         title_sale_Label.setHorizontalAlignment(JLabel.CENTER);
+
+        backToManager.addActionListener(this);
+        backToManager.setBounds((int) (screenSize.width * 0.06), (int) (screenSize.height * 0.8),
+                (int) (screenSize.width * 0.1),
+                (int) (screenSize.height * 0.05));
+        f.add(backToManager);
 
         itemNamePanel.add(title_item_Label);
         salePanel.add(title_sale_Label);
@@ -169,7 +176,7 @@ public class managerReportGUI implements ActionListener {
         } else if (e.getSource() == excessBtn) {
             excessPanel.setVisible(true);
             salePanelDisplay(false);
-            if(!excessChecked){
+            if (!excessChecked) {
                 for (int i = 0; i < excessItemList.size(); ++i) {
                     JLabel newSaleLabel = new JLabel(String.valueOf(excessItemList.get(i)));
                     newSaleLabel.setVerticalAlignment(JLabel.TOP);
@@ -180,7 +187,7 @@ public class managerReportGUI implements ActionListener {
             }
 
         } else if (e.getSource() == submitBtn) {
- 
+
             salePanelDisplay(false);
             excessPanel.setVisible(false);
 
@@ -207,6 +214,10 @@ public class managerReportGUI implements ActionListener {
                 e1.printStackTrace();
             }
 
+        }
+
+        else if (e.getSource() == backToManager) {
+            f.dispose();
         }
 
     }
@@ -427,7 +438,7 @@ public class managerReportGUI implements ActionListener {
         }
 
         for (int i = 0; i < no_sale_name.size(); i++) {
-            //System.out.print(no_sale_name.get(i));
+            // System.out.print(no_sale_name.get(i));
         }
 
         return temp;

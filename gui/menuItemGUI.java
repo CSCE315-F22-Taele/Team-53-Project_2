@@ -324,9 +324,8 @@ public class menuItemGUI implements ActionListener {
             clearBtn.setVisible(false);
 
         } else if (e.getSource() == backToCashier) {
-            // FIX ME: TODO: Implement
             new cashierGUI(employeeid);
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            f.dispose();
 
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);
