@@ -24,6 +24,7 @@ public class inventoryGUI implements ActionListener {
     JMenuBar menuBar = new JMenuBar();
     JMenu viewMenu = new JMenu("Items");
     JMenu editMenu = new JMenu("Edit");
+    JMenu deactivatedMenu = new JMenu("Deactivated");
 
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
     Integer inventory_id[];
@@ -50,8 +51,8 @@ public class inventoryGUI implements ActionListener {
 
     JButton clearBtn = new JButton("Clear");
 
-    // Back to Cashier
-    JButton backToCashier = new JButton("Back To Cashier");
+    // Back to Manager
+    JButton backToManager = new JButton("Back To Manager");
 
     // Store data
     ArrayList<Integer> idList = new ArrayList<Integer>();
@@ -82,11 +83,21 @@ public class inventoryGUI implements ActionListener {
     JMenuItem updateItem = new JMenuItem("Update");
     JButton updateBtn = new JButton("Update");
     JButton searchBtn_Update = new JButton("Search");
-    JButton searchBtn_Delete = new JButton("Search");
+    JButton searchBtn_deactivate = new JButton("Search");
 
-    // Delete
-    JMenuItem deleteItem = new JMenuItem("Deactivate");
-    JButton deleteBtn = new JButton("Deactivate");
+    // deactivate
+    JMenuItem deactivateItem = new JMenuItem("Deactivate");
+    JButton deactivateBtn = new JButton("Deactivate");
+
+    // Deactivated-menu
+    ArrayList<Integer> deactivated_IdList = new ArrayList<Integer>();
+    ArrayList<String> deactivated_NameList = new ArrayList<String>();
+    ArrayList<Double> deactivated_CostList = new ArrayList<Double>();
+    ArrayList<Integer> deactivated_QuantityList = new ArrayList<Integer>();
+    ArrayList<Date> deactivated_ExpirationList = new ArrayList<Date>();
+    ArrayList<String> deactivated_VendorList = new ArrayList<String>();
+    ArrayList<JMenuItem> deactivated_ItemList = new ArrayList<JMenuItem>();
+    JButton activateBtn = new JButton("Activate");
 
     // Frame
     JFrame f = new JFrame();
@@ -118,6 +129,16 @@ public class inventoryGUI implements ActionListener {
             expirationDateList = get_expiration_date(conn);
             vendorList = get_vendor(conn);
 
+            
+            deactivated_IdList = get_id_deactive(conn);
+            deactivated_NameList =  get_inventory_name_deactive(conn); 
+            deactivated_CostList = get_cost_deactive(conn);
+            deactivated_QuantityList = get_quantity_deactive(conn);
+            deactivated_ExpirationList = get_expiration_date_deactive(conn);
+            deactivated_VendorList = get_vendor_deactive(conn); 
+            
+
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             JOptionPane.showMessageDialog(null, "Failed database connection.");
@@ -129,6 +150,14 @@ public class inventoryGUI implements ActionListener {
             newItem.addActionListener(this);
             viewMenu.add(newItem);
             itemList.add(newItem);
+        }
+
+        // Add the deactivated items to the menu bar
+        for (int i = 0; i < deactivated_NameList.size(); i++) {
+            JMenuItem newItem = new JMenuItem(deactivated_NameList.get(i));
+            newItem.addActionListener(this);
+            deactivatedMenu.add(newItem);
+            deactivated_ItemList.add(newItem);
         }
 
         ////////// Background //////////
@@ -148,13 +177,15 @@ public class inventoryGUI implements ActionListener {
         ////////// Menu Setup //////////
         menuBar.add(viewMenu);
         menuBar.add(editMenu);
+        menuBar.add(deactivatedMenu);
 
         editMenu.add(addItem);
         editMenu.add(updateItem);
-        editMenu.add(deleteItem);
+        editMenu.add(deactivateItem);
+
         addItem.addActionListener(this);
         updateItem.addActionListener(this);
-        deleteItem.addActionListener(this);
+        deactivateItem.addActionListener(this);
 
         ////////// Data Output Area for each inventory item //////////
         idInfo.setBounds(620, 180, 80, 20);
@@ -200,10 +231,10 @@ public class inventoryGUI implements ActionListener {
         f.add(clearBtn);
 
         ////////// Logout //////////
-        backToCashier.addActionListener(this);
-        backToCashier.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
+        backToManager.addActionListener(this);
+        backToManager.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
                 (int) (screenHeight * 0.05));
-        f.add(backToCashier);
+        f.add(backToManager);
 
         // ADD Items
         inputName.setBounds(730, 210, 160, 20);
@@ -234,7 +265,7 @@ public class inventoryGUI implements ActionListener {
         ask_Name.setBounds(510, 210, 200, 20);
         f.add(ask_Name);
         f.add(searchBtn_Update);
-        f.add(searchBtn_Delete);
+        f.add(searchBtn_deactivate);
         f.add(updateBtn);
 
         ask_Name.setVisible(false);
@@ -245,14 +276,22 @@ public class inventoryGUI implements ActionListener {
         searchBtn_Update.setVisible(false);
         updateBtn.setVisible(false);
 
-        // Delete
-        f.add(deleteBtn);
-        searchBtn_Delete.addActionListener(this);
-        searchBtn_Delete.setBounds(910, 210, 100, 20);
-        searchBtn_Delete.setVisible(false);
-        deleteBtn.addActionListener(this);
-        deleteBtn.setBounds(910, 300, 100, 20);
-        deleteBtn.setVisible(false);
+        // deactivate
+        f.add(deactivateBtn);
+        searchBtn_deactivate.addActionListener(this);
+        searchBtn_deactivate.setBounds(910, 210, 100, 20);
+        searchBtn_deactivate.setVisible(false);
+
+        deactivateBtn.addActionListener(this);
+        deactivateBtn.setBounds(910, 300, 100, 20);
+        deactivateBtn.setVisible(false);
+
+        activateBtn.addActionListener(this);
+        activateBtn.setBounds(910, 210, 100, 20);
+        f.add(deactivateBtn);
+        f.add(activateBtn);
+
+        activateBtn.setVisible(false);
 
         ////////// Receipt Area //////////
         Color pink = new Color(244, 220, 245);
@@ -308,14 +347,15 @@ public class inventoryGUI implements ActionListener {
         // generate the items as buttons and add action
         for (int i = 0; i < restock_name_list.size(); i++) {
             JButton newBtn = new JButton(restock_name_list.get(i));
+            newBtn.setForeground(Color.red);
             newBtn.addActionListener(this);
             // newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
 
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
-           
 
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
+            newLabel.setForeground(Color.RED);
             restockPanel_Right.add(newLabel);
             restock_quantity_label.add(newLabel);
             newLabel.setVerticalAlignment(JLabel.TOP);
@@ -331,6 +371,21 @@ public class inventoryGUI implements ActionListener {
         itemCost.setText(String.valueOf(costList.get(k)));
         itemVendor.setText(vendorList.get(k));
         itemExpirationDate.setText(dateFormat.format(expirationDateList.get(k)));
+        i = k;
+
+        info_display(true);
+        clearBtn.setVisible(true);
+        activateBtn.setVisible(false);
+    }
+
+    public void deaction(int k) {
+
+        itemId.setText(String.valueOf(deactivated_IdList.get(k)));
+        itemName.setText(deactivated_NameList.get(k));
+        itemQuantity.setText(Integer.toString(deactivated_QuantityList.get(k)));
+        itemCost.setText(String.valueOf(deactivated_CostList.get(k)));
+        itemVendor.setText((deactivated_VendorList.get(k)));
+        itemExpirationDate.setText(dateFormat.format(deactivated_ExpirationList.get(k)));
         i = k;
 
         info_display(true);
@@ -375,17 +430,18 @@ public class inventoryGUI implements ActionListener {
         addBtn.setVisible(b);
         updateBtn.setVisible(b);
         searchBtn_Update.setVisible(b);
-        searchBtn_Delete.setVisible(b);
-        deleteBtn.setVisible(b);
+        searchBtn_deactivate.setVisible(b);
+        deactivateBtn.setVisible(b);
+        activateBtn.setVisible(b);
     }
 
-    public boolean checkItemExit(String name) {
+    public int checkItemExit(String name) {
         for (int i = 0; i < nameList.size(); ++i) {
             if (name.equals(nameList.get(i))) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public int generateId() {
@@ -449,8 +505,8 @@ public class inventoryGUI implements ActionListener {
             if (e.getSource() == itemList.get(h)) {
                 add_input_Display(false);
                 action(h);
+                btnDisplay(false);
             }
-            btnDisplay(false);
             ask_Name.setVisible(false);
         }
         for (int l = 0; l < restock_name_btn.size(); ++l) {
@@ -463,6 +519,17 @@ public class inventoryGUI implements ActionListener {
                 getUpdate(restock_name_btn.get(l).getText());
 
             }
+        }
+
+        for (int h = 0; h < deactivated_ItemList.size(); ++h) {
+            if (e.getSource() == deactivated_ItemList.get(h)) {
+                add_input_Display(false);
+                deaction(h);
+                activateBtn.setVisible(true);
+                btnDisplay(false);
+                activateBtn.setVisible(true);
+            }
+            ask_Name.setVisible(false);
         }
 
         if (e.getSource() == addItem) {
@@ -487,10 +554,10 @@ public class inventoryGUI implements ActionListener {
             ask_Name.setVisible(false);
             clearBtn.setVisible(false);
 
-        } else if (e.getSource() == backToCashier) {
+        } else if (e.getSource() == backToManager) {
             // FIX ME: TODO: Implement
-            new cashierGUI(employeeid);
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            // new cashierGUI(employeeid);
+            f.dispose();
 
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);
@@ -507,12 +574,9 @@ public class inventoryGUI implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Error. Date entered wrong. Use YYYY-MM-dd.");
             }
 
-            if (checkItemExit(name)) {
+            if (checkItemExit(name) != -1) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
-            
-                
-                
                 try {
                     add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -523,7 +587,7 @@ public class inventoryGUI implements ActionListener {
                     vendorList.add(vendor);
 
                 } catch (SQLException addException) {
-                    //addException.printStackTrace();
+                    // addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -547,15 +611,16 @@ public class inventoryGUI implements ActionListener {
         } else if (e.getSource() == searchBtn_Update) {
             getUpdate(inputName.getText());
 
-        } else if (e.getSource() == searchBtn_Delete) {
+        } else if (e.getSource() == searchBtn_deactivate) {
             btnDisplay(false);
-            deleteBtn.setVisible(true);
-            searchBtn_Delete.setVisible(false);
+            deactivateBtn.setVisible(true);
+            searchBtn_deactivate.setVisible(false);
             String name = inputName.getText();
 
             i = -1;
             for (int h = 0; h < nameList.size(); ++h) {
                 if (nameList.get(h).equals(name)) {
+
                     i = h;
                     break;
                 }
@@ -571,7 +636,7 @@ public class inventoryGUI implements ActionListener {
                 addBtn.setVisible(false);
                 add_input_Display(false);
                 inputName.setVisible(true);
-                searchBtn_Delete.setVisible(true);
+                searchBtn_deactivate.setVisible(true);
                 JOptionPane.showMessageDialog(null, "Item doesn't exist!");
 
             } else {
@@ -610,10 +675,6 @@ public class inventoryGUI implements ActionListener {
                 restock_quantity_list.set(restockIndex, Integer.parseInt(inputQuantity.getText()));
 
                 if (restock_quantity_list.get(restockIndex) >= 500) {
-                    // System.out.println("restock index: " + restockIndex);
-                    // System.out.println(restock_name_btn.get(restockIndex).getText());
-                    // System.out.println(restock_quantity_label.get(restockIndex).getText());
-
                     restockPanel_Left.remove(restock_name_btn.get(restockIndex));
                     restockPanel_Right.remove(restock_quantity_label.get(restockIndex));
                     restockPanel_Left.revalidate();
@@ -649,7 +710,7 @@ public class inventoryGUI implements ActionListener {
             inputName.setVisible(true);
             searchBtn_Update.setVisible(true);
 
-        } else if (e.getSource() == deleteItem) {
+        } else if (e.getSource() == deactivateItem) {
             btnDisplay(false);
             ask_Name.setVisible(true);
             clearBtn.setVisible(true);
@@ -659,15 +720,28 @@ public class inventoryGUI implements ActionListener {
             addBtn.setVisible(false);
             add_input_Display(false);
             inputName.setVisible(true);
-            searchBtn_Delete.setVisible(true);
+            searchBtn_deactivate.setVisible(true);
 
-        } else if (e.getSource() == deleteBtn) {
+        } else if (e.getSource() == deactivateBtn) {
             btnDisplay(false);
+
+            deactivated_IdList.add(idList.get(i));
+            deactivated_NameList.add(nameList.get(i));
+            deactivated_CostList.add(costList.get(i));
+            deactivated_QuantityList.add(quantityList.get(i));
+            deactivated_ExpirationList.add(expirationDateList.get(i));
+            deactivated_VendorList.add(vendorList.get(i));
+
+            JMenuItem newItem = new JMenuItem(nameList.get(i));
+            newItem.addActionListener(this);
+            deactivated_ItemList.add(newItem);
+            deactivatedMenu.add(newItem);
+
             try {
-                delete_item(conn, idList.get(i));
-                JOptionPane.showMessageDialog(null, "Delete successful.");
-            } catch (SQLException deleteException) {
-                JOptionPane.showMessageDialog(null, "Delete unsuccessful.");
+                deactivate_item(conn, idList.get(i));
+                JOptionPane.showMessageDialog(null, "deactivate successful.");
+            } catch (SQLException deactivateException) {
+                JOptionPane.showMessageDialog(null, "deactivate unsuccessful.");
             }
             idList.remove(i);
             nameList.remove(i);
@@ -688,16 +762,45 @@ public class inventoryGUI implements ActionListener {
             addBtn.setVisible(false);
             add_input_Display(false);
             inputName.setVisible(true);
-            searchBtn_Delete.setVisible(true);
+            searchBtn_deactivate.setVisible(true);
+        } else if (e.getSource() == activateBtn) {
+            idList.add(deactivated_IdList.get(i));
+            nameList.add(deactivated_NameList.get(i));
+            quantityList.add(deactivated_QuantityList.get(i));
+            costList.add(deactivated_CostList.get(i));
+            expirationDateList.add(deactivated_ExpirationList.get(i));
+            vendorList.add(deactivated_VendorList.get(i));
+
+            JMenuItem newItem = new JMenuItem(deactivated_NameList.get(i));
+            newItem.addActionListener(this);
+            itemList.add(newItem);
+            viewMenu.add(newItem);
+
+            deactivated_IdList.remove(i);
+            deactivated_NameList.remove(i);
+            deactivated_CostList.remove(i);
+            deactivated_QuantityList.remove(i);
+            deactivated_ExpirationList.remove(i);
+            deactivated_VendorList.remove(i);
+
+            deactivated_ItemList.remove(i);
+            deactivatedMenu.remove(i);
+
+            JOptionPane.showMessageDialog(null, "Activate successful.");
+
+            // clear the screen
+            clearItemLabel();
+            info_display(false);
+            activateBtn.setVisible(false);
+            clearBtn.setVisible(false);
         }
     }
 
-    public void add_item(Connection conn,  String name, int quantity, double cost, Date expirationDate,
+    public void add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
                 "INSERT INTO inventory( itemname, amount, cost, expirationdate,vendor, is_using ) VALUES(?,?,?,?,?, ?)");
 
-        
         addStatement.setString(1, name);
         addStatement.setInt(2, quantity);
         addStatement.setDouble(3, cost);
@@ -721,19 +824,102 @@ public class inventoryGUI implements ActionListener {
         updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
-        
+
         updateStat.executeUpdate();
     }
 
-    public void delete_item(Connection conn, int id) throws SQLException {
+    public void deactivate_item(Connection conn, int id) throws SQLException {
         PreparedStatement delStatement = conn.prepareStatement("UPDATE inventory SET is_using=false WHERE itemid=(?)");
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
 
+
+    
+    public ArrayList<Integer> get_id_deactive(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory WHERE is_using = false ORDER BY itemid ASC");
+
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp.add(findInventory.getInt("itemid"));
+
+        }
+
+        return temp;
+    }
+
+    public ArrayList<Integer> get_quantity_deactive(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE is_using = false ORDER BY itemid ASC");
+        // int count = 0; // Increments inventory array
+
+        ArrayList<Integer> temp = new ArrayList<Integer>();
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp.add(findInventory.getInt("amount"));
+
+        }
+
+        return temp;
+    }
+
+    public ArrayList<String> get_inventory_name_deactive(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE is_using = false ORDER BY itemid ASC");
+
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            temp.add(findInventory.getString("itemname"));
+
+        }
+
+        return temp;
+    }
+
+    public ArrayList<Double> get_cost_deactive(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory WHERE is_using = false ORDER BY itemid ASC");
+
+        ArrayList<Double> temp = new ArrayList<Double>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getDouble("cost"));
+        }
+        return temp;
+    }
+
+    public ArrayList<Date> get_expiration_date_deactive(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory WHERE is_using = false ORDER BY itemid ASC");
+
+        ArrayList<Date> temp = new ArrayList<Date>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getDate("expirationdate"));
+        }
+        return temp;
+    }
+
+    public ArrayList<String> get_vendor_deactive(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory WHERE is_using = false ORDER BY itemid ASC");
+        ArrayList<String> temp = new ArrayList<String>();
+
+        while (findInventory.next()) {
+            temp.add(findInventory.getString("vendor"));
+        }
+        return temp;
+    }
+
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -748,7 +934,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE is_using = true ORDER BY itemid ASC");
         // int count = 0; // Increments inventory array
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -764,7 +950,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -779,7 +965,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<Double> temp = new ArrayList<Double>();
 
@@ -791,7 +977,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<Date> temp = new ArrayList<Date>();
 
@@ -803,7 +989,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_vendor(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory WHERE is_using = true ORDER BY itemid ASC");
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
@@ -814,7 +1000,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_inventory_name_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500,  is_using = true");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -828,7 +1014,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Integer> get_inventory_amount_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500");
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500, is_using = true");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
