@@ -42,6 +42,7 @@ public class managerReportGUI implements ActionListener {
     // For sale report
     ArrayList<String> itemNameList = new ArrayList<String>();
     ArrayList<Integer> saleList = new ArrayList<Integer>();
+    boolean isChecked = false;
 
     // For excess report
     ArrayList<String> excessItemList = new ArrayList<String>();
@@ -69,10 +70,10 @@ public class managerReportGUI implements ActionListener {
         f.setVisible(true);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
-        ///// Sale report Layout /////
-        itemNamePanel.setBounds((int) (screenSize.width * 0.3), (int) (screenSize.height * 0.25),
+        ///// Sale report area /////
+        itemNamePanel.setBounds((int) (screenSize.width * 0.3), (int) (screenSize.height * 0.22),
                 (int) (screenSize.width * 0.2), (int) (screenSize.height * 0.8));
-        salePanel.setBounds((int) (screenSize.width * 0.5), (int) (screenSize.height * 0.25),
+        salePanel.setBounds((int) (screenSize.width * 0.5), (int) (screenSize.height * 0.22),
                 (int) (screenSize.width * 0.2), (int) (screenSize.height * 0.8));
 
         itemNamePanel.setLayout(new GridLayout(30, 1, 10, 10));
@@ -94,7 +95,7 @@ public class managerReportGUI implements ActionListener {
         salePanel.setVisible(false);
 
         ///// Excess Report Layout /////
-        excessPanel.setBounds((int) (screenSize.width * 0.2), (int) (screenSize.height * 0.25),
+        excessPanel.setBounds((int) (screenSize.width * 0.2), (int) (screenSize.height * 0.22),
                 (int) (screenSize.width * 0.6), (int) (screenSize.height * 0.8));
 
         excessPanel.setLayout(new GridLayout(30, 1, 10, 10));
@@ -102,9 +103,9 @@ public class managerReportGUI implements ActionListener {
         f.add(excessPanel);
 
         ///// Button /////
-        saleBtn.setBounds((int) (screenSize.width * 0.4), (int) (screenSize.height * 0.2),
+        saleBtn.setBounds((int) (screenSize.width * 0.4), (int) (screenSize.height * 0.15),
                 (int) (screenSize.width * 0.1), (int) (screenSize.height * 0.05));
-        excessBtn.setBounds((int) (screenSize.width * 0.5), (int) (screenSize.height * 0.2),
+        excessBtn.setBounds((int) (screenSize.width * 0.5), (int) (screenSize.height * 0.15),
                 (int) (screenSize.width * 0.1), (int) (screenSize.height * 0.05));
 
         saleBtn.addActionListener(this);
@@ -143,17 +144,21 @@ public class managerReportGUI implements ActionListener {
         if (e.getSource() == saleBtn) {
             salePanelDisplay(true);
             excessPanel.setVisible(false);
-            for (int i = 0; i < itemNameList.size(); ++i) {
-                JLabel newItemLabel = new JLabel(itemNameList.get(i));
-                newItemLabel.setVerticalAlignment(JLabel.TOP);
-                newItemLabel.setHorizontalAlignment(JLabel.CENTER);
-                itemNamePanel.add(newItemLabel);
+            if(!isChecked){
+                for (int i = 0; i < itemNameList.size(); ++i) {
+                    JLabel newItemLabel = new JLabel(itemNameList.get(i));
+                    newItemLabel.setVerticalAlignment(JLabel.TOP);
+                    newItemLabel.setHorizontalAlignment(JLabel.CENTER);
+                    itemNamePanel.add(newItemLabel);
 
-                JLabel newSaleLabel = new JLabel(String.valueOf(saleList.get(i)));
-                newSaleLabel.setVerticalAlignment(JLabel.TOP);
-                newSaleLabel.setHorizontalAlignment(JLabel.CENTER);
-                salePanel.add(newSaleLabel);
+                    JLabel newSaleLabel = new JLabel(String.valueOf(saleList.get(i)));
+                    newSaleLabel.setVerticalAlignment(JLabel.TOP);
+                    newSaleLabel.setHorizontalAlignment(JLabel.CENTER);
+                    salePanel.add(newSaleLabel);
+                }  
+                isChecked = true;              
             }
+
         } else if (e.getSource() == excessBtn) {
             excessPanel.setVisible(true);
             salePanelDisplay(false);
@@ -174,6 +179,15 @@ public class managerReportGUI implements ActionListener {
                 date_from = new SimpleDateFormat("yyyy-MM-dd").parse(fromDateInput.getText());
                 date_end = new SimpleDateFormat("yyyy-MM-dd").parse(endDateInput.getText());
             } catch (ParseException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+            }
+
+            try {
+                itemNameList = get_sale_report_name(conn);
+                saleList = get_sale_report_amount(conn, date_from, date_end);
+                isChecked = false;
+            } catch (SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
