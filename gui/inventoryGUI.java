@@ -341,6 +341,7 @@ public class inventoryGUI implements ActionListener {
         // generate the items as buttons and add action
         for (int i = 0; i < restock_name_list.size(); i++) {
             JButton newBtn = new JButton(restock_name_list.get(i));
+            newBtn.setForeground(Color.red);
             newBtn.addActionListener(this);
             // newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
 
@@ -348,6 +349,7 @@ public class inventoryGUI implements ActionListener {
             restock_name_btn.add(newBtn);
 
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
+            newLabel.setForeground(Color.RED);
             restockPanel_Right.add(newLabel);
             restock_quantity_label.add(newLabel);
             newLabel.setVerticalAlignment(JLabel.TOP);
@@ -427,14 +429,13 @@ public class inventoryGUI implements ActionListener {
         activateBtn.setVisible(b);
     }
 
-    public boolean checkItemExit(String name) {
+    public int checkItemExit(String name) {
         for (int i = 0; i < nameList.size(); ++i) {
-            // System.out.println(nameList.get(i));
             if (name.equals(nameList.get(i))) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public int generateId() {
@@ -567,7 +568,7 @@ public class inventoryGUI implements ActionListener {
                 JOptionPane.showMessageDialog(null, "Error. Date entered wrong. Use YYYY-MM-dd.");
             }
 
-            if (checkItemExit(name)) {
+            if (checkItemExit(name) != -1) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
                 try {
@@ -612,7 +613,6 @@ public class inventoryGUI implements ActionListener {
 
             i = -1;
             for (int h = 0; h < nameList.size(); ++h) {
-                System.out.println(nameList.get(h));
                 if (nameList.get(h).equals(name)) {
 
                     i = h;
@@ -669,10 +669,6 @@ public class inventoryGUI implements ActionListener {
                 restock_quantity_list.set(restockIndex, Integer.parseInt(inputQuantity.getText()));
 
                 if (restock_quantity_list.get(restockIndex) >= 500) {
-                    // System.out.println("restock index: " + restockIndex);
-                    // System.out.println(restock_name_btn.get(restockIndex).getText());
-                    // System.out.println(restock_quantity_label.get(restockIndex).getText());
-
                     restockPanel_Left.remove(restock_name_btn.get(restockIndex));
                     restockPanel_Right.remove(restock_quantity_label.get(restockIndex));
                     restockPanel_Left.revalidate();

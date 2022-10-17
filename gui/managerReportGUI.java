@@ -42,10 +42,12 @@ public class managerReportGUI implements ActionListener {
     // For sale report
     ArrayList<String> itemNameList = new ArrayList<String>();
     ArrayList<Integer> saleList = new ArrayList<Integer>();
-    boolean isChecked = false;
+    boolean saleChecked = false;
+    boolean excessChecked = false;
 
     // For excess report
     ArrayList<String> excessItemList = new ArrayList<String>();
+    JLabel excessReport_title = new JLabel("only sold less than 10%");
 
     // Dates
     Date date_from;
@@ -100,6 +102,11 @@ public class managerReportGUI implements ActionListener {
 
         excessPanel.setLayout(new GridLayout(30, 1, 10, 10));
         excessPanel.setVisible(false);
+        excessReport_title.setHorizontalAlignment(JLabel.CENTER);
+        excessReport_title.setVerticalAlignment(JLabel.TOP);
+        excessReport_title.setForeground(Color.RED);
+        excessPanel.add(excessReport_title);
+
         f.add(excessPanel);
 
         ///// Button /////
@@ -144,7 +151,7 @@ public class managerReportGUI implements ActionListener {
         if (e.getSource() == saleBtn) {
             salePanelDisplay(true);
             excessPanel.setVisible(false);
-            if (!isChecked) {
+            if (!saleChecked) {
                 for (int i = 0; i < itemNameList.size(); ++i) {
                     JLabel newItemLabel = new JLabel(itemNameList.get(i));
                     newItemLabel.setVerticalAlignment(JLabel.TOP);
@@ -156,24 +163,30 @@ public class managerReportGUI implements ActionListener {
                     newSaleLabel.setHorizontalAlignment(JLabel.CENTER);
                     salePanel.add(newSaleLabel);
                 }
-                isChecked = true;
+                saleChecked = true;
             }
 
         } else if (e.getSource() == excessBtn) {
             excessPanel.setVisible(true);
             salePanelDisplay(false);
-            for (int i = 0; i < excessItemList.size(); ++i) {
-                JLabel newSaleLabel = new JLabel(String.valueOf(excessItemList.get(i)));
-                newSaleLabel.setVerticalAlignment(JLabel.TOP);
-                newSaleLabel.setHorizontalAlignment(JLabel.CENTER);
-                excessPanel.add(newSaleLabel);
+            if(!excessChecked){
+                for (int i = 0; i < excessItemList.size(); ++i) {
+                    JLabel newSaleLabel = new JLabel(String.valueOf(excessItemList.get(i)));
+                    newSaleLabel.setVerticalAlignment(JLabel.TOP);
+                    newSaleLabel.setHorizontalAlignment(JLabel.CENTER);
+                    excessPanel.add(newSaleLabel);
+                }
+                excessChecked = true;
             }
+
         } else if (e.getSource() == submitBtn) {
+ 
+            salePanelDisplay(false);
+            excessPanel.setVisible(false);
+
             itemNameList.clear();
             saleList.clear();
             excessItemList.clear();
-            salePanelDisplay(false);
-            excessPanel.setVisible(false);
 
             try {
                 date_from = new SimpleDateFormat("yyyy-MM-dd").parse(fromDateInput.getText());
@@ -186,7 +199,9 @@ public class managerReportGUI implements ActionListener {
             try {
                 itemNameList = get_sale_report_name(conn);
                 saleList = get_sale_report_amount(conn, date_from, date_end);
-                isChecked = false;
+                excessItemList = get_excess_report(conn, date_from, date_end);
+                saleChecked = false;
+                excessChecked = false;
             } catch (SQLException e1) {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
@@ -412,7 +427,7 @@ public class managerReportGUI implements ActionListener {
         }
 
         for (int i = 0; i < no_sale_name.size(); i++) {
-            System.out.print(no_sale_name.get(i));
+            //System.out.print(no_sale_name.get(i));
         }
 
         return temp;
