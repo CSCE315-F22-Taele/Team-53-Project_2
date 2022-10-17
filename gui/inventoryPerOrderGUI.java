@@ -33,15 +33,6 @@ public class inventoryPerOrderGUI implements ActionListener {
     ////////// Frame Declaraiton //////////
     JFrame f = new JFrame("Inventory per Order GUI");
 
-    ////////// Deactivate //////////
-    JMenuBar menuBar = new JMenuBar();
-    JMenu deactivatedMenu = new JMenu("Deactivated");
-    ArrayList<String> deactivatedNameList = new ArrayList<String>();
-    ArrayList<JMenuItem> deactivatedMenuItemList = new ArrayList<JMenuItem>();
-    JLabel nameInfo = new JLabel("Name: ");
-    JLabel itemName = new JLabel();
-    JButton activateBtn = new JButton("Activate");
-
     ////////// Store value //////////
     /* Use these two arraylists to connect db */
     ArrayList<String> nameList = new ArrayList<String>();
@@ -75,7 +66,6 @@ public class inventoryPerOrderGUI implements ActionListener {
 
     // Item's index in buttonList
     int btnIndex = -1;
-    int activateIndex = -1;
 
     // Item's index in the nameOccursList
     int nameOccursIndex = -1;
@@ -94,21 +84,6 @@ public class inventoryPerOrderGUI implements ActionListener {
     Integer [] currInventory;
     inventoryPerOrderGUI(int id) {
 
-        Color blueCute = new Color(194, 194, 252);
-        ////////// Frame setting //////////
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        f.setSize(screenSize.width, screenSize.height);
-        f.setBackground(Color.gray);
-        f.setSize(1400, 1600);
-        f.setLayout(null);
-        f.setVisible(true);
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        f.setJMenuBar(menuBar);
-
-        menuBar.add(deactivatedMenu);
-
-        title.setBounds(30, 5, 200, 60);
-
         orderid = id; 
         try {
             conn = connectionSet();
@@ -123,36 +98,16 @@ public class inventoryPerOrderGUI implements ActionListener {
             JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
-
-        ////////// Deactivate //////////
-
-        // TODO: get data from db 
-        // HARDCODE FOR TESTING ONLY, DELETE ONCE DB IS DONE
-        deactivatedNameList.add("soy milk");
-        deactivatedNameList.add("yogurt");
-
-        // Add the deactivated items to the menu bar
-        for (int i = 0; i < deactivatedNameList.size(); i++) {
-            JMenuItem newItem = new JMenuItem(deactivatedNameList.get(i));
-            newItem.addActionListener(this);
-            deactivatedMenu.add(newItem);
-            deactivatedMenuItemList.add(newItem);
-        }
-
-        nameInfo.setBounds(520, 210, 80, 20);
-        itemName.setBounds(630, 210, 160, 20);
-        activateBtn.setBounds(560, 245, 90, 25);
-        nameInfo.setVisible(false);
-        itemName.setVisible(false);
-        activateBtn.setVisible(false);
-
-        activateBtn.addActionListener(this);
-        f.add(nameInfo);
-        f.add(itemName);
-        f.add(activateBtn);
-
         Color pink = new Color(244, 220, 245);
-
+        Color blueCute = new Color(194, 194, 252);
+        ////////// Frame setting //////////
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        f.setSize(screenSize.width, screenSize.height);
+        f.setBackground(Color.gray);
+        f.setSize(1400, 1600);
+        f.setLayout(null);
+        f.setVisible(true);
+        title.setBounds(30, 5, 200, 60);
 
         ////////// Items Area //////////
         itemsPanel.setBackground(pink);
@@ -228,33 +183,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         return -1;
     }
 
-    public void activate(int i){
-        JButton newBtn = new JButton(deactivatedNameList.get(i));
-        newBtn.setPreferredSize(new Dimension(200, 60));
-        newBtn.addActionListener(this);
-        nameList.add(deactivatedNameList.get(i));
-        btnList.add(newBtn);
-        itemsPanel.add(newBtn);
-        itemsPanel.validate();
-        // remove the item from deactiveate menu and list
-        deactivatedNameList.remove(i);
-        deactivatedMenuItemList.remove(i);
-        deactivatedMenu.remove(i);
-        
-        JOptionPane.showMessageDialog(null, "Activate successful.");
-    }
-
     public void actionPerformed(ActionEvent e) {
-        for (int h = 0; h < deactivatedMenuItemList.size(); ++h) {
-            if(e.getSource() == deactivatedMenuItemList.get(h)){
-                activateIndex = h;
-                itemsPanel.setVisible(false);
-                nameInfo.setVisible(true);
-                itemName.setVisible(true);
-                itemName.setText(deactivatedMenuItemList.get(h).getText());
-                activateBtn.setVisible(true);
-            }
-        }
         for (int i = 0; i < btnList.size(); ++i) {
             if (e.getSource() == btnList.get(i)) {
                 String name = btnList.get(i).getText();
@@ -316,15 +245,6 @@ public class inventoryPerOrderGUI implements ActionListener {
         } else if (e.getSource() == backToCashier) {
             // FIX ME: Implement
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-        } else if(e.getSource() == activateBtn){
-            activate(activateIndex);
-            JOptionPane.showMessageDialog(null, "Activate successful.");
-
-            nameInfo.setVisible(false);
-            itemName.setVisible(false);
-            activateBtn.setVisible(false);
-            itemsPanel.setVisible(true);
-
         }
     }
 

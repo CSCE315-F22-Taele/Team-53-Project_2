@@ -138,7 +138,7 @@ public class cashierGUI implements ActionListener {
     JPanel receiptPanel_Right = new JPanel();
     JPanel receiptPanel_Down = new JPanel();
 
-    
+    boolean checkoutTrue = false;
     public cashierGUI(int id) {
         
         try{
@@ -296,8 +296,12 @@ public class cashierGUI implements ActionListener {
     public void actionPerformed(ActionEvent e) {
  
         if (e.getSource() == checkoutBtn) {
-            insertOrder(); 
-            System.out.println(ordereditems);
+
+            if (checkoutTrue== false){
+                insertOrder();
+                checkoutTrue = true;
+            }
+
             new checkoutGUI(orderid, totalPrice, employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
            
@@ -435,6 +439,9 @@ public class cashierGUI implements ActionListener {
 
         try{
 
+        orderid = getOrderId(conn); 
+
+
         Calendar calendar = Calendar.getInstance();
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
         String stringVal = formatTime.format(calendar.getTime());
@@ -517,7 +524,7 @@ public class cashierGUI implements ActionListener {
 
         try{
 
-            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost ORDER BY id ASC");
+            ResultSet findMenu = stmt.executeQuery("SELECT menuitem FROM menucost WHERE is_selling = true ORDER BY id ASC");
 
             while (findMenu.next()) {
                 temp.add(findMenu.getString("menuitem"));
