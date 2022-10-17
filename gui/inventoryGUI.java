@@ -51,8 +51,8 @@ public class inventoryGUI implements ActionListener {
 
     JButton clearBtn = new JButton("Clear");
 
-    // Back to Cashier
-    JButton backToCashier = new JButton("Back To Cashier");
+    // Back to Manager
+    JButton backToManager = new JButton("Back To Manager");
 
     // Store data
     ArrayList<Integer> idList = new ArrayList<Integer>();
@@ -225,10 +225,10 @@ public class inventoryGUI implements ActionListener {
         f.add(clearBtn);
 
         ////////// Logout //////////
-        backToCashier.addActionListener(this);
-        backToCashier.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
+        backToManager.addActionListener(this);
+        backToManager.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
                 (int) (screenHeight * 0.05));
-        f.add(backToCashier);
+        f.add(backToManager);
 
         // ADD Items
         inputName.setBounds(730, 210, 160, 20);
@@ -548,10 +548,10 @@ public class inventoryGUI implements ActionListener {
             ask_Name.setVisible(false);
             clearBtn.setVisible(false);
 
-        } else if (e.getSource() == backToCashier) {
+        } else if (e.getSource() == backToManager) {
             // FIX ME: TODO: Implement
-            new cashierGUI(employeeid);
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+            // new cashierGUI(employeeid);
+            f.dispose();
 
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);
