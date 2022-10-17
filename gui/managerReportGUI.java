@@ -178,12 +178,6 @@ public class managerReportGUI implements ActionListener {
                 e1.printStackTrace();
             }
 
-            try {
-                get_sale_report_amount(conn, date_from, date_end);
-            } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
-            }
         }
 
     }
@@ -253,6 +247,19 @@ public class managerReportGUI implements ActionListener {
         }
 
         return convert_temp;
+    }
+
+    // THIS FUNCTION WILL RETURN ALL MENU ITEMS NAMES
+    public ArrayList<String> get_sale_report_name(Connection conn) throws SQLException {
+        Statement stmt = conn.createStatement();
+        ResultSet rs = stmt.executeQuery("SELECT menuitem FROM menucost ORDER BY id ASC");
+
+        ArrayList<String> temp = new ArrayList<String>();
+        while (rs.next()) {
+            temp.add(rs.getString("menuitem"));
+        }
+
+        return temp;
     }
 
     public Connection connectionSet() {
