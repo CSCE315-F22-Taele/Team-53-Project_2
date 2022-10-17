@@ -118,13 +118,6 @@ public class inventoryGUI implements ActionListener {
             expirationDateList = get_expiration_date(conn);
             vendorList = get_vendor(conn);
 
-            deactivated_IdList = get_id_deactive(conn);
-            deactivated_NameList = get_inventory_name_deactive(conn);
-            deactivated_CostList = get_cost_deactive(conn);
-            deactivated_QuantityList = get_quantity_deactive(conn);
-            deactivated_ExpirationList = get_expiration_date_deactive(conn);
-            deactivated_VendorList = get_vendor_deactive(conn);
-
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             JOptionPane.showMessageDialog(null, "Failed database connection.");
@@ -320,6 +313,7 @@ public class inventoryGUI implements ActionListener {
 
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
+           
 
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
             restockPanel_Right.add(newLabel);
@@ -516,7 +510,9 @@ public class inventoryGUI implements ActionListener {
             if (checkItemExit(name)) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
-
+            
+                
+                
                 try {
                     add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -527,7 +523,7 @@ public class inventoryGUI implements ActionListener {
                     vendorList.add(vendor);
 
                 } catch (SQLException addException) {
-                    // addException.printStackTrace();
+                    //addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -696,11 +692,12 @@ public class inventoryGUI implements ActionListener {
         }
     }
 
-    public void add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
+    public void add_item(Connection conn,  String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
                 "INSERT INTO inventory( itemname, amount, cost, expirationdate,vendor, is_using ) VALUES(?,?,?,?,?, ?)");
 
+        
         addStatement.setString(1, name);
         addStatement.setInt(2, quantity);
         addStatement.setDouble(3, cost);
@@ -724,7 +721,7 @@ public class inventoryGUI implements ActionListener {
         updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
-
+        
         updateStat.executeUpdate();
     }
 
@@ -734,97 +731,9 @@ public class inventoryGUI implements ActionListener {
         delStatement.executeUpdate();
     }
 
-    public ArrayList<Integer> get_id_deactive(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT itemid FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-
-        while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
-            temp.add(findInventory.getInt("itemid"));
-
-        }
-
-        return temp;
-    }
-
-    public ArrayList<Integer> get_quantity_deactive(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT amount FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-        // int count = 0; // Increments inventory array
-
-        ArrayList<Integer> temp = new ArrayList<Integer>();
-
-        while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
-            temp.add(findInventory.getInt("amount"));
-
-        }
-
-        return temp;
-    }
-
-    public ArrayList<String> get_inventory_name_deactive(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT itemname FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-
-        ArrayList<String> temp = new ArrayList<String>();
-
-        while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
-            temp.add(findInventory.getString("itemname"));
-
-        }
-
-        return temp;
-    }
-
-    public ArrayList<Double> get_cost_deactive(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT cost FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-
-        ArrayList<Double> temp = new ArrayList<Double>();
-
-        while (findInventory.next()) {
-            temp.add(findInventory.getDouble("cost"));
-        }
-        return temp;
-    }
-
-    public ArrayList<Date> get_expiration_date_deactive(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT expirationdate FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-
-        ArrayList<Date> temp = new ArrayList<Date>();
-
-        while (findInventory.next()) {
-            temp.add(findInventory.getDate("expirationdate"));
-        }
-        return temp;
-    }
-
-    public ArrayList<String> get_vendor_deactive(Connection conn) throws SQLException {
-        Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT vendor FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-        ArrayList<String> temp = new ArrayList<String>();
-
-        while (findInventory.next()) {
-            temp.add(findInventory.getString("vendor"));
-        }
-        return temp;
-    }
-
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT itemid FROM inventory WHERE is_using = true ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory ORDER BY itemid ASC");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
@@ -839,8 +748,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT amount FROM inventory WHERE is_using = true ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory ORDER BY itemid ASC");
         // int count = 0; // Increments inventory array
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -856,8 +764,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT itemname FROM inventory WHERE is_using = true ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory ORDER BY itemid ASC");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -872,8 +779,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT cost FROM inventory WHERE is_using = true ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory ORDER BY itemid ASC");
 
         ArrayList<Double> temp = new ArrayList<Double>();
 
@@ -885,8 +791,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT expirationdate FROM inventory WHERE is_using = true ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory ORDER BY itemid ASC");
 
         ArrayList<Date> temp = new ArrayList<Date>();
 
@@ -898,8 +803,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_vendor(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT vendor FROM inventory WHERE is_using = true ORDER BY itemid ASC");
+        ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory ORDER BY itemid ASC");
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
@@ -910,8 +814,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<String> get_inventory_name_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt
-                .executeQuery("SELECT itemname FROM inventory WHERE amount < 500,  is_using = true");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -925,7 +828,7 @@ public class inventoryGUI implements ActionListener {
 
     public ArrayList<Integer> get_inventory_amount_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500, is_using = true");
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
