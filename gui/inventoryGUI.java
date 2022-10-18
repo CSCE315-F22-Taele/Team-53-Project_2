@@ -492,17 +492,20 @@ public class inventoryGUI implements ActionListener {
             } else {
                 
                 try {
-                    add_item(conn, name, quantity, cost, expirationDate, vendor);
+                    int id = add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
+                    idList.add(id);
                     nameList.add(name);
                     quantityList.add(quantity);
                     costList.add(cost);
                     expirationDateList.add(expirationDate);
                     vendorList.add(vendor);
-                } catch (SQLException addException) {
                     
+                } catch (SQLException addException) {
+                    addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
+                System.out.println(vendorList.size());
                 JMenuItem newItem = new JMenuItem(name);
                 newItem.addActionListener(this);
                 viewMenu.add(newItem);
@@ -686,7 +689,7 @@ public class inventoryGUI implements ActionListener {
             }
         }
     }
-    public void add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
+    public Integer add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
                 "INSERT INTO inventory( itemname, amount, cost, expirationdate,vendor, is_using ) VALUES(?,?,?,?,?, ?)");
@@ -698,7 +701,23 @@ public class inventoryGUI implements ActionListener {
         addStatement.setString(5, vendor);
         addStatement.setBoolean(6, true);
         addStatement.executeUpdate();
+        
+        PreparedStatement itemId = conn.prepareStatement("SELECT itemid FROM inventory WHERE itemname=(?)");
+        itemId.setString(1, name);
+       
+
+        ResultSet inventoryId = itemId.executeQuery();
+        int id = -1;
+
+        while (inventoryId.next()) {
+            // inventory_names.push_back(findInventory.getString("itemname"));
+            id = (inventoryId.getInt("itemid"));
+        }
+
+        return id;
+
     }
+
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
                 "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?), is_using=true  WHERE itemid = (?)");
@@ -712,6 +731,7 @@ public class inventoryGUI implements ActionListener {
         updateStat.setInt(6, idList.get(index));
         updateStat.executeUpdate();
     }
+
     public void deactivate_item(Connection conn, int id) throws SQLException {
         PreparedStatement delStatement = conn.prepareStatement("UPDATE inventory SET is_using=false WHERE itemid=(?)");
         delStatement.setInt(1, id);
@@ -723,7 +743,6 @@ public class inventoryGUI implements ActionListener {
         addStat.setInt(1, id);
         addStat.executeUpdate();
     }
-
    
     public ArrayList<Integer> get_id_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
@@ -913,6 +932,7 @@ public class inventoryGUI implements ActionListener {
        
         return temp;
     }
+   
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
