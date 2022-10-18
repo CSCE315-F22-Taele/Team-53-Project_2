@@ -481,6 +481,7 @@ public class inventoryGUI implements ActionListener {
             Double cost = Double.parseDouble(inputCost.getText());
             Date expirationDate = null;
             String vendor = inputVendor.getText();
+            
             try {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
@@ -489,6 +490,7 @@ public class inventoryGUI implements ActionListener {
             if (checkItemExit(name) != -1) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
+                
                 try {
                     add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -498,7 +500,7 @@ public class inventoryGUI implements ActionListener {
                     expirationDateList.add(expirationDate);
                     vendorList.add(vendor);
                 } catch (SQLException addException) {
-                    // addException.printStackTrace();
+                    
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -888,7 +890,7 @@ public class inventoryGUI implements ActionListener {
     public ArrayList<String> get_inventory_name_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
        
-        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500,  is_using = true");
+        ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500 and is_using = true");
 
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -901,13 +903,14 @@ public class inventoryGUI implements ActionListener {
     public ArrayList<Integer> get_inventory_amount_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         
-        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500, is_using = true");
+        ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500 and is_using = true");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
         while (findInventory.next()) {
             temp.add(findInventory.getInt("amount"));
         }
+       
         return temp;
     }
     public Connection connectionSet() {
