@@ -89,7 +89,6 @@ public class menuItemGUI implements ActionListener {
             nameList = get_menu_item(conn);
             costList = get_cost(conn);
 
-            // TODO: get the data from db
             deactivatedNameList = get_deactivate_menu_item(conn);
             deactivatedCostList = get_deactivate_menu_cost(conn);
 
@@ -123,7 +122,7 @@ public class menuItemGUI implements ActionListener {
         f.setVisible(true);
         f.setJMenuBar(menuBar);
         f.setVisible(true);
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE); // What?
 
         int screenHeight = screenSize.height;
         int screenWidth = screenSize.width;
@@ -136,7 +135,6 @@ public class menuItemGUI implements ActionListener {
         editMenu.add(addItem);
         editMenu.add(updateItem);
         editMenu.add(deactivateItem);
-
         addItem.addActionListener(this);
         updateItem.addActionListener(this);
         deactivateItem.addActionListener(this);
@@ -326,7 +324,6 @@ public class menuItemGUI implements ActionListener {
             clearBtn.setVisible(false);
 
         } else if (e.getSource() == backToManager) {
-            // new cashierGUI(employeeid);
             f.dispose();
 
         } else if (e.getSource() == addBtn) {
@@ -436,7 +433,6 @@ public class menuItemGUI implements ActionListener {
             }
 
         } else if (e.getSource() == updateBtn) {
-            // NOTE: MUST BE REMOVED: WE ARE NOT UPDATING PRIMARY KEY
             btnDisplay(false);
             nameList.set(i, inputName.getText());
             costList.set(i, Double.parseDouble(inputCost.getText()));
@@ -484,7 +480,6 @@ public class menuItemGUI implements ActionListener {
             deactivatedItemList.add(newItem);
             deactivatedMenu.add(newItem);
 
-            // FIX ME AFTER BACKEDN DONE
             try {
                 delete_item(conn, nameList.get(i));
                 JOptionPane.showMessageDialog(null, "Deactivate successful.");

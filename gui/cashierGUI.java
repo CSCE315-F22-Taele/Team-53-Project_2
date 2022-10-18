@@ -255,7 +255,6 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Down);
 
         f.setSize(1800, 1600);
-
         f.setLayout(null);
         f.setVisible(true);
     }
@@ -289,6 +288,7 @@ public class cashierGUI implements ActionListener {
         } else if (e.getSource() == managerBtn) {
             new managerGUI(employeeid);
             f.dispose();
+
         } else if (e.getSource() == RestartOrder) {
             new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
