@@ -273,9 +273,7 @@ public class cashierGUI implements ActionListener {
         if (e.getSource() == checkoutBtn) {
 
             if (checkoutTrue == false) {
-
                 insertOrder();
-
                 new checkoutGUI(orderid, totalPrice, employeeid);
             }
 
@@ -405,18 +403,18 @@ public class cashierGUI implements ActionListener {
 
         try {
 
-            orderid = getOrderId(conn);
+            
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
             String stringVal = formatTime.format(calendar.getTime());
             Time time = java.sql.Time.valueOf(stringVal);
-
+            
             PreparedStatement statement = conn.prepareStatement(
                     "UPDATE ordering SET timeoforder=(?), amount=(?), ordereditems=(?) WHERE orderid=(?)");
 
             double amount = totalPrice;
-
+            
             Object[] orderedArr = ordereditems.toArray();
             Array ordered = conn.createArrayOf("INT", orderedArr);
             statement.setInt(4, orderid);
@@ -426,6 +424,7 @@ public class cashierGUI implements ActionListener {
 
             statement.executeUpdate();
         } catch (Exception e) {
+            // e.printStackTrace();
             JOptionPane.showMessageDialog(null, "Order insertion not done. ");
         }
 
