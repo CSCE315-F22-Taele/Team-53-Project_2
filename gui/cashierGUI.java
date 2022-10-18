@@ -254,8 +254,6 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Right);
         f.add(receiptPanel_Down);
 
-
-
         f.setSize(1800, 1600);
 
         f.setLayout(null);
@@ -275,14 +273,13 @@ public class cashierGUI implements ActionListener {
 
         if (e.getSource() == checkoutBtn) {
 
-
-            if (checkoutTrue == false){
+            if (checkoutTrue == false) {
 
                 insertOrder();
-    
+
                 new checkoutGUI(orderid, totalPrice, employeeid);
             }
-            
+
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == logoutBtn) {
@@ -291,6 +288,7 @@ public class cashierGUI implements ActionListener {
 
         } else if (e.getSource() == managerBtn) {
             new managerGUI(employeeid);
+            f.dispose();
         } else if (e.getSource() == RestartOrder) {
             new cashierGUI(employeeid);
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
@@ -406,7 +404,6 @@ public class cashierGUI implements ActionListener {
         Connection conn = connectionSet();
 
         try {
-
 
             orderid = getOrderId(conn);
 
