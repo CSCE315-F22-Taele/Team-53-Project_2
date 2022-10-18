@@ -502,10 +502,10 @@ public class inventoryGUI implements ActionListener {
                     vendorList.add(vendor);
                     
                 } catch (SQLException addException) {
-                    addException.printStackTrace();
+                    
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
-                System.out.println(vendorList.size());
+                
                 JMenuItem newItem = new JMenuItem(name);
                 newItem.addActionListener(this);
                 viewMenu.add(newItem);
