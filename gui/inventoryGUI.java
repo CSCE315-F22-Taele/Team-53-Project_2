@@ -50,8 +50,8 @@ public class inventoryGUI implements ActionListener {
 
     JButton clearBtn = new JButton("Clear");
 
-    // Back to Cashier
-    JButton backToCashier = new JButton("Back To Cashier");
+    // Back to Manager
+    JButton backToManager = new JButton("Back To Manager");
 
     // Store data
     ArrayList<Integer> idList = new ArrayList<Integer>();
@@ -204,10 +204,10 @@ public class inventoryGUI implements ActionListener {
         f.add(clearBtn);
 
         ////////// Logout //////////
-        backToCashier.addActionListener(this);
-        backToCashier.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
+        backToManager.addActionListener(this);
+        backToManager.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
                 (int) (screenHeight * 0.05));
-        f.add(backToCashier);
+        f.add(backToManager);
 
         // ADD Items
         inputName.setBounds(730, 210, 160, 20);
@@ -317,7 +317,6 @@ public class inventoryGUI implements ActionListener {
 
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
-           
 
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
             restockPanel_Right.add(newLabel);
@@ -491,10 +490,8 @@ public class inventoryGUI implements ActionListener {
             ask_Name.setVisible(false);
             clearBtn.setVisible(false);
 
-        } else if (e.getSource() == backToCashier) {
-            // FIX ME: TODO: Implement
-            new cashierGUI(employeeid);
-            f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
+        } else if (e.getSource() == backToManager) {
+            f.dispose();
 
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);
@@ -514,9 +511,7 @@ public class inventoryGUI implements ActionListener {
             if (checkItemExit(name)) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
-            
-                
-                
+
                 try {
                     add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -527,7 +522,7 @@ public class inventoryGUI implements ActionListener {
                     vendorList.add(vendor);
 
                 } catch (SQLException addException) {
-                    //addException.printStackTrace();
+                    // addException.printStackTrace();
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
                 JMenuItem newItem = new JMenuItem(name);
@@ -696,12 +691,11 @@ public class inventoryGUI implements ActionListener {
         }
     }
 
-    public void add_item(Connection conn,  String name, int quantity, double cost, Date expirationDate,
+    public void add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
                 "INSERT INTO inventory( itemname, amount, cost, expirationdate,vendor, is_using ) VALUES(?,?,?,?,?, ?)");
 
-        
         addStatement.setString(1, name);
         addStatement.setInt(2, quantity);
         addStatement.setDouble(3, cost);
@@ -725,7 +719,7 @@ public class inventoryGUI implements ActionListener {
         updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
         updateStat.setInt(6, idList.get(index));
-        
+
         updateStat.executeUpdate();
     }
 
@@ -734,7 +728,6 @@ public class inventoryGUI implements ActionListener {
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
-
 
     public ArrayList<String> get_deactivate_inventory(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
@@ -750,7 +743,6 @@ public class inventoryGUI implements ActionListener {
 
         return temp;
     }
-
 
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
