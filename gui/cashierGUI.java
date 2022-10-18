@@ -11,11 +11,11 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
 
-/* Array Index 
+/* Array Index
  * 0 - GYRO
  * 1 - BOWL
- * 2 - 2 falafels 
- * 3 - Extra pita and humus 
+ * 2 - 2 falafels
+ * 3 - Extra pita and humus
  * 4 - Extra Chicken
  * 5 - Extra Harissa
  * 6 - Extra Sp Meatball
@@ -24,16 +24,19 @@ import java.util.ArrayList;
  * 9 - Fountain drink
  */
 
-/* Prices Index 
+/* Prices Index
  * 0 - GYRO
  * 1 - BOWL
- * 2 - Extra pita and humus 
- * 3 - 2 falafels 
- * 4 - extra dressing 
+ * 2 - Extra pita and humus
+ * 3 - 2 falafels
+ * 4 - extra dressing
  * 5 - drink
  * 6 - extra protein
  */
 
+/**
+ * Implements the cashier graphical user interface. This helps us submit an order to the ordering datatable.
+ */
 public class cashierGUI implements ActionListener {
     private void makeFrameFullSize(JFrame aFrame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -126,6 +129,10 @@ public class cashierGUI implements ActionListener {
 
     boolean checkoutTrue = false;
 
+    /**
+     * Sets up the cashier GUI.
+     * @param id  The employeeid that is taking the order.
+     */
     public cashierGUI(int id) {
 
         try {
@@ -259,6 +266,11 @@ public class cashierGUI implements ActionListener {
         f.setVisible(true);
     }
 
+    /**
+     * Checks that a name is in the nameOccursList
+     * @param  name             String value holding the name we are checking for.
+     * @return     index in the array or -1 if not in the array.
+     */
     public int checkNameList(String name) {
         for (int j = 0; j < nameOccursList.size(); ++j) {
             if (name.equals(nameOccursList.get(j))) {
@@ -267,7 +279,10 @@ public class cashierGUI implements ActionListener {
         }
         return -1;
     }
-
+    /**
+     * The actions that happen with the click of each button.
+     * @param e  The button that was clicked.
+     */
     public void actionPerformed(ActionEvent e) {
 
         if (e.getSource() == checkoutBtn) {
@@ -342,6 +357,10 @@ public class cashierGUI implements ActionListener {
 
     }
 
+    /**
+     * Get the date starting for the orderid
+     * @return The orderid starting number (not including the count of the order)
+     */
     public int getDateforId() {
         // transform java data into proper SQL variables
         DateFormat formatDate = new SimpleDateFormat("yyMMdd");
@@ -352,7 +371,12 @@ public class cashierGUI implements ActionListener {
 
         return value * 1000;
     }
-
+    /**
+     * Get the orderid number based on the sequential order.
+     * @param  conn                       Connection with the database.
+     * @return              order id number
+     * @throws SQLException if the database SQL query did not work.
+     */
     public int getOrderId(Connection conn) throws SQLException {
 
         int lastRecord = 0;
@@ -380,6 +404,12 @@ public class cashierGUI implements ActionListener {
 
     }
 
+    /**
+     * Checks if the employee is manager
+     * @param  conn                   Connection with the database.
+     * @param  passCode               employee id that was inputted as the login passcode.
+     * @return          Returns if it employee is a manager.
+     */
     public boolean is_manager(Connection conn, int passCode) {
         boolean value = false;
         try {
@@ -397,24 +427,27 @@ public class cashierGUI implements ActionListener {
         return value;
     }
 
+    /**
+     * Insert order that has been inputted by the cashier into the database.
+     */
     public void insertOrder() {
 
         Connection conn = connectionSet();
 
         try {
 
-            
+
 
             Calendar calendar = Calendar.getInstance();
             SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm:ss");
             String stringVal = formatTime.format(calendar.getTime());
             Time time = java.sql.Time.valueOf(stringVal);
-            
+
             PreparedStatement statement = conn.prepareStatement(
                     "UPDATE ordering SET timeoforder=(?), amount=(?), ordereditems=(?) WHERE orderid=(?)");
 
             double amount = totalPrice;
-            
+
             Object[] orderedArr = ordereditems.toArray();
             Array ordered = conn.createArrayOf("INT", orderedArr);
             statement.setInt(4, orderid);
@@ -430,6 +463,11 @@ public class cashierGUI implements ActionListener {
 
     }
 
+    /**
+     * Get the name of the cashier/employee that is taking the order.
+     * @param  employeeid   The employee id that is taking the order
+     * @return  The employee name.
+     */
     public String get_employee_name(int employeeid) {
 
         String name = "Name not fetched.";
@@ -455,6 +493,12 @@ public class cashierGUI implements ActionListener {
     }
 
     // dynamically get price
+    /**
+     * Get Arraylist of the prices of all active menu items.
+     * @param  conn         Connection with the database.
+     * @return              A double ArrayList with the prices of the items selling in order of the menuid.
+     * @throws SQLException If the database SQL query did not work.
+     */
     public ArrayList<Double> get_price(Connection conn) throws SQLException {
 
         Statement stmt = conn.createStatement();
@@ -476,6 +520,12 @@ public class cashierGUI implements ActionListener {
         return items;
     }
 
+    /**
+     * Get Arraylist the menu items that are being sold in order of menu id.
+     * @param  conn    Connection with the database.
+     * @return           A String ArrayList with the names of the items selling in order of the menuid.
+     * @throws SQLException If the database SQL query did not work.
+     */
     public ArrayList<String> get_menu(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ArrayList<String> temp = new ArrayList<String>();
@@ -497,6 +547,10 @@ public class cashierGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Setup connection with the database.
+     * @return Connection to the database.
+     */
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -513,6 +567,10 @@ public class cashierGUI implements ActionListener {
         return conn;
     }
 
+    /**
+     * Cashier GUI main function.
+     * @param args[]  main function. 
+     */
     public static void main(String args[]) {
         new cashierGUI(0);
     }

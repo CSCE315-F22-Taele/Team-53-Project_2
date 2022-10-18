@@ -15,6 +15,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
+
+/**
+ * Implements the Inventory graphical user interface. This helps us see and edit inventory.
+ */
 public class inventoryGUI implements ActionListener {
     ////////// Declaration //////////
     // Menu Declaration
@@ -94,6 +98,11 @@ public class inventoryGUI implements ActionListener {
     Connection conn;
     int employeeid;
     boolean isRestock = false;
+
+    /**
+     * Constructor to setup a Inventory Graphical User Interface.
+     * @param id  Employee id. Has to be a manager to use this page.
+     */
     inventoryGUI(int id) {
         employeeid = id;
         try {
@@ -111,11 +120,11 @@ public class inventoryGUI implements ActionListener {
             // deactivatedCostList = ;
 
             deactivated_IdList = get_id_deactive(conn);
-            deactivated_NameList =  get_inventory_name_deactive(conn); 
+            deactivated_NameList =  get_inventory_name_deactive(conn);
             deactivated_CostList = get_cost_deactive(conn);
             deactivated_QuantityList = get_quantity_deactive(conn);
             deactivated_ExpirationList = get_expiration_date_deactive(conn);
-            deactivated_VendorList = get_vendor_deactive(conn); 
+            deactivated_VendorList = get_vendor_deactive(conn);
 
 
 
@@ -304,6 +313,11 @@ public class inventoryGUI implements ActionListener {
             newLabel.setHorizontalAlignment(JLabel.CENTER);
         }
     }
+
+    /**
+     * Add value into active menu bar.
+     * @param k  Index of the value to add into into the menu bar from the activated lists of values.
+     */
     public void action(int k) {
         itemId.setText(String.valueOf(idList.get(k)));
         itemName.setText(nameList.get(k));
@@ -316,6 +330,11 @@ public class inventoryGUI implements ActionListener {
         clearBtn.setVisible(true);
         activateBtn.setVisible(false);
     }
+
+    /**
+     * Add value into deactive menu bar.
+     * @param k  Index of the value to add into into the menu bar from the deactivated lists of values.
+     */
     public void deaction(int k) {
         itemId.setText(String.valueOf(deactivated_IdList.get(k)));
         itemName.setText(deactivated_NameList.get(k));
@@ -327,6 +346,11 @@ public class inventoryGUI implements ActionListener {
         info_display(true);
         clearBtn.setVisible(true);
     }
+
+    /**
+     * Function to make Labels appear or disappear.
+     * @param b True/False value to make Jlabels appear or disappear.
+     */
     public void info_display(Boolean b) {
         idInfo.setVisible(b);
         nameInfo.setVisible(b);
@@ -335,6 +359,11 @@ public class inventoryGUI implements ActionListener {
         expirationInfo.setVisible(b);
         vendorInfo.setVisible(b);
     }
+
+    /**
+     * Make text fields appear or disappear.
+     * @param b  True/False value to make text fields appear or disappear.
+     */
     public void add_input_Display(Boolean b) {
         inputName.setVisible(b);
         inputQuantity.setVisible(b);
@@ -342,6 +371,10 @@ public class inventoryGUI implements ActionListener {
         inputDate.setVisible(b);
         inputVendor.setVisible(b);
     }
+
+    /**
+     * Function to clear all labels when clear button pressed.
+     */
     public void clearItemLabel() {
         itemId.setText("");
         itemName.setText("");
@@ -350,6 +383,10 @@ public class inventoryGUI implements ActionListener {
         itemExpirationDate.setText("");
         itemVendor.setText("");
     }
+
+    /**
+     * Function to clear all Input Text when clear button pressed.
+     */
     public void clearInputText() {
         inputName.setText("");
         inputQuantity.setText("");
@@ -357,6 +394,11 @@ public class inventoryGUI implements ActionListener {
         inputDate.setText("");
         inputVendor.setText("");
     }
+
+    /**
+     * Whether or not to display the button
+     * @param b Boolean set to true if need to display button and false if not display.
+     */
     public void btnDisplay(boolean b) {
         addBtn.setVisible(b);
         updateBtn.setVisible(b);
@@ -365,6 +407,12 @@ public class inventoryGUI implements ActionListener {
         deactivateBtn.setVisible(b);
         activateBtn.setVisible(b);
     }
+
+    /**
+     * Check if item exits
+     * @param  name           Name to check if it exists.
+     * @return    Index that name is at or -1 if does not exist.
+     */
     public int checkItemExit(String name) {
         for (int i = 0; i < nameList.size(); ++i) {
             if (name.equals(nameList.get(i))) {
@@ -373,22 +421,12 @@ public class inventoryGUI implements ActionListener {
         }
         return -1;
     }
-    public int generateId() {
-        if (idList.isEmpty()) {
-            idList.add(0);
-            return 0;
-        } else {
-            int id = 0;
-            for (int i = 0; i < idList.size(); ++i) {
-                if (idList.get(i) > id) {
-                    id = idList.get(i);
-                }
-            }
-            id += 1;
-            idList.add(id);
-            return id;
-        }
-    }
+
+
+    /**
+     * Set update for item that needs to be restocked.
+     * @param name  Name of the item that needs to be restocked.
+     */
     public void getUpdate(String name) {
         btnDisplay(false);
         updateBtn.setVisible(true);
@@ -423,6 +461,11 @@ public class inventoryGUI implements ActionListener {
             inputVendor.setText(vendorList.get(i));
         }
     }
+
+    /**
+     * Action that needs to occur based on the button/item that was clicked.
+     * @param e Button clicked.
+     */
     public void actionPerformed(ActionEvent e) {
         for (int h = 0; h < itemList.size(); ++h) {
             if (e.getSource() == itemList.get(h)) {
@@ -481,7 +524,7 @@ public class inventoryGUI implements ActionListener {
             Double cost = Double.parseDouble(inputCost.getText());
             Date expirationDate = null;
             String vendor = inputVendor.getText();
-            
+
             try {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
@@ -490,7 +533,7 @@ public class inventoryGUI implements ActionListener {
             if (checkItemExit(name) != -1) {
                 JOptionPane.showMessageDialog(null, "Item already exists!");
             } else {
-                
+
                 try {
                     int id = add_item(conn, name, quantity, cost, expirationDate, vendor);
                     JOptionPane.showMessageDialog(null, "Item added to Database.");
@@ -500,12 +543,12 @@ public class inventoryGUI implements ActionListener {
                     costList.add(cost);
                     expirationDateList.add(expirationDate);
                     vendorList.add(vendor);
-                    
+
                 } catch (SQLException addException) {
-                    
+
                     JOptionPane.showMessageDialog(null, "Adding of item unsuccessful.");
                 }
-                
+
                 JMenuItem newItem = new JMenuItem(name);
                 newItem.addActionListener(this);
                 viewMenu.add(newItem);
@@ -658,7 +701,7 @@ public class inventoryGUI implements ActionListener {
         } else if (e.getSource() == activateBtn) {
             try{
                 activate_item(conn, deactivated_IdList.get(i));
-            
+
             idList.add(deactivated_IdList.get(i));
             nameList.add(deactivated_NameList.get(i));
             quantityList.add(deactivated_QuantityList.get(i));
@@ -689,6 +732,18 @@ public class inventoryGUI implements ActionListener {
             }
         }
     }
+
+    /**
+     * Funtion to add items to the inventory database.
+     * @param  conn                         Connection to the database.
+     * @param  name                         String holding the name of the item.
+     * @param  quantity                     Int for the amount of the item in inventory.
+     * @param  cost                         Double cost per unit used per order of the item in inventory.
+     * @param  expirationDate               Expiration date of the item in the inventory.
+     * @param  vendor                       String holding the vendor of the item.
+     * @return                Return the id of the item to add to the database.
+     * @throws SQLException   Database query is incorrect or unsuccessful.
+     */
     public Integer add_item(Connection conn, String name, int quantity, double cost, Date expirationDate,
             String vendor) throws SQLException {
         PreparedStatement addStatement = conn.prepareStatement(
@@ -701,10 +756,10 @@ public class inventoryGUI implements ActionListener {
         addStatement.setString(5, vendor);
         addStatement.setBoolean(6, true);
         addStatement.executeUpdate();
-        
+
         PreparedStatement itemId = conn.prepareStatement("SELECT itemid FROM inventory WHERE itemname=(?)");
         itemId.setString(1, name);
-       
+
 
         ResultSet inventoryId = itemId.executeQuery();
         int id = -1;
@@ -718,13 +773,18 @@ public class inventoryGUI implements ActionListener {
 
     }
 
+    /**
+     * Update an item based on user inputs.
+     * @param  conn                        Connection to database.
+     * @param  index The index in local arrays of the item to update that is active.
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public void update_item(Connection conn, int index) throws SQLException {
         PreparedStatement updateStat = conn.prepareStatement(
                 "UPDATE inventory SET itemname=(?), amount=(?), cost=(?), expirationdate=(?),vendor=(?), is_using=true  WHERE itemid = (?)");
         updateStat.setString(1, nameList.get(index));
         updateStat.setInt(2, quantityList.get(index));
         updateStat.setDouble(3, costList.get(index));
-        // FIX ME: RIGHT DATE FORMAT
         java.sql.Date sqlDate = new java.sql.Date(expirationDateList.get(index).getTime());
         updateStat.setDate(4, sqlDate);
         updateStat.setString(5, vendorList.get(index));
@@ -732,18 +792,36 @@ public class inventoryGUI implements ActionListener {
         updateStat.executeUpdate();
     }
 
+    /**
+     * Deactivate an item when the deactivate button is clicked.
+     * @param  conn                       Connection to database.
+     * @param  id                         Id of the item to activate into inventory.
+     * @throws SQLException Database query is incorrect or unsuccessful.
+     */
     public void deactivate_item(Connection conn, int id) throws SQLException {
         PreparedStatement delStatement = conn.prepareStatement("UPDATE inventory SET is_using=false WHERE itemid=(?)");
         delStatement.setInt(1, id);
         delStatement.executeUpdate();
     }
 
+    /**
+     * Activate an item when the activate button is clicked.
+     * @param  conn                       Connection to database.
+     * @param  id                         Id of the item to activate into inventory.
+     * @throws SQLException Database query is incorrect or unsuccessful.
+     */
     public void activate_item(Connection conn, int id) throws SQLException {
         PreparedStatement addStat = conn.prepareStatement("UPDATE inventory SET is_using=true WHERE itemid=(?)");
         addStat.setInt(1, id);
         addStat.executeUpdate();
     }
-   
+
+    /**
+     * Get the id of the inventory that are NOT active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Integer that holds the ids of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Integer> get_id_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemid FROM inventory WHERE is_using = false ORDER BY itemid ASC");
@@ -759,9 +837,15 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the quantity of the inventory that are NOT active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Integer that holds the quantity of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Integer> get_quantity_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-     
+
         ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE is_using = false ORDER BY itemid ASC");
         // int count = 0; // Increments inventory array
 
@@ -776,6 +860,12 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the names of the inventory that are NOT active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of String that holds the names of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<String> get_inventory_name_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE is_using = false ORDER BY itemid ASC");
@@ -791,6 +881,12 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the cost of the inventory that are NOT active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Double that holds the costs of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Double> get_cost_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory WHERE is_using = false ORDER BY itemid ASC");
@@ -803,6 +899,12 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the expiration date of the inventory that are NOT active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Dates that holds the expiration Date of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Date> get_expiration_date_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory WHERE is_using = false ORDER BY itemid ASC");
@@ -815,6 +917,12 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the vendors of the inventory that are not active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of String that holds the vendors of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<String> get_vendor_deactive(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory WHERE is_using = false ORDER BY itemid ASC");
@@ -826,6 +934,12 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the id of the inventory that are active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Integer that holds the ids of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Integer> get_id(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
 
@@ -840,9 +954,15 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the quantity of the inventory that are active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Integer that holds the quantity of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Integer> get_quantity(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        
+
         ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE is_using = true ORDER BY itemid ASC");
         // int count = 0; // Increments inventory array
 
@@ -854,9 +974,16 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the names of the inventory that are active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of String that holds the names of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
+
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        
+
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<String> temp = new ArrayList<String>();
@@ -868,9 +995,15 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the cost of the inventory that are active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Double that holds the costs of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Double> get_cost(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        
+
         ResultSet findInventory = stmt.executeQuery("SELECT cost FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<Double> temp = new ArrayList<Double>();
@@ -881,9 +1014,16 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the expiration date of the inventory that are active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Dates that holds the expiration Date of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
+
     public ArrayList<Date> get_expiration_date(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        
+
         ResultSet findInventory = stmt.executeQuery("SELECT expirationdate FROM inventory WHERE is_using = true ORDER BY itemid ASC");
 
         ArrayList<Date> temp = new ArrayList<Date>();
@@ -894,9 +1034,15 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the vendors of the inventory that are active ordered by their id.
+     * @param  conn         Connection to database.
+     * @return              ArrayList of String that holds the vendors of the items .
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<String> get_vendor(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        
+
         ResultSet findInventory = stmt.executeQuery("SELECT vendor FROM inventory WHERE is_using = true ORDER BY itemid ASC");
         ArrayList<String> temp = new ArrayList<String>();
 
@@ -906,9 +1052,15 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the names of the inventory that are active and have too low a quanity (under 500).
+     * @param  conn         Connection to database.
+     * @return              ArrayList of String that holds the names of the items that need to be restocked.
+     * @throws SQLException  Database query is incorrect or unsuccessful.
+     */
     public ArrayList<String> get_inventory_name_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-       
+
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE amount < 500 and is_using = true");
 
         ArrayList<String> temp = new ArrayList<String>();
@@ -919,9 +1071,15 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
+    /**
+     * Get the amounts of the inventory that is active and when the quanity is too low (under 500).
+     * @param  conn         Connection to database.
+     * @return              ArrayList of Integers that holds the amounts of the items that need to be restocked.
+     * @throws SQLException Database query is incorrect or unsuccessful.
+     */
     public ArrayList<Integer> get_inventory_amount_restock(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
-        
+
         ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE amount < 500 and is_using = true");
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
@@ -929,10 +1087,14 @@ public class inventoryGUI implements ActionListener {
         while (findInventory.next()) {
             temp.add(findInventory.getInt("amount"));
         }
-       
+
         return temp;
     }
-   
+
+    /**
+     * Setup connection with the database.
+     * @return Connection to the database.
+     */
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -946,6 +1108,11 @@ public class inventoryGUI implements ActionListener {
         }
         return conn;
     }
+
+    /**
+     * Inventory GUI main function.
+     * @param args[]  main function.
+     */
     public static void main(String[] args) {
         new inventoryGUI(0);
     }
