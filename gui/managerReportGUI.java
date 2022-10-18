@@ -27,6 +27,8 @@ public class managerReportGUI implements ActionListener {
     JPanel itemNamePanel = new JPanel();
     JPanel salePanel = new JPanel();
     JPanel excessPanel = new JPanel();
+    JPanel excessTitlePanel = new JPanel();
+
 
     ///// Label /////
     JLabel title_item_Label = new JLabel("Item");
@@ -104,16 +106,23 @@ public class managerReportGUI implements ActionListener {
         salePanel.setVisible(false);
 
         ///// Excess Report Layout /////
-        excessPanel.setBounds((int) (screenSize.width * 0.2), (int) (screenSize.height * 0.22),
-                (int) (screenSize.width * 0.6), (int) (screenSize.height * 0.8));
-
-        excessPanel.setLayout(new GridLayout(30, 1, 10, 10));
-        excessPanel.setVisible(false);
+        excessTitlePanel.setBounds((int) (screenSize.width * 0.2), (int) (screenSize.height * 0.22),
+        (int) (screenSize.width * 0.6), (int) (screenSize.height * 0.05));
+        excessTitlePanel.setLayout(new GridLayout(1, 1, 1, 1));
+        excessTitlePanel.add(excessReport_title);
         excessReport_title.setHorizontalAlignment(JLabel.CENTER);
         excessReport_title.setVerticalAlignment(JLabel.TOP);
         excessReport_title.setForeground(Color.RED);
-        excessPanel.add(excessReport_title);
 
+        excessPanel.setBounds((int) (screenSize.width * 0.2), (int) (screenSize.height * 0.27),
+                (int) (screenSize.width * 0.6), (int) (screenSize.height * 0.7));
+
+        excessPanel.setLayout(new GridLayout(20, 5, 10, 10));
+        excessPanel.setVisible(false);
+        excessTitlePanel.setVisible(false);
+
+
+        f.add(excessTitlePanel);
         f.add(excessPanel);
 
         ///// Button /////
@@ -158,6 +167,8 @@ public class managerReportGUI implements ActionListener {
         if (e.getSource() == saleBtn) {
             salePanelDisplay(true);
             excessPanel.setVisible(false);
+            excessTitlePanel.setVisible(false);
+
             if (!saleChecked) {
                 for (int i = 0; i < itemNameList.size(); ++i) {
                     JLabel newItemLabel = new JLabel(itemNameList.get(i));
@@ -175,6 +186,8 @@ public class managerReportGUI implements ActionListener {
 
         } else if (e.getSource() == excessBtn) {
             excessPanel.setVisible(true);
+            excessTitlePanel.setVisible(true);
+
             salePanelDisplay(false);
             if (!excessChecked) {
                 for (int i = 0; i < excessItemList.size(); ++i) {
@@ -190,6 +203,7 @@ public class managerReportGUI implements ActionListener {
 
             salePanelDisplay(false);
             excessPanel.setVisible(false);
+            excessTitlePanel.setVisible(false);
 
             itemNameList.clear();
             saleList.clear();
