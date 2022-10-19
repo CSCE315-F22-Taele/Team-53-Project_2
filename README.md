@@ -25,3 +25,7 @@ This code is a project for CSCE-331 (Introduction to Software Engineering). This
 - Insert, update or activate/deactive inventory items.
 - View sale report of all menu items in a given time frame.
 - View excess report of all inventory items sold below a 10% threshold in a given time frame.
+
+
+####DOCUMENTATION
+https://pages.github.tamu.edu/prekshavaghela/pom-honey_documentation/package-summary.html
