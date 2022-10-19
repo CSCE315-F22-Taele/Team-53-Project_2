@@ -1,11 +1,8 @@
 import javax.swing.*;
 import javax.swing.JOptionPane;
-
 import java.awt.*;
 import java.awt.event.*;
-
 import java.sql.*;
-import java.sql.DriverManager;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,7 +41,7 @@ public class checkoutGUI implements ActionListener {
     public checkoutGUI(int order, double price, int id) {
         dbConnect c1= new dbConnect();
         conn = c1.connectionSet();
-        
+
         orderid = order;
         amount = price;
         employeeid = id;
@@ -90,7 +87,6 @@ public class checkoutGUI implements ActionListener {
         f.add(optionsPanel);
 
         ////////// Recipt Area //////////
-        // TODO: integrate w cashier, get actual values from cashier
 
         JPanel receiptPanel = new JPanel();
         JLabel receiptTitle = new JLabel("RECEIPT");
@@ -109,10 +105,7 @@ public class checkoutGUI implements ActionListener {
         itemTitle.setBounds((int) (width * 0.065), 70, 100, 100);
         quantityTitle.setBounds((int) (width * 0.19), 70, 100, 100);
         totalSale.setBounds((int) (width * 0.11), (int) (height * 0.6), 200, (int) (height * 0.08));
-        // sale.setBounds((int) (width * 0.2), (int) (height * 0.6), 200, (int) (height
-        // * 0.08));
-        // checkoutBtn.setBounds((int) (width * 0.09), (int) (height * 0.8), (int)
-        // (width * 0.15), (int) (height * 0.1));
+        
 
         // Font
         receiptTitle.setFont(new Font("Serif", Font.PLAIN, 28));
@@ -124,7 +117,7 @@ public class checkoutGUI implements ActionListener {
         ddButton.setFont(new Font("Serif", Font.PLAIN, 20));
         cardButton.setFont(new Font("Serif", Font.PLAIN, 20));
         mealswipeButton.setFont(new Font("Serif", Font.PLAIN, 20));
-        // sale.setFont(new Font("Arial", Font.PLAIN, 20));
+       
 
         // Add to panel
         receiptPanel.add(receiptTitle);
@@ -132,13 +125,7 @@ public class checkoutGUI implements ActionListener {
         receiptPanel.add(quantityTitle);
         receiptPanel.add(totalSale);
         receiptPanel.add(total_price);
-        // receiptPanel.add(sale);
-        // receiptPanel.add(checkoutBtn);
-
-        // for (int i = 0; i < 10; ++i) {
-        // receiptPanel.add(labelArr[i]);
-        // receiptPanel.add(inputArr[i]);
-        // }
+        
         cashButton.addActionListener(this);
         ddButton.addActionListener(this);
         cardButton.addActionListener(this);
@@ -148,7 +135,8 @@ public class checkoutGUI implements ActionListener {
 
         f.add(receiptPanel);
 
-        f.setSize(1800, 1600);
+        
+        f.setSize(screenSize.width, screenSize.height);
 
         f.setLayout(null);
         f.setVisible(true);
@@ -246,7 +234,7 @@ public class checkoutGUI implements ActionListener {
         try {
             PreparedStatement checkoutStatement = conn.prepareStatement(
                     "INSERT INTO checkout(paymentmethod, amount, cardnumber, employeeid, orderid) VALUES (?, ?,?, ?, ?)");
-            // checkoutStatement.setInt(1, checkoutid)
+            
             checkoutStatement.setDouble(2, amount);
             checkoutStatement.setInt(1, paymentMethod);
             checkoutStatement.setString(3, cardnumber);

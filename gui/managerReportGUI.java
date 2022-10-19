@@ -43,8 +43,7 @@ public class managerReportGUI implements ActionListener {
     JButton backToManager = new JButton("Back To Manager");
 
     ///// Store values /////
-    // We will use these variable to store the data from database
-    // For sale report
+    // We will use these variable to store the data from database For sale report
     ArrayList<String> itemNameList = new ArrayList<String>();
     ArrayList<Integer> saleList = new ArrayList<Integer>();
     String[][] data;
@@ -81,7 +80,6 @@ public class managerReportGUI implements ActionListener {
         ////////// Frame Setting //////////
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
-        f.setSize(400, 400);
         f.setLayout(null);
         f.setVisible(true);
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);

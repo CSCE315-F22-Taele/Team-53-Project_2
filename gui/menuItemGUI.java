@@ -1,19 +1,14 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -124,7 +119,6 @@ public class menuItemGUI implements ActionListener {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
         f.setBackground(Color.gray);
-        f.setSize(1400, 1600);
         f.setLayout(null);
         f.setVisible(true);
         f.setJMenuBar(menuBar);

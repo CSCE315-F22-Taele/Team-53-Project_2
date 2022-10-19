@@ -1,18 +1,22 @@
-
-import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.AbstractDocument.LeafElement;
 import java.sql.*;
 import java.sql.DriverManager;
-import java.awt.event.*;
+
 
 /**
  * Implements the database connection
  */
 public class dbConnect {
 
+    /**
+     * Variable to create connection to database.
+     */
     public Connection conn =  connectionSet();
-    
+
+    /**
+     * Creates connection with database
+     * @return Connection to Pom and Honey database.
+     */
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection

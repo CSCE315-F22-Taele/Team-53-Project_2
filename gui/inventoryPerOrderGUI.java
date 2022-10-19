@@ -16,10 +16,7 @@ import javax.swing.JOptionPane;
  * Implements the ordering items graphical user interface. This helps us submit an order with proper inventory changes to the ordering data table.
  */
 public class inventoryPerOrderGUI implements ActionListener {
-    private void makeFrameFullSize(JFrame aFrame) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        aFrame.setSize(screenSize.width, screenSize.height);
-    }
+  
 
     ////////// Frame Declaraiton //////////
     JFrame f = new JFrame("Inventory per Order GUI");
@@ -293,8 +290,7 @@ public class inventoryPerOrderGUI implements ActionListener {
      * @throws SQLException if the database SQL query did not work.
      */
     public void update_item(Connection conn,ArrayList <Integer> inventory) throws SQLException {
-       // PreparedStatement updateStat = conn.prepareStatement("UPDATE inventory SET amount=(?) WHERE itemname=(?)");
-    //    Statement stmt = conn.createStatement();
+      
         boolean orderId_exists = false;
        PreparedStatement order_exists = conn.prepareStatement("SELECT EXISTS( SELECT 1 FROM ordering WHERE orderid =(?) )");
        order_exists.setInt(1, orderid);

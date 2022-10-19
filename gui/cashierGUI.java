@@ -1,12 +1,9 @@
 import java.awt.*;
 import javax.swing.*;
-import javax.swing.text.AbstractDocument.LeafElement;
 import java.sql.*;
-import java.sql.DriverManager;
 import java.awt.event.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.ArrayList;
@@ -38,10 +35,7 @@ import java.util.ArrayList;
  * Implements the cashier graphical user interface. This helps us submit an order to the ordering datatable.
  */
 public class cashierGUI implements ActionListener {
-    private void makeFrameFullSize(JFrame aFrame) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        aFrame.setSize(screenSize.width, screenSize.height);
-    }
+    
 
     // Button declaration
     JButton logoutBtn;
@@ -66,7 +60,7 @@ public class cashierGUI implements ActionListener {
     // Store the click numbers to update the amount of each selected items
     ArrayList<Integer> clickList = new ArrayList<Integer>();
 
-    private JLabel labelEmployee;
+ 
     // Label Declaration
     JLabel l1 = new JLabel("GYRO");
     JLabel l2 = new JLabel("BOWL");
@@ -261,7 +255,8 @@ public class cashierGUI implements ActionListener {
         f.add(receiptPanel_Right);
         f.add(receiptPanel_Down);
 
-        f.setSize(1800, 1600);
+        
+        f.setSize(screenSize.width, screenSize.height);
         f.setLayout(null);
         f.setVisible(true);
     }
@@ -344,6 +339,7 @@ public class cashierGUI implements ActionListener {
                     clickList.set(nameOccursIndex, clickList.get(nameOccursIndex) + 1);
                     String newAmount = String.valueOf(clickList.get(nameOccursIndex) * priceArr.get(i));
                     String count = String.valueOf(clickList.get(nameOccursIndex));
+                    
                     // find the corresponding label of the item
                     JLabel l = amountLabelList.get(nameOccursIndex);
                     l.setText(count + "  :  " + newAmount);
@@ -362,6 +358,7 @@ public class cashierGUI implements ActionListener {
      * @return The orderid starting number (not including the count of the order)
      */
     public int getDateforId() {
+        
         // transform java data into proper SQL variables
         DateFormat formatDate = new SimpleDateFormat("yyMMdd");
         Date date = Calendar.getInstance().getTime();
@@ -371,6 +368,7 @@ public class cashierGUI implements ActionListener {
 
         return value * 1000;
     }
+
     /**
      * Get the orderid number based on the sequential order.
      * @param  conn                       Connection with the database.

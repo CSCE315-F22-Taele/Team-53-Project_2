@@ -9,10 +9,7 @@ import java.sql.*;
  * or manager to login into this POS system.
  */
 public class loginGUI implements ActionListener {
-    private void makeFrameFullSize(JFrame aFrame) {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        aFrame.setSize(screenSize.width, screenSize.height);
-    }
+
 
     // Store the passcode
     String tempCode = "";
@@ -45,7 +42,6 @@ public class loginGUI implements ActionListener {
      */
     loginGUI() {
 
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(width, height);
         f.setBackground(Color.gray);
 
