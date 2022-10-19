@@ -1,24 +1,19 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.*;
 import java.sql.Array;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
+
 
 
 public class managerReportGUI implements ActionListener {
@@ -74,7 +69,8 @@ public class managerReportGUI implements ActionListener {
     Connection conn;
 
     public managerReportGUI() {
-        conn = connectionSet();
+        dbConnect c1= new dbConnect();
+        conn = c1.connectionSet();
 
         ////////// Frame Setting //////////
         f.setSize(screenSize.width, screenSize.height);
@@ -147,7 +143,7 @@ public class managerReportGUI implements ActionListener {
 
     public void salePanelDisplay(boolean b) {
         itemNamePanel.setVisible(b);
-        //salePanel.setVisible(b);
+        
     }
 
     public void getSaleReport(){
@@ -222,8 +218,7 @@ public class managerReportGUI implements ActionListener {
                 date_from = new SimpleDateFormat("yyyy-MM-dd").parse(fromDateInput.getText());
                 date_end = new SimpleDateFormat("yyyy-MM-dd").parse(endDateInput.getText());
             } catch (ParseException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+               
             }
 
             try {
@@ -233,8 +228,7 @@ public class managerReportGUI implements ActionListener {
                 saleChecked = false;
                 excessChecked = false;
             } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
+               
             }
             data = new String[itemNameList.size()][2];
         }
@@ -388,10 +382,6 @@ public class managerReportGUI implements ActionListener {
             convert_temp.add(i);
         }
 
-        // DELETE TESTING PRINT STATEMENTS
-        for (int i = 0; i < convert_temp.size(); i++) {
-            // System.out.print(convert_temp.get(i) + " ");
-        }
 
         return convert_temp;
     }
@@ -407,9 +397,7 @@ public class managerReportGUI implements ActionListener {
             temp.add(rs.getInt("amount"));
         }
 
-        for (int i = 0; i < temp.size(); i++) {
-            // System.out.print(temp.get(i) + " ");
-        }
+
 
         return temp;
     }
@@ -429,10 +417,7 @@ public class managerReportGUI implements ActionListener {
             }
         }
 
-        for (int i = 0; i < no_sale.size(); i++) {
-            // System.out.print(no_sale.get(i));
-        }
-
+       
         return no_sale;
     }
 
@@ -460,28 +445,10 @@ public class managerReportGUI implements ActionListener {
             }
         }
 
-        for (int i = 0; i < no_sale_name.size(); i++) {
-            // System.out.print(no_sale_name.get(i));
-        }
 
         return temp;
     }
 
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Database connection failed");
-        }
-
-        return conn;
-    }
 
     public static void main(String[] args) {
         new managerReportGUI();

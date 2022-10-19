@@ -97,8 +97,8 @@ public class cashierGUI implements ActionListener {
     // Frame Declaraiton
     JFrame f = new JFrame("Cashier GUI");
 
-    // Global Var --> Unused, hardcoded can change later
-    int height_items;
+    // Global Var 
+  
     int employeeid;
     boolean is_manager;
     int orderid;
@@ -136,7 +136,8 @@ public class cashierGUI implements ActionListener {
     public cashierGUI(int id) {
 
         try {
-            conn = connectionSet();
+            dbConnect c1= new dbConnect();
+            conn = c1.connectionSet();
             orderid = getOrderId(conn);
             menuArr = get_menu(conn);
             employeeid = id;
@@ -152,14 +153,14 @@ public class cashierGUI implements ActionListener {
         }
 
         f.setSize(screenSize.width, screenSize.height);
-        f.setBackground(Color.gray); // TODO: Fix background color
+        f.setBackground(Color.gray); 
 
         ////////// Menu-items Area //////////
         JPanel itemsPanel = new JPanel();
         Color pink = new Color(244, 220, 245);
         itemsPanel.setBackground(pink);
         itemsPanel.setBounds((int) (width * 0.06), (int) (height * 0.09), (int) (width * 0.6), (int) (height * 0.7));
-        // itemsPanel.setLayout(new GridLayout(5, 2, 10, 10));
+        
 
         f.add(itemsPanel);
 
@@ -175,23 +176,24 @@ public class cashierGUI implements ActionListener {
             itemsPanel.validate();
         }
 
-        // Button 11
+        // Button logout
         logoutBtn = new JButton("LOGOUT");
         logoutBtn.setBounds((int) (width * 0.17), (int) (height * 0.8), 100, 80);
         logoutBtn.setBackground(Color.LIGHT_GRAY);
         logoutBtn.addActionListener(this);
 
-        // Button 12
+        // Button checkout
         checkoutBtn = new JButton("CHECKOUT");
         checkoutBtn.setBackground(Color.LIGHT_GRAY);
         checkoutBtn.addActionListener(this);
 
-        // Button 13
+        // Button manager
         managerBtn = new JButton("MANAGER OPTIONS");
         managerBtn.setBounds((int) (width * 0.27), (int) (height * 0.8), 100, 80);
         managerBtn.setBackground(Color.LIGHT_GRAY);
         managerBtn.addActionListener(this);
 
+        //button restart 
         RestartOrder = new JButton("RESTART ORDER");
         RestartOrder.setBounds((int) (width * 0.37), (int) (height * 0.8), 100, 80);
         RestartOrder.setBackground(Color.LIGHT_GRAY);
@@ -209,9 +211,6 @@ public class cashierGUI implements ActionListener {
         JPanel logoutPanel = new JPanel(new GridLayout(1, 3));
         logoutPanel.setBackground(pink);
         logoutPanel.setBounds((int) (width * 0.06), (int) ((height * 0.82)), (int) (width * 0.6), (int) (height * 0.1));
-        // logoutPanel.setLayout(new BorderLayout());
-        // logoutBtn.setVerticalAlignment(JButton.CENTER);
-        // logoutBtn.setHorizontalAlignment(JButton.CENTER);
         logoutPanel.add(logoutBtn);
 
         logoutPanel.add(RestartOrder);
@@ -222,6 +221,7 @@ public class cashierGUI implements ActionListener {
 
         ////////// Receipt Area //////////
         Color blueCute = new Color(194, 194, 252);
+        
         // Title
         receiptPanel_Top.setBackground(blueCute);
         receiptPanel_Top.setBounds((int) (width * 0.7), 0, (int) (width * 0.3), (int) (height * 0.1));
@@ -432,7 +432,7 @@ public class cashierGUI implements ActionListener {
      */
     public void insertOrder() {
 
-        Connection conn = connectionSet();
+        
 
         try {
 
@@ -492,7 +492,7 @@ public class cashierGUI implements ActionListener {
         return name;
     }
 
-    // dynamically get price
+   
     /**
      * Get Arraylist of the prices of all active menu items.
      * @param  conn         Connection with the database.
@@ -545,26 +545,6 @@ public class cashierGUI implements ActionListener {
         }
 
         return temp;
-    }
-
-    /**
-     * Setup connection with the database.
-     * @return Connection to the database.
-     */
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Database connection failed");
-        }
-
-        return conn;
     }
 
     /**

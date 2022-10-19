@@ -2,24 +2,12 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.awt.*;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.awt.event.*;
 import java.sql.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 
 import javax.swing.JOptionPane;
@@ -37,18 +25,16 @@ public class inventoryPerOrderGUI implements ActionListener {
     JFrame f = new JFrame("Inventory per Order GUI");
 
     ////////// Store value //////////
-    /* Use these two arraylists to connect db */
+    /* Use arraylist to connect db */
     ArrayList<String> nameList = new ArrayList<String>();
-    //ArrayList<Integer> quantityList = new ArrayList<Integer>();
+  
 
     /* The rest of these arraylists are using for the front-end */
-    // Store btns
     ArrayList<JButton> btnList = new ArrayList<JButton>();
     JButton submitBtn = new JButton("Submit");
     JButton backToCashier = new JButton("Back to Cashier");
 
     // Store the names which have already clicked by user to prevent show up
-    // repeatly
     ArrayList<String> nameOccursList = new ArrayList<String>();
 
     // Store the item's index number of the nameList and quantityList
@@ -94,20 +80,21 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         orderid = id;
         try {
-            conn = connectionSet();
+            dbConnect c1= new dbConnect();
+            conn = c1.connectionSet();
             nameList = get_inventory_name(conn);
-            //quantityList = get_quantity(conn);
+            
             for( int i=0; i<  nameList.size(); i++){
                 inventoryCounts.add(0);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
 
             JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
         Color pink = new Color(244, 220, 245);
         Color blueCute = new Color(194, 194, 252);
+        
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -263,7 +250,7 @@ public class inventoryPerOrderGUI implements ActionListener {
                 try {
                     update_item(conn, inventoryCounts);
                 } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
+                   
 
                     JOptionPane.showMessageDialog(null, "Update of item inventory used failed. ");
                 }
@@ -272,7 +259,7 @@ public class inventoryPerOrderGUI implements ActionListener {
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == backToCashier) {
-            // FIX ME: Implement
+           
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
         }
     }
@@ -291,7 +278,7 @@ public class inventoryPerOrderGUI implements ActionListener {
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+          
             temp.add(findInventory.getString("itemname"));
 
         }
@@ -328,17 +315,12 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         ResultSet inventoryInfo = get_inventory.executeQuery();
 
-        // Object[] inventoryArray = inventory.toArray();
-        // Array inventoryArr = conn.createArrayOf("INT",inventoryArray );
 
 
         while (inventoryInfo.next()) {
             Array temp = inventoryInfo.getArray("inventory");
             currInventory = (Integer[])temp.getArray();
         }
-
-        //FIX ME: make this work
-        //List vals = Arrays.asList(currInventory);
 
         for( int i=0; i<inventory.size(); i++){
             inventory.set(i, inventory.get(i) + (int) currInventory[i] );
@@ -367,26 +349,6 @@ public class inventoryPerOrderGUI implements ActionListener {
 
         updateStat.executeUpdate();
        }
-    }
-
-    /**
-     * Setup connection with the database.
-     * @return Connection to the database.
-     */
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Database connection failed.");
-        }
-
-        return conn;
     }
 
     /**

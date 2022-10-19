@@ -2,8 +2,6 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import javax.swing.JOptionPane;
 
 public class managerGUI implements ActionListener {
 
@@ -76,21 +74,7 @@ public class managerGUI implements ActionListener {
         }
     }
 
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection Failed");
-        }
-
-        return conn;
-    }
+   
 
     public static void main(String[] args) {
         new managerGUI(0);

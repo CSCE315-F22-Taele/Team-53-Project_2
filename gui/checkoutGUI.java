@@ -42,7 +42,9 @@ public class checkoutGUI implements ActionListener {
      * @param id     The employee id of the cashier taking that order.
      */
     public checkoutGUI(int order, double price, int id) {
-        conn = connectionSet();
+        dbConnect c1= new dbConnect();
+        conn = c1.connectionSet();
+        
         orderid = order;
         amount = price;
         employeeid = id;
@@ -257,24 +259,6 @@ public class checkoutGUI implements ActionListener {
         }
     }
 
-    /**
-     * Setup connection with the database.
-     * @return Connection to the database.
-     */
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection not made with database.");
-        } // end try catch
-
-        return conn;
-    }
 
     /**
      * Checkout GUI main function.

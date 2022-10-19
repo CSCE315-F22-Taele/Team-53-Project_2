@@ -1,11 +1,9 @@
 import java.awt.*;
 import javax.swing.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -13,7 +11,6 @@ import java.sql.Statement;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +18,7 @@ import javax.swing.JOptionPane;
  */
 public class inventoryGUI implements ActionListener {
     ////////// Declaration //////////
+    
     // Menu Declaration
     JMenuBar menuBar = new JMenuBar();
     JMenu viewMenu = new JMenu("Items");
@@ -29,6 +27,7 @@ public class inventoryGUI implements ActionListener {
     ArrayList<JMenuItem> itemList = new ArrayList<JMenuItem>();
     Integer inventory_id[];
     String inventory_names[];
+   
     // View
     JLabel idInfo = new JLabel("Item ID: ");
     JLabel itemId = new JLabel("");
@@ -43,8 +42,10 @@ public class inventoryGUI implements ActionListener {
     JLabel vendorInfo = new JLabel("Vendor: ");
     JLabel itemVendor = new JLabel("");
     JButton clearBtn = new JButton("Clear");
+   
     // Back to Manager
     JButton backToManager = new JButton("Back To Manager");
+   
     // Store data
     ArrayList<Integer> idList = new ArrayList<Integer>();
     ArrayList<String> nameList = new ArrayList<String>();
@@ -57,6 +58,7 @@ public class inventoryGUI implements ActionListener {
     ArrayList<Integer> restock_quantity_list = new ArrayList<Integer>();
     ArrayList<JLabel> restock_quantity_label = new ArrayList<JLabel>();
     DateFormat dateFormat;
+    
     // Add
     JButton addBtn = new JButton("Add");
     JTextField inputName = new JTextField("");
@@ -66,15 +68,18 @@ public class inventoryGUI implements ActionListener {
     JTextField inputVendor = new JTextField("");
     ArrayList<JTextField> inputList = new ArrayList<JTextField>();
     JMenuItem addItem = new JMenuItem("Add");
+    
     // Update
     JLabel ask_Name;
     JMenuItem updateItem = new JMenuItem("Update");
     JButton updateBtn = new JButton("Update");
     JButton searchBtn_Update = new JButton("Search");
     JButton searchBtn_deactivate = new JButton("Search");
+    
     // deactivate
     JMenuItem deactivateItem = new JMenuItem("Deactivate");
     JButton deactivateBtn = new JButton("Deactivate");
+    
     // Deactivated-menu
     ArrayList<Integer> deactivated_IdList = new ArrayList<Integer>();
     ArrayList<String> deactivated_NameList = new ArrayList<String>();
@@ -84,14 +89,17 @@ public class inventoryGUI implements ActionListener {
     ArrayList<String> deactivated_VendorList = new ArrayList<String>();
     ArrayList<JMenuItem> deactivated_ItemList = new ArrayList<JMenuItem>();
     JButton activateBtn = new JButton("Activate");
+    
     // Frame
     JFrame f = new JFrame();
+    
     //////////// Restock Panel //////////
     JPanel itemsPanel = new JPanel();
     JPanel restockPanel_Top = new JPanel();
     JPanel restockPanel_Left = new JPanel();
     JPanel restockPanel_Right = new JPanel();
     JPanel restockPanel_Down = new JPanel();
+    
     // Const Vars
     int i = 0;
     int restockIndex = -1;
@@ -106,8 +114,9 @@ public class inventoryGUI implements ActionListener {
     inventoryGUI(int id) {
         employeeid = id;
         try {
-            conn = connectionSet();
-            // int size = get_inventory_size(conn);
+            dbConnect c1= new dbConnect();
+            conn = c1.connectionSet();
+
             nameList = get_inventory_name(conn);
             idList = get_id(conn);
             quantityList = get_quantity(conn);
@@ -115,9 +124,7 @@ public class inventoryGUI implements ActionListener {
             expirationDateList = get_expiration_date(conn);
             vendorList = get_vendor(conn);
 
-            // TODO: get the data from db
-            // deactivatedNameList = ;
-            // deactivatedCostList = ;
+
 
             deactivated_IdList = get_id_deactive(conn);
             deactivated_NameList =  get_inventory_name_deactive(conn);
@@ -129,9 +136,10 @@ public class inventoryGUI implements ActionListener {
 
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+        
             JOptionPane.showMessageDialog(null, "Failed database connection.");
         }
+        
         // Add the inventory items to menu bar
         for (int i = 0; i < nameList.size(); i++) {
             JMenuItem newItem = new JMenuItem(nameList.get(i));
@@ -139,6 +147,7 @@ public class inventoryGUI implements ActionListener {
             viewMenu.add(newItem);
             itemList.add(newItem);
         }
+        
         // Add the deactivated items to the menu bar
         for (int i = 0; i < deactivated_NameList.size(); i++) {
             JMenuItem newItem = new JMenuItem(deactivated_NameList.get(i));
@@ -146,6 +155,7 @@ public class inventoryGUI implements ActionListener {
             deactivatedMenu.add(newItem);
             deactivated_ItemList.add(newItem);
         }
+        
         ////////// Background //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         f.setSize(screenSize.width, screenSize.height);
@@ -158,6 +168,7 @@ public class inventoryGUI implements ActionListener {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         int screenHeight = screenSize.height;
         int screenWidth = screenSize.width;
+        
         ////////// Menu Setup //////////
         menuBar.add(viewMenu);
         menuBar.add(editMenu);
@@ -168,6 +179,7 @@ public class inventoryGUI implements ActionListener {
         addItem.addActionListener(this);
         updateItem.addActionListener(this);
         deactivateItem.addActionListener(this);
+        
         ////////// Data Output Area for each inventory item //////////
         idInfo.setBounds(620, 180, 80, 20);
         itemId.setBounds(730, 180, 160, 20);
@@ -181,8 +193,10 @@ public class inventoryGUI implements ActionListener {
         itemExpirationDate.setBounds(730, 300, 160, 20);
         vendorInfo.setBounds(620, 330, 80, 20);
         itemVendor.setBounds(730, 330, 160, 20);
+        
         // Hide before user clicks view
         info_display(false);
+        
         // Clear the Data Output Area
         clearBtn.setBounds(780, 420, 115, 40);
         addBtn.setBounds(670, 420, 115, 40);
@@ -201,11 +215,13 @@ public class inventoryGUI implements ActionListener {
         f.add(vendorInfo);
         f.add(itemVendor);
         f.add(clearBtn);
+        
         ////////// Logout //////////
         backToManager.addActionListener(this);
         backToManager.setBounds((int) (screenWidth * 0.06), (int) (screenHeight * 0.8), (int) (screenWidth * 0.1),
                 (int) (screenHeight * 0.05));
         f.add(backToManager);
+        
         // ADD Items
         inputName.setBounds(730, 210, 160, 20);
         inputQuantity.setBounds(730, 240, 160, 20);
@@ -226,6 +242,7 @@ public class inventoryGUI implements ActionListener {
         f.add(inputDate);
         f.add(inputVendor);
         dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        
         ///// Update /////
         ask_Name = new JLabel("Please enter the Item's name");
         ask_Name.setBounds(510, 210, 200, 20);
@@ -240,6 +257,7 @@ public class inventoryGUI implements ActionListener {
         updateBtn.setBounds(910, 300, 100, 20);
         searchBtn_Update.setVisible(false);
         updateBtn.setVisible(false);
+        
         // deactivate
         f.add(deactivateBtn);
         searchBtn_deactivate.addActionListener(this);
@@ -253,16 +271,18 @@ public class inventoryGUI implements ActionListener {
         f.add(deactivateBtn);
         f.add(activateBtn);
         activateBtn.setVisible(false);
+        
         ////////// Receipt Area //////////
-        Color pink = new Color(244, 220, 245);
+       
         Color blueCute = new Color(194, 194, 252);
+        
         // Title
         restockPanel_Top.setBackground(blueCute);
         restockPanel_Top.setBounds((int) (screenWidth * 0.7), 0, (int) (screenWidth * 0.3), (int) (screenHeight * 0.1));
         restockPanel_Top.setLayout(null);
         restockPanel_Top.setLayout(new GridLayout(1, 1, 10, 10));
         JLabel title = new JLabel("REORDER NOW");
-        // title.setFont(new Font("Serif", Font.PLAIN, 20));
+       
         title.setVerticalAlignment(JLabel.CENTER);
         title.setHorizontalAlignment(JLabel.CENTER);
         restockPanel_Top.add(title);
@@ -270,6 +290,7 @@ public class inventoryGUI implements ActionListener {
         restockPanel_Left.setBounds((int) (screenWidth * 0.7), (int) (screenHeight * 0.1), (int) (screenWidth * 0.15),
                 (int) (screenHeight * 0.7));
         restockPanel_Left.setLayout(new GridLayout(25, 1, 10, 10));
+       
         JLabel itemNameTitle = new JLabel("Item");
         itemNameTitle.setVerticalAlignment(JLabel.TOP);
         itemNameTitle.setHorizontalAlignment(JLabel.CENTER);
@@ -278,6 +299,7 @@ public class inventoryGUI implements ActionListener {
         restockPanel_Right.setBounds((int) (screenWidth * 0.85), (int) (screenHeight * 0.1), (int) (screenWidth * 0.15),
                 (int) (screenHeight * 0.7));
         restockPanel_Right.setLayout(new GridLayout(25, 1, 10, 10));
+       
         JLabel quantityTitle = new JLabel("Quantity");
         quantityTitle.setVerticalAlignment(JLabel.TOP);
         quantityTitle.setHorizontalAlignment(JLabel.CENTER);
@@ -285,24 +307,25 @@ public class inventoryGUI implements ActionListener {
         restockPanel_Down.setBackground(blueCute);
         restockPanel_Down.setBounds((int) (screenWidth * 0.7), (int) (screenHeight * 0.8), (int) (screenWidth * 0.3),
                 (int) (screenHeight * 0.3));
+        
         f.add(restockPanel_Top);
         f.add(restockPanel_Left);
         f.add(restockPanel_Right);
         f.add(restockPanel_Down);
+
         // Add the restock items to the arraylist
         try {
             restock_name_list = get_inventory_name_restock(conn);
             restock_quantity_list = get_inventory_amount_restock(conn);
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            // e.printStackTrace();
+
         }
+
         // generate the items as buttons and add action
         for (int i = 0; i < restock_name_list.size(); i++) {
             JButton newBtn = new JButton(restock_name_list.get(i));
             newBtn.setForeground(Color.red);
             newBtn.addActionListener(this);
-            // newBtn.setFont(new Font("Serif", Font.PLAIN, 15));
             restockPanel_Left.add(newBtn);
             restock_name_btn.add(newBtn);
             JLabel newLabel = new JLabel(String.valueOf(restock_quantity_list.get(i)));
@@ -513,8 +536,6 @@ public class inventoryGUI implements ActionListener {
             ask_Name.setVisible(false);
             clearBtn.setVisible(false);
         } else if (e.getSource() == backToManager) {
-            // FIX ME: TODO: Implement
-            // new cashierGUI(employeeid);
             f.dispose();
         } else if (e.getSource() == addBtn) {
             btnDisplay(false);
@@ -611,7 +632,7 @@ public class inventoryGUI implements ActionListener {
             try {
                 expirationDate = new SimpleDateFormat("yyyy-MM-dd").parse(inputDate.getText());
             } catch (ParseException error) {
-                // TODO Auto-generated catch block
+               
                 JOptionPane.showMessageDialog(null, "Date wrong. Use format YYYY-MM-dd");
             }
             expirationDateList.set(i, expirationDate);
@@ -631,13 +652,14 @@ public class inventoryGUI implements ActionListener {
                     restock_quantity_label.remove(restockIndex);
                     restock_quantity_list.remove(restockIndex);
                 }
+                
                 isRestock = false;
             }
             try {
                 update_item(conn, i);
                 JOptionPane.showMessageDialog(null, "Updated item.");
             } catch (SQLException errorUpdate) {
-                // PRINT OUT. UPDATE UNSUCCESSFUL.
+                
                 JOptionPane.showMessageDialog(null, "Update unsuccessful.");
             }
             clearInputText();
@@ -721,6 +743,7 @@ public class inventoryGUI implements ActionListener {
             deactivated_ItemList.remove(i);
             deactivatedMenu.remove(i);
             JOptionPane.showMessageDialog(null, "Activate successful.");
+            
             // clear the screen
             clearItemLabel();
             info_display(false);
@@ -765,7 +788,7 @@ public class inventoryGUI implements ActionListener {
         int id = -1;
 
         while (inventoryId.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+            
             id = (inventoryId.getInt("itemid"));
         }
 
@@ -829,7 +852,7 @@ public class inventoryGUI implements ActionListener {
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+            
             temp.add(findInventory.getInt("itemid"));
 
         }
@@ -847,12 +870,12 @@ public class inventoryGUI implements ActionListener {
         Statement stmt = conn.createStatement();
 
         ResultSet findInventory = stmt.executeQuery("SELECT amount FROM inventory WHERE is_using = false ORDER BY itemid ASC");
-        // int count = 0; // Increments inventory array
+       
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+            
             temp.add(findInventory.getInt("amount"));
 
         }
@@ -873,7 +896,7 @@ public class inventoryGUI implements ActionListener {
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+           
             temp.add(findInventory.getString("itemname"));
 
         }
@@ -948,7 +971,7 @@ public class inventoryGUI implements ActionListener {
         ArrayList<Integer> temp = new ArrayList<Integer>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+            
             temp.add(findInventory.getInt("itemid"));
         }
         return temp;
@@ -968,7 +991,6 @@ public class inventoryGUI implements ActionListener {
 
         ArrayList<Integer> temp = new ArrayList<Integer>();
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
             temp.add(findInventory.getInt("amount"));
         }
         return temp;
@@ -989,7 +1011,6 @@ public class inventoryGUI implements ActionListener {
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
             temp.add(findInventory.getString("itemname"));
         }
         return temp;
@@ -1091,24 +1112,7 @@ public class inventoryGUI implements ActionListener {
         return temp;
     }
 
-    /**
-     * Setup connection with the database.
-     * @return Connection to the database.
-     */
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection Failed");
-        }
-        return conn;
-    }
-
+  
     /**
      * Inventory GUI main function.
      * @param args[]  main function.
