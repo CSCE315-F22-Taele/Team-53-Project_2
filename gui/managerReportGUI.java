@@ -17,6 +17,9 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
 
+/**
+ * Implement the Manager Report (sales) Graphical User Interface. Accessed by managers, a manager can view a sales and/or excess report. A sales report includes the amount each menu item was sold in a given time period. An excess report includes the amount of inventory items used 10% or less in a given time period.
+ */
 public class managerReportGUI implements ActionListener {
     ///// Frame /////
     JFrame f = new JFrame("Manager Report");
@@ -64,6 +67,9 @@ public class managerReportGUI implements ActionListener {
 
     Connection conn;
 
+/**
+ * Constructor to setup the Manager Report Graphical User Interface.
+ */
     public managerReportGUI() {
         conn = connectionSet();
 
@@ -158,11 +164,19 @@ public class managerReportGUI implements ActionListener {
         f.add(submitBtn);
     }
 
+    /**
+     * This function will determine whether to display the sale panel on screen.
+     * @param b  boolean that determines whether to display or hide the panel
+     */
     public void salePanelDisplay(boolean b) {
         itemNamePanel.setVisible(b);
         salePanel.setVisible(b);
     }
 
+    /**
+     * This function holds the action taken for each button clicked.
+     * @param e  Type of ActionEvent taken. This is determined based on the button that was clicked.
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saleBtn) {
             salePanelDisplay(true);
@@ -236,7 +250,12 @@ public class managerReportGUI implements ActionListener {
 
     }
 
-    // THIS FUNCTION WILL DETERMINE THE NUMBER OF MENU ITEMS
+    /**
+     * This function will determine the number of menu items in database.
+     * @param  conn                       Connection to database
+     * @return                            amount of menu items
+     * @throws SQLException               error check if query is unsuccessful
+     */
     public int get_menu_item_num(Connection conn) throws SQLException {
 
         Statement stmt = conn.createStatement();
@@ -250,8 +269,14 @@ public class managerReportGUI implements ActionListener {
         return count;
     }
 
-    // THIS FUNCTION WILL GET THE SALES FOR EACH MENU ITEM IN A GIVEN TIMEFRAME -->
-    // WILL USE FOR FRONTEND
+    /**
+     * This function will determine the number of menu items sold in a given time period.
+     * @param  conn                     Connection to database
+     * @param  start                    start Date
+     * @param  end                      end Date
+     * @return                          array of quantity of each menu items sold in a time period
+     * @throws SQLException             error check if query is unsuccessful
+     */
     public ArrayList<Integer> get_sale_report_amount(Connection conn, Date start, Date end) throws SQLException {
 
         // Convert Date into orderid
@@ -304,7 +329,12 @@ public class managerReportGUI implements ActionListener {
         return convert_temp;
     }
 
-    // THIS FUNCTION WILL RETURN ALL MENU ITEMS NAMES --> WILL USE FOR FRONTEND
+    /**
+     * This function will return a list of all menu items in the menu by id.
+     * @param  conn                       Connection to database
+     * @return                            list of all menu
+     * @throws SQLException               error check if query is unsuccessful
+     */
     public ArrayList<String> get_sale_report_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet rs = stmt.executeQuery("SELECT menuitem FROM menucost ORDER BY id ASC");
@@ -317,7 +347,12 @@ public class managerReportGUI implements ActionListener {
         return temp;
     }
 
-    // THIS FUNCTION WILL DETERMINE THE NUMBER OF INVENTORY ITEMS
+    /**
+     * This function will determine the number of inventory items in database.
+     * @param  conn                       Connection to database
+     * @return                            number of inventory items
+     * @throws SQLException               error check if query is unsuccessful
+     */
     public int get_inventory_num(Connection conn) throws SQLException {
 
         Statement stmt = conn.createStatement();
@@ -331,6 +366,14 @@ public class managerReportGUI implements ActionListener {
         return count;
     }
 
+    /**
+     * This function will determine the number of each inventory item use in a given time period.
+     * @param  conn                       Connection to database
+     * @param  start                      start date
+     * @param  end                        end date
+     * @return                            array of total number of each inventory item used in a time period
+     * @throws SQLException               error check if query is unsuccessful
+     */
     public ArrayList<Integer> get_inventory_use(Connection conn, Date start, Date end) throws SQLException {
         // Convert Date into orderid
         DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd");
@@ -387,6 +430,12 @@ public class managerReportGUI implements ActionListener {
         return convert_temp;
     }
 
+    /**
+     * This function will get an array of the current inventory amounts for each inventory item.
+     * @param  conn                       Connection to the database
+     * @return                            array of current amount of each inventory item
+     * @throws SQLException               error check if query is unsuccessful
+     */
     public ArrayList<Integer> get_inventory(Connection conn) throws SQLException {
         String prep_statement = "SELECT amount FROM inventory ORDER BY itemid ASC";
 
@@ -398,13 +447,15 @@ public class managerReportGUI implements ActionListener {
             temp.add(rs.getInt("amount"));
         }
 
-        for (int i = 0; i < temp.size(); i++) {
-            // System.out.print(temp.get(i) + " ");
-        }
-
         return temp;
     }
 
+    /**
+     * This function will determine the percentage of an inventory item is sold.
+     * @param  used_inventory                 array of total amount of inventory used in a given time period
+     * @param  remain_inventory               array of current total inventory and used inventory
+     * @return                                array based on inventory item index, with 1 as item sold less than 10%
+     */
     public ArrayList<Integer> calculate_inventory_use(ArrayList<Integer> used_inventory,
             ArrayList<Integer> remain_inventory) {
         ArrayList<Integer> no_sale = new ArrayList<Integer>();
@@ -420,14 +471,17 @@ public class managerReportGUI implements ActionListener {
             }
         }
 
-        for (int i = 0; i < no_sale.size(); i++) {
-            // System.out.print(no_sale.get(i));
-        }
-
         return no_sale;
     }
 
-    // USE TO GET EXCESS REPORT
+    /**
+     * This function will create a list of inventory items that are used less that 10% in a given time frame.
+     * @param  conn                       Connection to database
+     * @param  start                      start date
+     * @param  end                        end date
+     * @return                            array of inventory item names that are used less than 10%
+     * @throws SQLException               error check if query is unsuccessful
+     */
     public ArrayList<String> get_excess_report(Connection conn, Date start, Date end) throws SQLException {
         String prep_statement = "SELECT itemname FROM inventory ORDER BY itemid ASC";
 
@@ -449,10 +503,6 @@ public class managerReportGUI implements ActionListener {
             if (no_sale.get(i) == 1) {
                 no_sale_name.add(temp.get(i));
             }
-        }
-
-        for (int i = 0; i < no_sale_name.size(); i++) {
-            // System.out.print(no_sale_name.get(i));
         }
 
         return temp;

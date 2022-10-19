@@ -7,6 +7,10 @@ import java.awt.event.*;
 import java.sql.*;
 import java.sql.DriverManager;
 
+/**
+ * Implement the Login Graphical User Interface. This GUI will allow a cashier
+ * or manager to login into this POS system.
+ */
 public class loginGUI implements ActionListener {
     private void makeFrameFullSize(JFrame aFrame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -39,6 +43,9 @@ public class loginGUI implements ActionListener {
     int width = screenSize.width;
     int height = screenSize.height;
 
+    /**
+     * Constructor to set up a Login Graphical User Interface.
+     */
     loginGUI() {
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -106,6 +113,13 @@ public class loginGUI implements ActionListener {
 
     }
 
+    /**
+     * This function holds the action taken for each button pressed on the login pin
+     * pad.
+     * 
+     * @param e Type of ActionEvent taken. This is determined based on the button
+     *          that was clicked.
+     */
     public void actionPerformed(ActionEvent e) {
         // Collect each digit to a passtempCode
         if (e.getSource() == btn1) {
@@ -154,6 +168,13 @@ public class loginGUI implements ActionListener {
         }
     }
 
+    /**
+     * This function will take the pin (employeeid) entered and check if this
+     * employee exists in the database.
+     * 
+     * @param password the values selected on the pin pad
+     * @return boolean whether this employee is valid
+     */
     public boolean checkPassword(int password) {
         Connection conn = connectionSet();
         boolean value = false;
@@ -173,6 +194,11 @@ public class loginGUI implements ActionListener {
         return value;
     }
 
+    /**
+     * This function establishes a connection to the database.
+     * 
+     * @return the Connection object corresponding to the database
+     */
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
@@ -183,8 +209,7 @@ public class loginGUI implements ActionListener {
                     my.user, my.pswd);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error accessing Database.");
-        } // end try catch
-          // JOptionPane.showMessageDialog(null, "Opened database successfully");
+        }
         return conn;
     }
 

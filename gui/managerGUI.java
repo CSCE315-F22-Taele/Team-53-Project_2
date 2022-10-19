@@ -5,6 +5,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import javax.swing.JOptionPane;
 
+/**
+ * Implement the Manager Graphical User Interface. This GUI is only accesible by a manager, that allows a manager to view inventory, menu items, and sale report.
+ */
 public class managerGUI implements ActionListener {
 
     ////////// Declaration //////////
@@ -31,6 +34,10 @@ public class managerGUI implements ActionListener {
     Connection conn;
     int employeeid;
 
+/**
+ * Constructor to setup a Manager GUI.
+ * @param id  Employee id. Has to be a manager to access this page.
+ */
     managerGUI(int id) {
         employeeid = id;
         // Buttons
@@ -63,6 +70,10 @@ public class managerGUI implements ActionListener {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
+    /**
+     * This function holds the action taken for each page only a manager can access.
+     * @param e  Type of ActionEvent taken. This is determined based on the button that was clicked.
+     */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == inventoryBtn) {
             new inventoryGUI(employeeid);
@@ -76,6 +87,10 @@ public class managerGUI implements ActionListener {
         }
     }
 
+    /**
+     * This function establishes a connection to the database.
+     * @return the Connection object corresponding to the database
+     */
     public Connection connectionSet() {
         dbSetup my = new dbSetup();
         // Building the connection
