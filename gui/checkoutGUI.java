@@ -9,6 +9,9 @@ import java.sql.DriverManager;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Implements the checkout graphical user interface. This helps us submit an order information to the checkout data table.
+ */
 public class checkoutGUI implements ActionListener {
 
     JFrame f = new JFrame("Checkout GUI");
@@ -32,8 +35,16 @@ public class checkoutGUI implements ActionListener {
     int employeeid;
     int orderid;
 
+    /**
+     * Setup the Checkout GUI
+     * @param order  The orderid number.
+     * @param price  The amount that needs to be charged for one order.
+     * @param id     The employee id of the cashier taking that order.
+     */
     public checkoutGUI(int order, double price, int id) {
-        conn = connectionSet();
+        dbConnect c1= new dbConnect();
+        conn = c1.connectionSet();
+        
         orderid = order;
         amount = price;
         employeeid = id;
@@ -143,6 +154,10 @@ public class checkoutGUI implements ActionListener {
         f.setVisible(true);
     }
 
+    /**
+     * The actions that happen with the click of each button.
+     * @param e  The button that was clicked.
+     */
     public void actionPerformed(ActionEvent e) {
         // Collect each digit to a passtempCode
         String cardnumber;
@@ -207,14 +222,26 @@ public class checkoutGUI implements ActionListener {
 
     }
 
+    /**
+     * generate a random value.
+     * @param  Min               A minimum range of values to randomly generate.
+     * @param  Max               A maximum range of values to randomly generate.
+     * @return     Random Integer generated between the range of min and max.
+     */
     public static int getRandomValue(int Min, int Max) {
-        // FIX ME: SEE IF WE CAN RANDOMIZE THIS SO THAT THE AMOUNT IS 0 50% OF THE TIME,
-        // 1 30% AND MORE THAN 1 OTHER: 20%
+
         return ThreadLocalRandom
                 .current()
                 .nextInt(Min, Max + 1);
     }
 
+    /**
+     * Insert into the checkout data table.
+     * @param conn           Connection to database.
+     * @param paymentMethod  Int enum value of Enum. one of the 4 options->
+     * 0: meal swipes, 1: dining dollars, 2: card, 3: cash
+     * @param cardnumber     The customers card number or UIN.
+     */
     public void get_checkout(Connection conn, int paymentMethod, String cardnumber) {
         try {
             PreparedStatement checkoutStatement = conn.prepareStatement(
@@ -232,21 +259,11 @@ public class checkoutGUI implements ActionListener {
         }
     }
 
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection not made with database.");
-        } // end try catch
 
-        return conn;
-    }
-
+    /**
+     * Checkout GUI main function.
+     * @param args[]  main function.
+     */
     public static void main(String args[]) {
 
         new checkoutGUI(0, 0, 0);

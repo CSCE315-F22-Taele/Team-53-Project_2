@@ -1,11 +1,8 @@
 import javax.swing.*;
 import javax.swing.JOptionPane;
-
 import java.awt.*;
 import java.awt.event.*;
-
 import java.sql.*;
-import java.sql.DriverManager;
 
 /**
  * Implement the Login Graphical User Interface. This GUI will allow a cashier
@@ -147,16 +144,8 @@ public class loginGUI implements ActionListener {
 
             if (checkPassword(passCode)) {
                 // If yes, go directly to cashierGUI
-
-                // openWindow openPOS= new openWindow(passCode, manager);
-                // openPOS.set_employeeid();
-
                 new cashierGUI(passCode);
-                // newGui.get_employee(passCode);
-
                 f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
-                // FIX ME: ADD A WAY TO GET THE EMPLOYEE ID TO THE CASHIER PAGE
-
                 JOptionPane.showMessageDialog(null, "Pincode is correct.");
 
             } else {
@@ -176,7 +165,8 @@ public class loginGUI implements ActionListener {
      * @return boolean whether this employee is valid
      */
     public boolean checkPassword(int password) {
-        Connection conn = connectionSet();
+        dbConnect c1 = new dbConnect();
+        Connection conn = c1.connectionSet();
         boolean value = false;
         try {
             PreparedStatement employeeCheck = conn
@@ -192,25 +182,6 @@ public class loginGUI implements ActionListener {
         }
 
         return value;
-    }
-
-    /**
-     * This function establishes a connection to the database.
-     * 
-     * @return the Connection object corresponding to the database
-     */
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Error accessing Database.");
-        }
-        return conn;
     }
 
     public static void main(String args[]) {

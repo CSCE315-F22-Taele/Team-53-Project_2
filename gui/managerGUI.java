@@ -2,11 +2,11 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
-import javax.swing.JOptionPane;
 
 /**
- * Implement the Manager Graphical User Interface. This GUI is only accesible by a manager, that allows a manager to view inventory, menu items, and sale report.
+ * Implement the Manager Graphical User Interface. This GUI is only accesible by
+ * a manager, that allows a manager to view inventory, menu items, and sale
+ * report.
  */
 public class managerGUI implements ActionListener {
 
@@ -31,13 +31,13 @@ public class managerGUI implements ActionListener {
 
     // Const Vars
     int i = 0;
-    Connection conn;
     int employeeid;
 
-/**
- * Constructor to setup a Manager GUI.
- * @param id  Employee id. Has to be a manager to access this page.
- */
+    /**
+     * Constructor to setup a Manager GUI.
+     * 
+     * @param id Employee id. Has to be a manager to access this page.
+     */
     managerGUI(int id) {
         employeeid = id;
         // Buttons
@@ -72,7 +72,9 @@ public class managerGUI implements ActionListener {
 
     /**
      * This function holds the action taken for each page only a manager can access.
-     * @param e  Type of ActionEvent taken. This is determined based on the button that was clicked.
+     * 
+     * @param e Type of ActionEvent taken. This is determined based on the button
+     *          that was clicked.
      */
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == inventoryBtn) {
@@ -85,26 +87,6 @@ public class managerGUI implements ActionListener {
             new cashierGUI(employeeid);
             f.dispose();
         }
-    }
-
-    /**
-     * This function establishes a connection to the database.
-     * @return the Connection object corresponding to the database
-     */
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Connection Failed");
-        }
-
-        return conn;
     }
 
     public static void main(String[] args) {

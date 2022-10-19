@@ -2,28 +2,19 @@ import java.awt.*;
 import javax.swing.*;
 import java.awt.event.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.awt.*;
-import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.awt.event.*;
 import java.sql.*;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.List;
 
 
 import javax.swing.JOptionPane;
 
+/**
+ * Implements the ordering items graphical user interface. This helps us submit an order with proper inventory changes to the ordering data table.
+ */
 public class inventoryPerOrderGUI implements ActionListener {
     private void makeFrameFullSize(JFrame aFrame) {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -34,18 +25,16 @@ public class inventoryPerOrderGUI implements ActionListener {
     JFrame f = new JFrame("Inventory per Order GUI");
 
     ////////// Store value //////////
-    /* Use these two arraylists to connect db */
+    /* Use arraylist to connect db */
     ArrayList<String> nameList = new ArrayList<String>();
-    //ArrayList<Integer> quantityList = new ArrayList<Integer>();
+  
 
     /* The rest of these arraylists are using for the front-end */
-    // Store btns
     ArrayList<JButton> btnList = new ArrayList<JButton>();
     JButton submitBtn = new JButton("Submit");
     JButton backToCashier = new JButton("Back to Cashier");
 
     // Store the names which have already clicked by user to prevent show up
-    // repeatly
     ArrayList<String> nameOccursList = new ArrayList<String>();
 
     // Store the item's index number of the nameList and quantityList
@@ -53,11 +42,11 @@ public class inventoryPerOrderGUI implements ActionListener {
 
     // Store the amount of each selected items
     ArrayList<JLabel> amountLabelList = new ArrayList<JLabel>();
-    
+
     // Store the click numbers to update the amount of each selected items
     ArrayList<Integer> clickList = new ArrayList<Integer>();
     ArrayList<Integer>  inventoryCounts= new ArrayList<Integer>();
-    
+
     ////////// Global Vars //////////
     int userId = 0;
     JLabel title = new JLabel("Welcome User " + userId);
@@ -82,24 +71,30 @@ public class inventoryPerOrderGUI implements ActionListener {
     int height = screenSize.height;
     int width = screenSize.width;
     Integer [] currInventory;
+
+    /**
+     * Setup nventory Per Order GUI constructor.
+     * @param id  Orderid from the cashier page. Must use this to add to the inventory database.
+     */
     inventoryPerOrderGUI(int id) {
 
         orderid = id;
         try {
-            conn = connectionSet();
+            dbConnect c1= new dbConnect();
+            conn = c1.connectionSet();
             nameList = get_inventory_name(conn);
-            //quantityList = get_quantity(conn);
+            
             for( int i=0; i<  nameList.size(); i++){
                 inventoryCounts.add(0);
             }
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
-           
+
             JOptionPane.showMessageDialog(null, "Database operations unsuccessful.");
         }
 
         Color pink = new Color(244, 220, 245);
         Color blueCute = new Color(194, 194, 252);
+        
         ////////// Frame setting //////////
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 
@@ -184,6 +179,11 @@ public class inventoryPerOrderGUI implements ActionListener {
 
     }
 
+    /**
+     * Check if name is in the inventory
+     * @param  name  Item name
+     * @return     The index of the value in the local array or -1 if does not exist.
+     */
     public int checkNameList(String name) {
         for (int j = 0; j < nameOccursList.size(); ++j) {
             if (name.equals(nameOccursList.get(j))) {
@@ -193,6 +193,10 @@ public class inventoryPerOrderGUI implements ActionListener {
         return -1;
     }
 
+    /**
+     * Allows for action given a button/click from the user.
+     * @param e The button clicked or the action that has to occur.
+     */
     public void actionPerformed(ActionEvent e) {
         for (int i = 0; i < btnList.size(); ++i) {
             if (e.getSource() == btnList.get(i)) {
@@ -234,84 +238,90 @@ public class inventoryPerOrderGUI implements ActionListener {
 
                     // update the amountLabelList
                     amountLabelList.set(nameOccursIndex, l);
-                
+
                 }
                 inventoryCounts.set(i, inventoryCounts.get(i) + 1);
-                
+
             }
         }
 
         if (e.getSource() == submitBtn) {
-            
+
                 try {
                     update_item(conn, inventoryCounts);
                 } catch (SQLException e1) {
-                    // TODO Auto-generated catch block
-                    
+                   
+
                     JOptionPane.showMessageDialog(null, "Update of item inventory used failed. ");
                 }
-            
+
 
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
 
         } else if (e.getSource() == backToCashier) {
-            // FIX ME: Implement
+           
             f.dispatchEvent(new WindowEvent(f, WindowEvent.WINDOW_CLOSING));
         }
     }
 
     ///// Backend /////
+    /**
+     * Get the inventory name from the database in order of the item id.
+     * @param  conn         Connection to the database.
+     * @return              ArrayList of Strings that holds the names of the inventory that are active.
+     * @throws SQLException if the database SQL query did not work.
+     */
     public ArrayList<String> get_inventory_name(Connection conn) throws SQLException {
         Statement stmt = conn.createStatement();
         ResultSet findInventory = stmt.executeQuery("SELECT itemname FROM inventory WHERE is_using = true ORDER BY itemid ASC");
-        
+
         ArrayList<String> temp = new ArrayList<String>();
 
         while (findInventory.next()) {
-            // inventory_names.push_back(findInventory.getString("itemname"));
+          
             temp.add(findInventory.getString("itemname"));
 
         }
-       
+
         return temp;
     }
 
-    
+    /**
+     * Add the inventory used for an item into ordering database.
+     * @param  conn                       Connection to the database.
+     * @param  inventory   ArrayList of Integers that holds all the values of the inventory used/clicked through.
+     * @throws SQLException if the database SQL query did not work.
+     */
     public void update_item(Connection conn,ArrayList <Integer> inventory) throws SQLException {
        // PreparedStatement updateStat = conn.prepareStatement("UPDATE inventory SET amount=(?) WHERE itemname=(?)");
     //    Statement stmt = conn.createStatement();
         boolean orderId_exists = false;
        PreparedStatement order_exists = conn.prepareStatement("SELECT EXISTS( SELECT 1 FROM ordering WHERE orderid =(?) )");
        order_exists.setInt(1, orderid);
-        
+
        ResultSet orderInfo = order_exists.executeQuery();
 
-       
+
           while (orderInfo.next()) {
             orderId_exists = orderInfo.getBoolean("exists");
           }
-        
-       
-    
+
+
+
        if(orderId_exists){
-        
+
         PreparedStatement get_inventory= conn.prepareStatement("SELECT inventory FROM ordering WHERE orderid=(?)");
         get_inventory.setInt(1, orderid);
-         
-        ResultSet inventoryInfo = get_inventory.executeQuery();
-        
-        // Object[] inventoryArray = inventory.toArray();
-        // Array inventoryArr = conn.createArrayOf("INT",inventoryArray );
 
-        
+        ResultSet inventoryInfo = get_inventory.executeQuery();
+
+
+
         while (inventoryInfo.next()) {
             Array temp = inventoryInfo.getArray("inventory");
             currInventory = (Integer[])temp.getArray();
         }
-        
-        //FIX ME: make this work
-        //List vals = Arrays.asList(currInventory);
-        
+
         for( int i=0; i<inventory.size(); i++){
             inventory.set(i, inventory.get(i) + (int) currInventory[i] );
         }
@@ -319,20 +329,20 @@ public class inventoryPerOrderGUI implements ActionListener {
         Object[] inventoryArray = inventory.toArray();
         Array inventoryArr = conn.createArrayOf("INT",inventoryArray );
 
-        
+
 
         PreparedStatement updateStat = conn.prepareStatement("UPDATE ordering SET inventory =(?) WHERE orderid=(?)");
-       
+
         updateStat.setArray(1, inventoryArr);
         updateStat.setInt(2, orderid);
 
         updateStat.executeUpdate();
        }
        else{
-       
+
        PreparedStatement updateStat = conn.prepareStatement("INSERT INTO ordering(orderid, inventory) VALUES(?,?)");
         Object[] inventoryArray = inventory.toArray();
-        
+
         Array inventoryArr = conn.createArrayOf("INT",inventoryArray );
         updateStat.setArray(2, inventoryArr);
         updateStat.setInt(1, orderid);
@@ -341,22 +351,10 @@ public class inventoryPerOrderGUI implements ActionListener {
        }
     }
 
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Database connection failed.");
-        }
-
-        return conn;
-    }
-
+    /**
+     * Inventory Per Order GUI main function.
+     * @param args[]  main function.
+     */
     public static void main(String[] args) {
         new inventoryPerOrderGUI(221015030);
     }

@@ -91,8 +91,8 @@ public class menuItemGUI implements ActionListener {
     menuItemGUI(int id) {
         employeeid = id;
         try {
-            conn = connectionSet();
-            // int size = get_inventory_size(conn);
+            dbConnect c1= new dbConnect();
+            conn = c1.connectionSet();
             nameList = get_menu_item(conn);
             costList = get_cost(conn);
 
@@ -100,7 +100,7 @@ public class menuItemGUI implements ActionListener {
             deactivatedCostList = get_deactivate_menu_cost(conn);
 
         } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            
             JOptionPane.showMessageDialog(null, "Connection Failed.");
         }
 
@@ -558,8 +558,6 @@ public class menuItemGUI implements ActionListener {
                 activate_item(conn, deactivatedNameList.get(i));
                 JOptionPane.showMessageDialog(null, "Activate successful.");
             } catch (SQLException e1) {
-                // TODO Auto-generated catch block
-                e1.printStackTrace();
                 JOptionPane.showMessageDialog(null, "Activate unsuccessful.");
             }
 
@@ -715,22 +713,6 @@ public class menuItemGUI implements ActionListener {
         return temp;
     }
 
-    public Connection connectionSet() {
-        dbSetup my = new dbSetup();
-        // Building the connection
-        Connection conn = null;
-
-        try {
-            Class.forName("org.postgresql.Driver");
-            conn = DriverManager.getConnection("jdbc:postgresql://csce-315-db.engr.tamu.edu/csce331_904_53",
-                    my.user, my.pswd);
-        } catch (Exception e) {
-
-            JOptionPane.showMessageDialog(null, "Database connection failed");
-        }
-
-        return conn;
-    }
 
     public static void main(String[] args) {
         new menuItemGUI(0);
