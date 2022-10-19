@@ -16,6 +16,10 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
+
 
 public class managerReportGUI implements ActionListener {
     ///// Frame /////
@@ -25,7 +29,6 @@ public class managerReportGUI implements ActionListener {
     ///// Panel /////
     // Sale Report
     JPanel itemNamePanel = new JPanel();
-    JPanel salePanel = new JPanel();
     JPanel excessPanel = new JPanel();
     JPanel excessTitlePanel = new JPanel();
 
@@ -45,8 +48,14 @@ public class managerReportGUI implements ActionListener {
     // For sale report
     ArrayList<String> itemNameList = new ArrayList<String>();
     ArrayList<Integer> saleList = new ArrayList<Integer>();
+    String [][] data;
     boolean saleChecked = false;
     boolean excessChecked = false;
+    JTable sale_table;
+    String[] column_names = {"Item", "Sale"};
+    JScrollPane sale_panel;
+    boolean tableCheck = false;
+
 
     // For excess report
     ArrayList<String> excessItemList = new ArrayList<String>();
@@ -76,34 +85,12 @@ public class managerReportGUI implements ActionListener {
         f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 
         ///// Sale report area /////
-        itemNamePanel.setBounds((int) (screenSize.width * 0.3), (int) (screenSize.height * 0.22),
-                (int) (screenSize.width * 0.2), (int) (screenSize.height * 0.8));
-        salePanel.setBounds((int) (screenSize.width * 0.5), (int) (screenSize.height * 0.22),
-                (int) (screenSize.width * 0.2), (int) (screenSize.height * 0.8));
-
-        itemNamePanel.setLayout(new GridLayout(30, 1, 10, 10));
-        salePanel.setLayout(new GridLayout(30, 1, 10, 10));
-
-        title_item_Label.setVerticalAlignment(JLabel.TOP);
-        title_item_Label.setHorizontalAlignment(JLabel.CENTER);
-
-        title_sale_Label.setVerticalAlignment(JLabel.TOP);
-        title_sale_Label.setHorizontalAlignment(JLabel.CENTER);
-
         backToManager.addActionListener(this);
         backToManager.setBounds((int) (screenSize.width * 0.06), (int) (screenSize.height * 0.8),
                 (int) (screenSize.width * 0.1),
                 (int) (screenSize.height * 0.05));
+
         f.add(backToManager);
-
-        itemNamePanel.add(title_item_Label);
-        salePanel.add(title_sale_Label);
-
-        f.add(itemNamePanel);
-        f.add(salePanel);
-
-        itemNamePanel.setVisible(false);
-        salePanel.setVisible(false);
 
         ///// Excess Report Layout /////
         excessTitlePanel.setBounds((int) (screenSize.width * 0.2), (int) (screenSize.height * 0.22),
@@ -160,35 +147,52 @@ public class managerReportGUI implements ActionListener {
 
     public void salePanelDisplay(boolean b) {
         itemNamePanel.setVisible(b);
-        salePanel.setVisible(b);
+        //salePanel.setVisible(b);
+    }
+
+    public void getSaleReport(){
+        tableCheck = true;
+        sale_table = new JTable(data, column_names);
+
+        for(int j = 0; j < itemNameList.size(); ++j){
+            data[j][0] = itemNameList.get(j);
+            data[j][1] = String.valueOf(saleList.get(j));
+        }
+
+
+        sale_panel = new JScrollPane(sale_table);
+        sale_panel.setBounds((int) (screenSize.width * 0.3), (int) (screenSize.height * 0.22),
+        (int) (screenSize.width * 0.4), (int) (screenSize.height * 0.8));
+        sale_panel.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+        sale_panel.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
+
+        sale_panel.setBackground(Color.RED);
+        sale_panel.setVisible(true);
+        f.getContentPane().add(sale_panel);
+        f.validate();
+        f.repaint();
+                
+        saleChecked = true;
+
     }
 
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == saleBtn) {
-            salePanelDisplay(true);
             excessPanel.setVisible(false);
             excessTitlePanel.setVisible(false);
-
+            
             if (!saleChecked) {
-                for (int i = 0; i < itemNameList.size(); ++i) {
-                    JLabel newItemLabel = new JLabel(itemNameList.get(i));
-                    newItemLabel.setVerticalAlignment(JLabel.TOP);
-                    newItemLabel.setHorizontalAlignment(JLabel.CENTER);
-                    itemNamePanel.add(newItemLabel);
-
-                    JLabel newSaleLabel = new JLabel(String.valueOf(saleList.get(i)));
-                    newSaleLabel.setVerticalAlignment(JLabel.TOP);
-                    newSaleLabel.setHorizontalAlignment(JLabel.CENTER);
-                    salePanel.add(newSaleLabel);
-                }
-                saleChecked = true;
+                getSaleReport();
+                sale_panel.setVisible(true);
             }
+            sale_panel.setVisible(true);
 
         } else if (e.getSource() == excessBtn) {
             excessPanel.setVisible(true);
             excessTitlePanel.setVisible(true);
-
-            salePanelDisplay(false);
+            if(tableCheck){
+                sale_panel.setVisible(false);
+            }
             if (!excessChecked) {
                 for (int i = 0; i < excessItemList.size(); ++i) {
                     JLabel newSaleLabel = new JLabel(String.valueOf(excessItemList.get(i)));
@@ -204,10 +208,15 @@ public class managerReportGUI implements ActionListener {
             salePanelDisplay(false);
             excessPanel.setVisible(false);
             excessTitlePanel.setVisible(false);
+            if(tableCheck){
+                sale_panel.setVisible(false);
+            }
 
             itemNameList.clear();
             saleList.clear();
             excessItemList.clear();
+            
+
 
             try {
                 date_from = new SimpleDateFormat("yyyy-MM-dd").parse(fromDateInput.getText());
@@ -227,7 +236,7 @@ public class managerReportGUI implements ActionListener {
                 // TODO Auto-generated catch block
                 e1.printStackTrace();
             }
-
+            data = new String[itemNameList.size()][2];
         }
 
         else if (e.getSource() == backToManager) {
